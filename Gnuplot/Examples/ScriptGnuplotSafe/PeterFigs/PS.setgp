@@ -1,0 +1,18 @@
+############ PS ############# 
+DELAYTIME = 40 
+SIZE_X =2400
+SIZE_Y =1200
+SIZE_RATIO = 1
+OUTPUT_NAME=sprintf("%s.ps",PLOTNAME);
+#############################
+set terminal  postscript enhanced font 'Helvetica,10'
+#set termoption 
+
+#size SIZE_X,SIZE_Y
+
+set output OUTPUT_NAME
+set size ratio SIZE_RATIO
+
+
+
+

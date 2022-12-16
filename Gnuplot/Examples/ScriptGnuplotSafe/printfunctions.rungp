@@ -1,0 +1,37 @@
+set term table
+fitlambda=fitlambda_DFT
+fitgamma=fitgamma_DFT
+fitenergy=fitenergy_DFT
+
+transmissionDFT(x)= (fitlambda * fitgamma* fitgamma) / ( ( (x-fitenergy)*(x-fitenergy)) + (fitgamma* fitgamma*(1+fitlambda)*(1+fitlambda)/4) )
+seebeckcoefficientDFT(x) = S0 * (x-fitenergy) * transmissionDFT(x) / (fitlambda * fitgamma* fitgamma)
+ZTKDFT(x) = 300*S0 *S0 * G0 * transmissionDFT(x) * transmissionDFT(x)  * transmissionDFT(x) * (x-fitenergy) * (x-fitenergy)  / ((fitlambda * fitgamma* fitgamma) * (fitlambda * fitgamma* fitgamma))
+
+OUTPUT_NAME=sprintf("%s%sDFT.Transmission.DFT.gp.dat",GENERIC_NAME,PLOT_TYPE);
+set output OUTPUT_NAME
+plot transmissionDFT(x)
+OUTPUT_NAME=sprintf("%s%sDFT.Seebeck.DFT.gp.dat",GENERIC_NAME,PLOT_TYPE);
+set output OUTPUT_NAME
+plot seebeckcoefficientDFT(x)
+OUTPUT_NAME=sprintf("%s%sDFT.ZTK.DFT.gp.dat",GENERIC_NAME,PLOT_TYPE);
+set output OUTPUT_NAME
+plot ZTKDFT(x)
+
+
+fitlambda=fitlambda_DFTS
+fitgamma=fitgamma_DFTS
+fitenergy=fitenergy_DFTS
+
+transmissionDFTS(x) = (fitlambda * fitgamma* fitgamma) / ( ( (x-fitenergy)*(x-fitenergy)) + (fitgamma* fitgamma*(1+fitlambda)*(1+fitlambda)/4) )
+seebeckcoefficientDFTS(x) = S0 * (x-fitenergy) * transmissionDFTS(x) / (fitlambda * fitgamma* fitgamma)
+ZTKDFTS(x) = 300*S0 *S0 * G0 * transmissionDFTS(x) * transmissionDFTS(x)  * transmissionDFTS(x) * (x-fitenergy) * (x-fitenergy)  / ((fitlambda * fitgamma* fitgamma) * (fitlambda * fitgamma* fitgamma))
+
+OUTPUT_NAME=sprintf("%s%sDFT.Transmission.DFT+S.gp.dat",GENERIC_NAME,PLOT_TYPE);
+set output OUTPUT_NAME
+plot transmissionDFTS(x)
+OUTPUT_NAME=sprintf("%s%sDFT.Seebeck.DFT+S.gp.dat",GENERIC_NAME,PLOT_TYPE);
+set output OUTPUT_NAME
+plot seebeckcoefficientDFTS(x)
+OUTPUT_NAME=sprintf("%s%sDFT.ZTK.DFT+S.gp.dat",GENERIC_NAME,PLOT_TYPE);
+set output OUTPUT_NAME
+plot ZTKDFTS(x)

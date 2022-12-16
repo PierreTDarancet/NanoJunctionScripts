@@ -1,0 +1,16 @@
+PLOT_TYPE="Density&Potential"
+load "specs.ingp"
+
+load "AGif.setgp"
+
+load "6plots.4x2D_2xCt.setgp"
+
+load "setup+.rungp"
+load "iterate.6plots.2D4P.rungp"
+
+load "setup-.rungp"
+load "iterate.6plots.2D4P.rungp"
+
+load "close.rungp"
+
+

@@ -1,0 +1,61 @@
+set size ratio 0.18
+set xtics 50 mirror
+set mxtics 5 
+set terminal aqua title 'Si2 Junction'  font "Helvetica,20" enhanced
+set title "Si2 Junction"offset 0,-1.1
+set multiplot
+set xrange [0:*]
+set xtics format " "
+ampnorm=0.015
+
+
+set tmargin at screen 0.95 
+set bmargin at screen 0.75
+set lmargin at screen 0.12
+
+unset xlabel
+set ylabel 'DoS(meV^{-1})' offset 2,0
+set yrange [0:6]
+set ytics 2.5 ; 
+
+plot '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si2TRIMTRIM/Phonons/phononsDos.Smeared.dat' u ($1*0.12398):($2/0.12398) w l  lc rgb 'grey20' lw 4 t "DoS" ,  '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si2TRIMTRIM/Phonons/phononsDos.dat' u ($1*0.12398):($2*0.8) w impulses lc rgb 'red' t "States"
+
+unset title
+set tmargin at screen 0.75
+set bmargin at screen 0.55
+set lmargin at screen 0.12
+
+set ylabel 'Rel.Disp. (A)' offset 3,0
+set yrange [0:0.3]
+set ytics 0.25 
+set mytics 5
+plot '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si2TRIMTRIM/Phonons/Si2TRIMTRIM.SiStretch.Total.dat'u 3:($7/ampnorm) w impulses lc rgb "orange" lw 2 t "Si-Si Stretch",  '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si2TRIMTRIM/Phonons/Si2TRIMTRIM.C-Si_inchain.Stretch.dat' u 3:($7/ampnorm):(0.9) w circles  lc rgb "red" lw 3 t "Si-C Stretch in-chain"
+
+unset title
+set tmargin at screen 0.55
+set bmargin at screen 0.35
+set lmargin at screen 0.12
+
+set ylabel 'Disp. (A)' offset 3,0
+set yrange [0:0.3]
+set ytics 0.25 
+set mytics 5
+plot '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si2TRIMTRIM/Phonons/Si2TRIMTRIM.Hmotion.Total.dat' u 3:($7/(10.*ampnorm)) w impulses lc rgb "green" lw 3 t "H motion (/10)", '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si2TRIMTRIM/Phonons/Si2TRIMTRIM.Smotion.Total.dat' u 3:($7/ampnorm):(0.9) w circles lc rgb 'blue' lw 3 t "S motion", '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si2TRIMTRIM/Phonons/Si2TRIMTRIM.S-Au.Stretch.dat' u 3:($7/ampnorm):(0.9) w circles lc rgb 'red' lw 3 t "S-Au stretch"
+
+
+unset title
+set tmargin at screen 0.35
+set bmargin at screen 0.15
+set lmargin at screen 0.12
+set xlabel 'Energy (meV)' offset 0,1
+set xtics format "%g" offset 0,0.5
+set ylabel 'Disp. (A)' offset 3,0
+set yrange [0:0.3]
+set ytics 0.25 
+set mytics 5
+plot  '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si2TRIMTRIM/Phonons/Si2TRIMTRIM.C_inchain.Total.dat' u 3:($7/ampnorm) w impulses  lc rgb 'red' lw 3 t "C motion chain" , '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si2TRIMTRIM/Phonons/Si2TRIMTRIM.Aumotion.Total.dat' u 3:($7/ampnorm):(0.9) w circles lc rgb 'orange' lw 3 t "Au motion"
+
+
+
+
+unset multiplot

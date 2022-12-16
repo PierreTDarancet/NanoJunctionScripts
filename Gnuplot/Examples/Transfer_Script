@@ -1,0 +1,488 @@
+#!/bin/bash
+
+mkdir Transfer
+
+cd Transfer
+
+mkdir DASTRIMAD
+echo "DASTRIMAD"
+
+echo "-1000"
+
+cp /mako/scratch/pdarancet/DAS_TrimAd/DASEnforcedTRIMAD-1.0V/main.RHO ./DASTRIMAD/-1000.RHO
+cp /mako/scratch/pdarancet/DAS_TrimAd/DASEnforcedTRIMAD-1.0V/main.DRHO ./DASTRIMAD/-1000.DRHO
+cp /mako/scratch/pdarancet/DAS_TrimAd/DASEnforcedTRIMAD-1.0V/Vscf3D_af_Laplace_correction.out  ./DASTRIMAD/-1000.VT
+cp /mako/scratch/pdarancet/DAS_TrimAd/DASEnforcedTRIMAD-1.0V/Vhartree3D_af_Laplace_correction.out  ./DASTRIMAD/-1000.VH
+cp /mako/scratch/pdarancet/DAS_TrimAd/DASEnforcedTRIMAD-1.0V/Vhartree03D_af_Laplace_correction.out  ./DASTRIMAD/-1000.VH0
+
+echo "-500"
+
+cp /mako/scratch/pdarancet/DAS_TrimAd/DASEnforcedTRIMAD-0.5V/main.RHO ./DASTRIMAD/-500.RHO
+cp /mako/scratch/pdarancet/DAS_TrimAd/DASEnforcedTRIMAD-0.5V/main.DRHO ./DASTRIMAD/-500.DRHO
+cp /mako/scratch/pdarancet/DAS_TrimAd/DASEnforcedTRIMAD-0.5V/Vscf3D_af_Laplace_correction.out  ./DASTRIMAD/-500.VT
+cp /mako/scratch/pdarancet/DAS_TrimAd/DASEnforcedTRIMAD-0.5V/Vhartree3D_af_Laplace_correction.out  ./DASTRIMAD/-500.VH
+cp /mako/scratch/pdarancet/DAS_TrimAd/DASEnforcedTRIMAD-0.5V/Vhartree03D_af_Laplace_correction.out  ./DASTRIMAD/-500.VH0
+
+echo "0"
+
+cp /mako/scratch/pdarancet/DAS_TrimAd/DASEnforcedTRIMAD_0.0V/main.RHO ./DASTRIMAD/0.RHO
+cp /mako/scratch/pdarancet/DAS_TrimAd/DASEnforcedTRIMAD_0.0V/main.DRHO ./DASTRIMAD/0.DRHO
+cp /mako/scratch/pdarancet/DAS_TrimAd/DASEnforcedTRIMAD_0.0V/Vscf3D_af_Laplace_correction.out  ./DASTRIMAD/0.VT
+cp /mako/scratch/pdarancet/DAS_TrimAd/DASEnforcedTRIMAD_0.0V/Vhartree3D_af_Laplace_correction.out  ./DASTRIMAD/0.VH
+cp /mako/scratch/pdarancet/DAS_TrimAd/DASEnforcedTRIMAD_0.0V/Vhartree03D_af_Laplace_correction.out  ./DASTRIMAD/0.VH0
+
+echo "500"
+
+cp /mako/scratch/pdarancet/DAS_TrimAd/DASEnforcedTRIMAD+0.5V/main.RHO ./DASTRIMAD/500.RHO
+cp /mako/scratch/pdarancet/DAS_TrimAd/DASEnforcedTRIMAD+0.5V/main.DRHO  ./DASTRIMAD/500.DRHO
+cp /mako/scratch/pdarancet/DAS_TrimAd/DASEnforcedTRIMAD+0.5V/Vscf3D_af_Laplace_correction.out  ./DASTRIMAD/500.VT
+cp /mako/scratch/pdarancet/DAS_TrimAd/DASEnforcedTRIMAD+0.5V/Vhartree3D_af_Laplace_correction.out  ./DASTRIMAD/500.VH
+cp /mako/scratch/pdarancet/DAS_TrimAd/DASEnforcedTRIMAD+0.5V/Vhartree03D_af_Laplace_correction.out  ./DASTRIMAD/500.VH0
+
+echo "1000"
+
+cp /mako/scratch/pdarancet/DAS_TrimAd/DASEnforcedTRIMAD+1.0V/main.RHO ./DASTRIMAD/1000.RHO
+cp /mako/scratch/pdarancet/DAS_TrimAd/DASEnforcedTRIMAD+1.0V/main.DRHO  ./DASTRIMAD/1000.DRHO
+cp /mako/scratch/pdarancet/DAS_TrimAd/DASEnforcedTRIMAD+1.0V/Vscf3D_af_Laplace_correction.out  ./DASTRIMAD/1000.VT
+cp /mako/scratch/pdarancet/DAS_TrimAd/DASEnforcedTRIMAD+1.0V/Vhartree3D_af_Laplace_correction.out  ./DASTRIMAD/1000.VH
+cp /mako/scratch/pdarancet/DAS_TrimAd/DASEnforcedTRIMAD+1.0V/Vhartree03D_af_Laplace_correction.out  ./DASTRIMAD/1000.VH0
+
+mkdir BAPATRIMAD
+echo "BAPATRIMAD"
+
+echo "-1000"
+
+cp /mako/scratch/pdarancet/BAPA_TrimAd/BAPAEnforcedTRIMAD-1.0V/main.RHO  ./BAPATRIMAD/-1000.RHO
+cp /mako/scratch/pdarancet/BAPA_TrimAd/BAPAEnforcedTRIMAD-1.0V/main.DRHO  ./BAPATRIMAD/-1000.DRHO
+cp /mako/scratch/pdarancet/BAPA_TrimAd/BAPAEnforcedTRIMAD-1.0V/Vscf3D_af_Laplace_correction.out  ./BAPATRIMAD/-1000.VT
+cp /mako/scratch/pdarancet/BAPA_TrimAd/BAPAEnforcedTRIMAD-1.0V/Vhartree3D_af_Laplace_correction.out  ./BAPATRIMAD/-1000.VH
+cp /mako/scratch/pdarancet/BAPA_TrimAd/BAPAEnforcedTRIMAD-1.0V/Vhartree03D_af_Laplace_correction.out  ./BAPATRIMAD/-1000.VH0
+
+echo "-500"
+
+cp /mako/scratch/pdarancet/BAPA_TrimAd/BAPAEnforcedTRIMAD-0.5V/main.RHO  ./BAPATRIMAD/-500.RHO
+cp /mako/scratch/pdarancet/BAPA_TrimAd/BAPAEnforcedTRIMAD-0.5V/main.DRHO  ./BAPATRIMAD/-500.DRHO
+cp /mako/scratch/pdarancet/BAPA_TrimAd/BAPAEnforcedTRIMAD-0.5V/Vscf3D_af_Laplace_correction.out  ./BAPATRIMAD/-500.VT
+cp /mako/scratch/pdarancet/BAPA_TrimAd/BAPAEnforcedTRIMAD-0.5V/Vhartree3D_af_Laplace_correction.out  ./BAPATRIMAD/-500.VH
+cp /mako/scratch/pdarancet/BAPA_TrimAd/BAPAEnforcedTRIMAD-0.5V/Vhartree03D_af_Laplace_correction.out  ./BAPATRIMAD/-500.VH0
+echo "0"
+
+cp /mako/scratch/pdarancet/BAPA_TrimAd/BAPAEnforcedTRIMAD_0.0V/main.RHO  ./BAPATRIMAD/0.RHO
+cp /mako/scratch/pdarancet/BAPA_TrimAd/BAPAEnforcedTRIMAD_0.0V/main.DRHO  ./BAPATRIMAD/0.DRHO
+cp /mako/scratch/pdarancet/BAPA_TrimAd/BAPAEnforcedTRIMAD_0.0V/Vscf3D_af_Laplace_correction.out ./BAPATRIMAD/0.VT
+cp /mako/scratch/pdarancet/BAPA_TrimAd/BAPAEnforcedTRIMAD_0.0V/Vhartree3D_af_Laplace_correction.out  ./BAPATRIMAD/0.VH
+cp /mako/scratch/pdarancet/BAPA_TrimAd/BAPAEnforcedTRIMAD_0.0V/Vhartree03D_af_Laplace_correction.out  ./BAPATRIMAD/0.VH0
+
+echo "500"
+
+cp /mako/scratch/pdarancet/BAPA_TrimAd/BAPAEnforcedTRIMAD+0.5V/main.RHO  ./BAPATRIMAD/500.RHO
+cp /mako/scratch/pdarancet/BAPA_TrimAd/BAPAEnforcedTRIMAD+0.5V/main.DRHO ./BAPATRIMAD/500.DRHO
+cp /mako/scratch/pdarancet/BAPA_TrimAd/BAPAEnforcedTRIMAD+0.5V/Vscf3D_af_Laplace_correction.out  ./BAPATRIMAD/500.VT
+cp /mako/scratch/pdarancet/BAPA_TrimAd/BAPAEnforcedTRIMAD+0.5V/Vhartree3D_af_Laplace_correction.out  ./BAPATRIMAD/500.VH
+cp /mako/scratch/pdarancet/BAPA_TrimAd/BAPAEnforcedTRIMAD+0.5V/Vhartree03D_af_Laplace_correction.out  ./BAPATRIMAD/500.VH0
+
+echo "1000"
+
+cp /mako/scratch/pdarancet/BAPA_TrimAd/BAPAEnforcedTRIMAD+1.0V/main.RHO  ./BAPATRIMAD/1000.RHO
+cp /mako/scratch/pdarancet/BAPA_TrimAd/BAPAEnforcedTRIMAD+1.0V/main.DRHO  ./BAPATRIMAD/1000.DRHO
+cp /mako/scratch/pdarancet/BAPA_TrimAd/BAPAEnforcedTRIMAD+1.0V/Vscf3D_af_Laplace_correction.out  ./BAPATRIMAD/1000.VT
+cp /mako/scratch/pdarancet/BAPA_TrimAd/BAPAEnforcedTRIMAD+1.0V/Vhartree3D_af_Laplace_correction.out  ./BAPATRIMAD/1000.VH
+cp /mako/scratch/pdarancet/BAPA_TrimAd/BAPAEnforcedTRIMAD+1.0V/Vhartree03D_af_Laplace_correction.out  ./BAPATRIMAD/1000.VH0
+
+mkdir HDATRIMAD
+echo "HDATRIMAD"
+
+echo "-1000"
+
+cp /mako/scratch/pdarancet/HDA-D_TrimAd/HDADEnforcedTRIMAD-1.0V/main.RHO  ./HDATRIMAD/-1000.RHO
+cp /mako/scratch/pdarancet/HDA-D_TrimAd/HDADEnforcedTRIMAD-1.0V/main.DRHO  ./HDATRIMAD/-1000.DRHO
+cp /mako/scratch/pdarancet/HDA-D_TrimAd/HDADEnforcedTRIMAD-1.0V/Vscf3D_af_Laplace_correction.out  ./HDATRIMAD/-1000.VT
+cp /mako/scratch/pdarancet/HDA-D_TrimAd/HDADEnforcedTRIMAD-1.0V/Vhartree3D_af_Laplace_correction.out  ./HDATRIMAD/-1000.VH
+cp /mako/scratch/pdarancet/HDA-D_TrimAd/HDADEnforcedTRIMAD-1.0V/Vhartree03D_af_Laplace_correction.out  ./HDATRIMAD/-1000.VH0
+
+echo "-500"
+
+cp /mako/scratch/pdarancet/HDA-D_TrimAd/HDADEnforcedTRIMAD-0.5V/main.RHO  ./HDATRIMAD/-500.RHO
+cp /mako/scratch/pdarancet/HDA-D_TrimAd/HDADEnforcedTRIMAD-0.5V/main.DRHO  ./HDATRIMAD/-500.DRHO
+cp /mako/scratch/pdarancet/HDA-D_TrimAd/HDADEnforcedTRIMAD-0.5V/Vscf3D_af_Laplace_correction.out  ./HDATRIMAD/-500.VT
+cp /mako/scratch/pdarancet/HDA-D_TrimAd/HDADEnforcedTRIMAD-0.5V/Vhartree3D_af_Laplace_correction.out  ./HDATRIMAD/-500.VH
+cp /mako/scratch/pdarancet/HDA-D_TrimAd/HDADEnforcedTRIMAD-0.5V/Vhartree03D_af_Laplace_correction.out  ./HDATRIMAD/-500.VH0
+
+echo "0"
+
+cp /mako/scratch/pdarancet/HDA-D_TrimAd/HDADEnforcedTRIMAD_0.0V/main.RHO  ./HDATRIMAD/0.RHO
+cp /mako/scratch/pdarancet/HDA-D_TrimAd/HDADEnforcedTRIMAD_0.0V/main.DRHO  ./HDATRIMAD/0.DRHO
+cp /mako/scratch/pdarancet/HDA-D_TrimAd/HDADEnforcedTRIMAD_0.0V/Vscf3D_af_Laplace_correction.out  ./HDATRIMAD/0.VT
+cp /mako/scratch/pdarancet/HDA-D_TrimAd/HDADEnforcedTRIMAD_0.0V/Vhartree3D_af_Laplace_correction.out  ./HDATRIMAD/0.VH
+cp /mako/scratch/pdarancet/HDA-D_TrimAd/HDADEnforcedTRIMAD_0.0V/Vhartree03D_af_Laplace_correction.out  ./HDATRIMAD/0.VH0
+
+echo "500"
+
+cp /mako/scratch/pdarancet/HDA-D_TrimAd/HDADEnforcedTRIMAD+0.5V/main.RHO  ./HDATRIMAD/500.RHO
+cp /mako/scratch/pdarancet/HDA-D_TrimAd/HDADEnforcedTRIMAD+0.5V/main.DRHO  ./HDATRIMAD/500.DRHO
+cp /mako/scratch/pdarancet/HDA-D_TrimAd/HDADEnforcedTRIMAD+0.5V/Vscf3D_af_Laplace_correction.out ./HDATRIMAD/500.VT
+cp /mako/scratch/pdarancet/HDA-D_TrimAd/HDADEnforcedTRIMAD+0.5V/Vhartree3D_af_Laplace_correction.out  ./HDATRIMAD/500.VH
+cp /mako/scratch/pdarancet/HDA-D_TrimAd/HDADEnforcedTRIMAD+0.5V/Vhartree03D_af_Laplace_correction.out  ./HDATRIMAD/500.VH0
+
+echo "1000"
+
+cp /mako/scratch/pdarancet/HDA-D_TrimAd/HDADEnforcedTRIMAD+1.0V/main.RHO  ./HDATRIMAD/1000.RHO
+cp /mako/scratch/pdarancet/HDA-D_TrimAd/HDADEnforcedTRIMAD+1.0V/main.DRHO  ./HDATRIMAD/1000.DRHO
+cp /mako/scratch/pdarancet/HDA-D_TrimAd/HDADEnforcedTRIMAD+1.0V/Vscf3D_af_Laplace_correction.out  ./HDATRIMAD/1000.VT
+cp /mako/scratch/pdarancet/HDA-D_TrimAd/HDADEnforcedTRIMAD+1.0V/Vhartree3D_af_Laplace_correction.out  ./HDATRIMAD/1000.VH
+cp /mako/scratch/pdarancet/HDA-D_TrimAd/HDADEnforcedTRIMAD+1.0V/Vhartree03D_af_Laplace_correction.out  ./HDATRIMAD/1000.VH0
+
+mkdir BPTRIMAD
+echo "BPTRIMAD"
+
+echo "-1000"
+
+cp /mako/scratch/pdarancet/BP_constr_TrimAd/BP_SY_TrimAd-1.0V/main.RHO ./BPTRIMAD/-1000.RHO
+cp /mako/scratch/pdarancet/BP_constr_TrimAd/BP_SY_TrimAd-1.0V/main.DRHO ./BPTRIMAD/-1000.DRHO
+cp /mako/scratch/pdarancet/BP_constr_TrimAd/BP_SY_TrimAd-1.0V/Vscf3D_af_Laplace_correction.out ./BPTRIMAD/-1000.VT
+cp /mako/scratch/pdarancet/BP_constr_TrimAd/BP_SY_TrimAd-1.0V/Vhartree3D_af_Laplace_correction.out ./BPTRIMAD/-1000.VH
+cp /mako/scratch/pdarancet/BP_constr_TrimAd/BP_SY_TrimAd-1.0V/Vhartree03D_af_Laplace_correction.out ./BPTRIMAD/-1000.VH0
+
+echo "-500"
+
+cp /mako/scratch/pdarancet/BP_constr_TrimAd/BP_SY_TrimAd-0.5V/main.RHO ./BPTRIMAD/-500.RHO
+cp /mako/scratch/pdarancet/BP_constr_TrimAd/BP_SY_TrimAd-0.5V/main.DRHO ./BPTRIMAD/-500.DRHO
+cp /mako/scratch/pdarancet/BP_constr_TrimAd/BP_SY_TrimAd-0.5V/Vscf3D_af_Laplace_correction.out ./BPTRIMAD/-500.VT
+cp /mako/scratch/pdarancet/BP_constr_TrimAd/BP_SY_TrimAd-0.5V/Vhartree3D_af_Laplace_correction.out ./BPTRIMAD/-500.VH
+cp /mako/scratch/pdarancet/BP_constr_TrimAd/BP_SY_TrimAd-0.5V/Vhartree03D_af_Laplace_correction.out ./BPTRIMAD/-500.VH0
+
+echo "0"
+
+cp /mako/scratch/pdarancet/BP_constr_TrimAd/BP_SY_TrimAd_0.0V/main.RHO ./BPTRIMAD/0.RHO
+cp /mako/scratch/pdarancet/BP_constr_TrimAd/BP_SY_TrimAd_0.0V/main.DRHO ./BPTRIMAD/0.DRHO
+cp /mako/scratch/pdarancet/BP_constr_TrimAd/BP_SY_TrimAd_0.0V/Vscf3D_af_Laplace_correction.out ./BPTRIMAD/0.VT
+cp /mako/scratch/pdarancet/BP_constr_TrimAd/BP_SY_TrimAd_0.0V/Vhartree3D_af_Laplace_correction.out ./BPTRIMAD/0.VH
+cp /mako/scratch/pdarancet/BP_constr_TrimAd/BP_SY_TrimAd_0.0V/Vhartree03D_af_Laplace_correction.out ./BPTRIMAD/0.VH0
+
+echo "500"
+
+cp /mako/scratch/pdarancet/BP_constr_TrimAd/BP_SY_TrimAd+0.5V/main.RHO ./BPTRIMAD/500.RHO
+cp /mako/scratch/pdarancet/BP_constr_TrimAd/BP_SY_TrimAd+0.5V/main.DRHO ./BPTRIMAD/500.DRHO
+cp /mako/scratch/pdarancet/BP_constr_TrimAd/BP_SY_TrimAd+0.5V/Vscf3D_af_Laplace_correction.out ./BPTRIMAD/500.VT
+cp /mako/scratch/pdarancet/BP_constr_TrimAd/BP_SY_TrimAd+0.5V/Vhartree3D_af_Laplace_correction.out ./BPTRIMAD/500.VH
+cp /mako/scratch/pdarancet/BP_constr_TrimAd/BP_SY_TrimAd+0.5V/Vhartree03D_af_Laplace_correction.out ./BPTRIMAD/500.VH0
+
+echo "1000"
+
+cp /mako/scratch/pdarancet/BP_constr_TrimAd/BP_SY_TrimAd+1.0V/main.RHO ./BPTRIMAD/1000.RHO
+cp /mako/scratch/pdarancet/BP_constr_TrimAd/BP_SY_TrimAd+1.0V/main.DRHO ./BPTRIMAD/1000.DRHO
+cp /mako/scratch/pdarancet/BP_constr_TrimAd/BP_SY_TrimAd+1.0V/Vscf3D_af_Laplace_correction.out ./BPTRIMAD/1000.VT
+cp /mako/scratch/pdarancet/BP_constr_TrimAd/BP_SY_TrimAd+1.0V/Vhartree3D_af_Laplace_correction.out ./BPTRIMAD/1000.VH
+cp /mako/scratch/pdarancet/BP_constr_TrimAd/BP_SY_TrimAd+1.0V/Vhartree03D_af_Laplace_correction.out ./BPTRIMAD/1000.VH0
+
+
+mkdir DASADAD
+echo "DASADAD"
+
+echo "-1000"
+
+cp /mako/scratch/pdarancet/DAS_AdAd/DASEnforcedADAD-1.0V/main.RHO ./DASADAD/-1000.RHO
+cp /mako/scratch/pdarancet/DAS_AdAd/DASEnforcedADAD-1.0V/main.DRHO ./DASADAD/-1000.DRHO
+cp /mako/scratch/pdarancet/DAS_AdAd/DASEnforcedADAD-1.0V/Vscf3D_af_Laplace_correction.out  ./DASADAD/-1000.VT
+cp /mako/scratch/pdarancet/DAS_AdAd/DASEnforcedADAD-1.0V/Vhartree3D_af_Laplace_correction.out  ./DASADAD/-1000.VH
+cp /mako/scratch/pdarancet/DAS_AdAd/DASEnforcedADAD-1.0V/Vhartree03D_af_Laplace_correction.out  ./DASADAD/-1000.VH0
+
+echo "-500"
+
+cp /mako/scratch/pdarancet/DAS_AdAd/DASEnforcedADAD-0.5V/main.RHO ./DASADAD/-500.RHO
+cp /mako/scratch/pdarancet/DAS_AdAd/DASEnforcedADAD-0.5V/main.DRHO ./DASADAD/-500.DRHO
+cp /mako/scratch/pdarancet/DAS_AdAd/DASEnforcedADAD-0.5V/Vscf3D_af_Laplace_correction.out  ./DASADAD/-500.VT
+cp /mako/scratch/pdarancet/DAS_AdAd/DASEnforcedADAD-0.5V/Vhartree3D_af_Laplace_correction.out  ./DASADAD/-500.VH
+cp /mako/scratch/pdarancet/DAS_AdAd/DASEnforcedADAD-0.5V/Vhartree03D_af_Laplace_correction.out  ./DASADAD/-500.VH0
+
+echo "0"
+
+cp /mako/scratch/pdarancet/DAS_AdAd/DASEnforcedADAD_0.0V/main.RHO ./DASADAD/0.RHO
+cp /mako/scratch/pdarancet/DAS_AdAd/DASEnforcedADAD_0.0V/main.DRHO ./DASADAD/0.DRHO
+cp /mako/scratch/pdarancet/DAS_AdAd/DASEnforcedADAD_0.0V/Vscf3D_af_Laplace_correction.out  ./DASADAD/0.VT
+cp /mako/scratch/pdarancet/DAS_AdAd/DASEnforcedADAD_0.0V/Vhartree3D_af_Laplace_correction.out  ./DASADAD/0.VH
+cp /mako/scratch/pdarancet/DAS_AdAd/DASEnforcedADAD_0.0V/Vhartree03D_af_Laplace_correction.out  ./DASADAD/0.VH0
+
+echo "500"
+
+cp /mako/scratch/pdarancet/DAS_AdAd/DASEnforcedADAD+0.5V/main.RHO ./DASADAD/500.RHO
+cp /mako/scratch/pdarancet/DAS_AdAd/DASEnforcedADAD+0.5V/main.DRHO  ./DASADAD/500.DRHO
+cp /mako/scratch/pdarancet/DAS_AdAd/DASEnforcedADAD+0.5V/Vscf3D_af_Laplace_correction.out  ./DASADAD/500.VT
+cp /mako/scratch/pdarancet/DAS_AdAd/DASEnforcedADAD+0.5V/Vhartree3D_af_Laplace_correction.out  ./DASADAD/500.VH
+cp /mako/scratch/pdarancet/DAS_AdAd/DASEnforcedADAD+0.5V/Vhartree03D_af_Laplace_correction.out  ./DASADAD/500.VH0
+
+echo "1000"
+
+cp /mako/scratch/pdarancet/DAS_AdAd/DASEnforcedADAD+1.0V/main.RHO ./DASADAD/1000.RHO
+cp /mako/scratch/pdarancet/DAS_AdAd/DASEnforcedADAD+1.0V/main.DRHO  ./DASADAD/1000.DRHO
+cp /mako/scratch/pdarancet/DAS_AdAd/DASEnforcedADAD+1.0V/Vscf3D_af_Laplace_correction.out  ./DASADAD/1000.VT
+cp /mako/scratch/pdarancet/DAS_AdAd/DASEnforcedADAD+1.0V/Vhartree3D_af_Laplace_correction.out  ./DASADAD/1000.VH
+cp /mako/scratch/pdarancet/DAS_AdAd/DASEnforcedADAD+1.0V/Vhartree03D_af_Laplace_correction.out  ./DASADAD/1000.VH0
+
+mkdir BAPAADAD
+echo "BAPAADAD"
+
+echo "-1000"
+
+cp /mako/scratch/pdarancet/BAPA_AdAD/BAPAEnforcedADAD-1.0V/main.RHO  ./BAPAADAD/-1000.RHO
+cp /mako/scratch/pdarancet/BAPA_AdAD/BAPAEnforcedADAD-1.0V/main.DRHO  ./BAPAADAD/-1000.DRHO
+cp /mako/scratch/pdarancet/BAPA_AdAD/BAPAEnforcedADAD-1.0V/Vscf3D_af_Laplace_correction.out  ./BAPAADAD/-1000.VT
+cp /mako/scratch/pdarancet/BAPA_AdAD/BAPAEnforcedADAD-1.0V/Vhartree3D_af_Laplace_correction.out  ./BAPAADAD/-1000.VH
+cp /mako/scratch/pdarancet/BAPA_AdAD/BAPAEnforcedADAD-1.0V/Vhartree03D_af_Laplace_correction.out  ./BAPAADAD/-1000.VH0
+
+echo "-500"
+
+cp /mako/scratch/pdarancet/BAPA_AdAD/BAPAEnforcedADAD-0.5V/main.RHO  ./BAPAADAD/-500.RHO
+cp /mako/scratch/pdarancet/BAPA_AdAD/BAPAEnforcedADAD-0.5V/main.DRHO  ./BAPAADAD/-500.DRHO
+cp /mako/scratch/pdarancet/BAPA_AdAD/BAPAEnforcedADAD-0.5V/Vscf3D_af_Laplace_correction.out  ./BAPAADAD/-500.VT
+cp /mako/scratch/pdarancet/BAPA_AdAD/BAPAEnforcedADAD-0.5V/Vhartree3D_af_Laplace_correction.out  ./BAPAADAD/-500.VH
+cp /mako/scratch/pdarancet/BAPA_AdAD/BAPAEnforcedADAD-0.5V/Vhartree03D_af_Laplace_correction.out  ./BAPAADAD/-500.VH0
+echo "0"
+
+cp /mako/scratch/pdarancet/BAPA_AdAD/BAPAEnforcedADAD_0.0V/main.RHO  ./BAPAADAD/0.RHO
+cp /mako/scratch/pdarancet/BAPA_AdAD/BAPAEnforcedADAD_0.0V/main.DRHO  ./BAPAADAD/0.DRHO
+cp /mako/scratch/pdarancet/BAPA_AdAD/BAPAEnforcedADAD_0.0V/Vscf3D_af_Laplace_correction.out ./BAPAADAD/0.VT
+cp /mako/scratch/pdarancet/BAPA_AdAD/BAPAEnforcedADAD_0.0V/Vhartree3D_af_Laplace_correction.out  ./BAPAADAD/0.VH
+cp /mako/scratch/pdarancet/BAPA_AdAD/BAPAEnforcedADAD_0.0V/Vhartree03D_af_Laplace_correction.out  ./BAPAADAD/0.VH0
+
+echo "500"
+
+cp /mako/scratch/pdarancet/BAPA_AdAD/BAPAEnforcedADAD+0.5V/main.RHO  ./BAPAADAD/500.RHO
+cp /mako/scratch/pdarancet/BAPA_AdAD/BAPAEnforcedADAD+0.5V/main.DRHO ./BAPAADAD/500.DRHO
+cp /mako/scratch/pdarancet/BAPA_AdAD/BAPAEnforcedADAD+0.5V/Vscf3D_af_Laplace_correction.out  ./BAPAADAD/500.VT
+cp /mako/scratch/pdarancet/BAPA_AdAD/BAPAEnforcedADAD+0.5V/Vhartree3D_af_Laplace_correction.out  ./BAPAADAD/500.VH
+cp /mako/scratch/pdarancet/BAPA_AdAD/BAPAEnforcedADAD+0.5V/Vhartree03D_af_Laplace_correction.out  ./BAPAADAD/500.VH0
+
+echo "1000"
+
+cp /mako/scratch/pdarancet/BAPA_AdAD/BAPAEnforcedADAD+1.0V/main.RHO  ./BAPAADAD/1000.RHO
+cp /mako/scratch/pdarancet/BAPA_AdAD/BAPAEnforcedADAD+1.0V/main.DRHO  ./BAPAADAD/1000.DRHO
+cp /mako/scratch/pdarancet/BAPA_AdAD/BAPAEnforcedADAD+1.0V/Vscf3D_af_Laplace_correction.out  ./BAPAADAD/1000.VT
+cp /mako/scratch/pdarancet/BAPA_AdAD/BAPAEnforcedADAD+1.0V/Vhartree3D_af_Laplace_correction.out  ./BAPAADAD/1000.VH
+cp /mako/scratch/pdarancet/BAPA_AdAD/BAPAEnforcedADAD+1.0V/Vhartree03D_af_Laplace_correction.out  ./BAPAADAD/1000.VH0
+
+mkdir HDAADAD
+echo "HDAADAD"
+
+echo "-1000"
+
+cp /mako/scratch/pdarancet/HDA-D_AdAd/HDA-DEnforcedADAD-1.0V/main.RHO  ./HDAADAD/-1000.RHO
+cp /mako/scratch/pdarancet/HDA-D_AdAd/HDA-DEnforcedADAD-1.0V/main.DRHO  ./HDAADAD/-1000.DRHO
+cp /mako/scratch/pdarancet/HDA-D_AdAd/HDA-DEnforcedADAD-1.0V/Vscf3D_af_Laplace_correction.out  ./HDAADAD/-1000.VT
+cp /mako/scratch/pdarancet/HDA-D_AdAd/HDA-DEnforcedADAD-1.0V/Vhartree3D_af_Laplace_correction.out  ./HDAADAD/-1000.VH
+cp /mako/scratch/pdarancet/HDA-D_AdAd/HDA-DEnforcedADAD-1.0V/Vhartree03D_af_Laplace_correction.out  ./HDAADAD/-1000.VH0
+
+echo "-500"
+
+cp /mako/scratch/pdarancet/HDA-D_AdAd/HDA-DEnforcedADAD-0.5V/main.RHO  ./HDAADAD/-500.RHO
+cp /mako/scratch/pdarancet/HDA-D_AdAd/HDA-DEnforcedADAD-0.5V/main.DRHO  ./HDAADAD/-500.DRHO
+cp /mako/scratch/pdarancet/HDA-D_AdAd/HDA-DEnforcedADAD-0.5V/Vscf3D_af_Laplace_correction.out  ./HDAADAD/-500.VT
+cp /mako/scratch/pdarancet/HDA-D_AdAd/HDA-DEnforcedADAD-0.5V/Vhartree3D_af_Laplace_correction.out  ./HDAADAD/-500.VH
+cp /mako/scratch/pdarancet/HDA-D_AdAd/HDA-DEnforcedADAD-0.5V/Vhartree03D_af_Laplace_correction.out  ./HDAADAD/-500.VH0
+
+echo "0"
+
+cp /mako/scratch/pdarancet/HDA-D_AdAd/HDA-DEnforcedADAD_0.0V/main.RHO  ./HDAADAD/0.RHO
+cp /mako/scratch/pdarancet/HDA-D_AdAd/HDA-DEnforcedADAD_0.0V/main.DRHO  ./HDAADAD/0.DRHO
+cp /mako/scratch/pdarancet/HDA-D_AdAd/HDA-DEnforcedADAD_0.0V/Vscf3D_af_Laplace_correction.out  ./HDAADAD/0.VT
+cp /mako/scratch/pdarancet/HDA-D_AdAd/HDA-DEnforcedADAD_0.0V/Vhartree3D_af_Laplace_correction.out  ./HDAADAD/0.VH
+cp /mako/scratch/pdarancet/HDA-D_AdAd/HDA-DEnforcedADAD_0.0V/Vhartree03D_af_Laplace_correction.out  ./HDAADAD/0.VH0
+
+echo "500"
+
+cp /mako/scratch/pdarancet/HDA-D_AdAd/HDA-DEnforcedADAD+0.5V/main.RHO  ./HDAADAD/500.RHO
+cp /mako/scratch/pdarancet/HDA-D_AdAd/HDA-DEnforcedADAD+0.5V/main.DRHO  ./HDAADAD/500.DRHO
+cp /mako/scratch/pdarancet/HDA-D_AdAd/HDA-DEnforcedADAD+0.5V/Vscf3D_af_Laplace_correction.out ./HDAADAD/500.VT
+cp /mako/scratch/pdarancet/HDA-D_AdAd/HDA-DEnforcedADAD+0.5V/Vhartree3D_af_Laplace_correction.out  ./HDAADAD/500.VH
+cp /mako/scratch/pdarancet/HDA-D_AdAd/HDA-DEnforcedADAD+0.5V/Vhartree03D_af_Laplace_correction.out  ./HDAADAD/500.VH0
+
+echo "1000"
+
+cp /mako/scratch/pdarancet/HDA-D_AdAd/HDA-DEnforcedADAD+1.0V/main.RHO  ./HDAADAD/1000.RHO
+cp /mako/scratch/pdarancet/HDA-D_AdAd/HDA-DEnforcedADAD+1.0V/main.DRHO  ./HDAADAD/1000.DRHO
+cp /mako/scratch/pdarancet/HDA-D_AdAd/HDA-DEnforcedADAD+1.0V/Vscf3D_af_Laplace_correction.out  ./HDAADAD/1000.VT
+cp /mako/scratch/pdarancet/HDA-D_AdAd/HDA-DEnforcedADAD+1.0V/Vhartree3D_af_Laplace_correction.out  ./HDAADAD/1000.VH
+cp /mako/scratch/pdarancet/HDA-D_AdAd/HDA-DEnforcedADAD+1.0V/Vhartree03D_af_Laplace_correction.out  ./HDAADAD/1000.VH0
+
+mkdir BPADAD
+echo "BPADAD"
+
+echo "-1000"
+
+cp /mako/scratch/pdarancet/BP_constr_AdAd/BP_SY_AdAd-1.0V/main.RHO ./BPADAD/-1000.RHO
+cp /mako/scratch/pdarancet/BP_constr_AdAd/BP_SY_AdAd-1.0V/main.DRHO ./BPADAD/-1000.DRHO
+cp /mako/scratch/pdarancet/BP_constr_AdAd/BP_SY_AdAd-1.0V/Vscf3D_af_Laplace_correction.out ./BPADAD/-1000.VT
+cp /mako/scratch/pdarancet/BP_constr_AdAd/BP_SY_AdAd-1.0V/Vhartree3D_af_Laplace_correction.out ./BPADAD/-1000.VH
+cp /mako/scratch/pdarancet/BP_constr_AdAd/BP_SY_AdAd-1.0V/Vhartree03D_af_Laplace_correction.out ./BPADAD/-1000.VH0
+
+echo "-500"
+
+cp /mako/scratch/pdarancet/BP_constr_AdAd/BP_SY_AdAd-0.5V/main.RHO ./BPADAD/-500.RHO
+cp /mako/scratch/pdarancet/BP_constr_AdAd/BP_SY_AdAd-0.5V/main.DRHO ./BPADAD/-500.DRHO
+cp /mako/scratch/pdarancet/BP_constr_AdAd/BP_SY_AdAd-0.5V/Vscf3D_af_Laplace_correction.out ./BPADAD/-500.VT
+cp /mako/scratch/pdarancet/BP_constr_AdAd/BP_SY_AdAd-0.5V/Vhartree3D_af_Laplace_correction.out ./BPADAD/-500.VH
+cp /mako/scratch/pdarancet/BP_constr_AdAd/BP_SY_AdAd-0.5V/Vhartree03D_af_Laplace_correction.out ./BPADAD/-500.VH0
+
+echo "0"
+
+cp /mako/scratch/pdarancet/BP_constr_AdAd/BP_SY_AdAd_0.0V/main.RHO ./BPADAD/0.RHO
+cp /mako/scratch/pdarancet/BP_constr_AdAd/BP_SY_AdAd_0.0V/main.DRHO ./BPADAD/0.DRHO
+cp /mako/scratch/pdarancet/BP_constr_AdAd/BP_SY_AdAd_0.0V/Vscf3D_af_Laplace_correction.out ./BPADAD/0.VT
+cp /mako/scratch/pdarancet/BP_constr_AdAd/BP_SY_AdAd_0.0V/Vhartree3D_af_Laplace_correction.out ./BPADAD/0.VH
+cp /mako/scratch/pdarancet/BP_constr_AdAd/BP_SY_AdAd_0.0V/Vhartree03D_af_Laplace_correction.out ./BPADAD/0.VH0
+
+echo "500"
+
+cp /mako/scratch/pdarancet/BP_constr_AdAd/BP_SY_AdAd+0.5V/main.RHO ./BPADAD/500.RHO
+cp /mako/scratch/pdarancet/BP_constr_AdAd/BP_SY_AdAd+0.5V/main.DRHO ./BPADAD/500.DRHO
+cp /mako/scratch/pdarancet/BP_constr_AdAd/BP_SY_AdAd+0.5V/Vscf3D_af_Laplace_correction.out ./BPADAD/500.VT
+cp /mako/scratch/pdarancet/BP_constr_AdAd/BP_SY_AdAd+0.5V/Vhartree3D_af_Laplace_correction.out ./BPADAD/500.VH
+cp /mako/scratch/pdarancet/BP_constr_AdAd/BP_SY_AdAd+0.5V/Vhartree03D_af_Laplace_correction.out ./BPADAD/500.VH0
+
+echo "1000"
+
+cp /mako/scratch/pdarancet/BP_constr_AdAd/BP_SY_AdAd+1.0V/main.RHO ./BPADAD/1000.RHO
+cp /mako/scratch/pdarancet/BP_constr_AdAd/BP_SY_AdAd+1.0V/main.DRHO ./BPADAD/1000.DRHO
+cp /mako/scratch/pdarancet/BP_constr_AdAd/BP_SY_AdAd+1.0V/Vscf3D_af_Laplace_correction.out ./BPADAD/1000.VT
+cp /mako/scratch/pdarancet/BP_constr_AdAd/BP_SY_AdAd+1.0V/Vhartree3D_af_Laplace_correction.out ./BPADAD/1000.VH
+cp /mako/scratch/pdarancet/BP_constr_AdAd/BP_SY_AdAd+1.0V/Vhartree03D_af_Laplace_correction.out ./BPADAD/1000.VH0
+
+
+mkdir BPVHGTRIMAD
+echo "BPVHGTRIMAD"
+
+echo "-1000"
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-1000/main.RHO ./BPVHGTRIMAD/-1000.RHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-1000/main.DRHO ./BPVHGTRIMAD/-1000.DRHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-1000/Vscf3D_af_Laplace_correction.out ./BPVHGTRIMAD/-1000.VT
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-1000/Vhartree3D_af_Laplace_correction.out ./BPVHGTRIMAD/-1000.VH
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-1000/Vhartree03D_af_Laplace_correction.out ./BPVHGTRIMAD/-1000.VH0
+echo "-900"
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-900/main.RHO ./BPVHGTRIMAD/-900.RHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-900/main.DRHO ./BPVHGTRIMAD/-900.DRHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-900/Vscf3D_af_Laplace_correction.out ./BPVHGTRIMAD/-900.VT
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-900/Vhartree3D_af_Laplace_correction.out ./BPVHGTRIMAD/-900.VH
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-900/Vhartree03D_af_Laplace_correction.out ./BPVHGTRIMAD/-900.VH0
+echo "-800"
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-800/main.RHO ./BPVHGTRIMAD/-800.RHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-800/main.DRHO ./BPVHGTRIMAD/-800.DRHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-800/Vscf3D_af_Laplace_correction.out ./BPVHGTRIMAD/-800.VT
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-800/Vhartree3D_af_Laplace_correction.out ./BPVHGTRIMAD/-800.VH
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-800/Vhartree03D_af_Laplace_correction.out ./BPVHGTRIMAD/-800.VH0
+echo "-700"
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-700/main.RHO ./BPVHGTRIMAD/-700.RHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-700/main.DRHO ./BPVHGTRIMAD/-700.DRHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-700/Vscf3D_af_Laplace_correction.out ./BPVHGTRIMAD/-700.VT
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-700/Vhartree3D_af_Laplace_correction.out ./BPVHGTRIMAD/-700.VH
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-700/Vhartree03D_af_Laplace_correction.out ./BPVHGTRIMAD/-700.VH0
+echo "-600"
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-600/main.RHO ./BPVHGTRIMAD/-600.RHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-600/main.DRHO ./BPVHGTRIMAD/-600.DRHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-600/Vscf3D_af_Laplace_correction.out ./BPVHGTRIMAD/-600.VT
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-600/Vhartree3D_af_Laplace_correction.out ./BPVHGTRIMAD/-600.VH
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-600/Vhartree03D_af_Laplace_correction.out ./BPVHGTRIMAD/-600.VH0
+echo "-500"
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-500/main.RHO ./BPVHGTRIMAD/-500.RHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-500/main.DRHO ./BPVHGTRIMAD/-500.DRHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-500/Vscf3D_af_Laplace_correction.out ./BPVHGTRIMAD/-500.VT
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-500/Vhartree3D_af_Laplace_correction.out ./BPVHGTRIMAD/-500.VH
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-500/Vhartree03D_af_Laplace_correction.out ./BPVHGTRIMAD/-500.VH0
+echo "-400"
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-400/main.RHO ./BPVHGTRIMAD/-400.RHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-400/main.DRHO ./BPVHGTRIMAD/-400.DRHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-400/Vscf3D_af_Laplace_correction.out ./BPVHGTRIMAD/-400.VT
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-400/Vhartree3D_af_Laplace_correction.out ./BPVHGTRIMAD/-400.VH
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-400/Vhartree03D_af_Laplace_correction.out ./BPVHGTRIMAD/-400.VH0
+echo "-300"
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-300/main.RHO ./BPVHGTRIMAD/-300.RHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-300/main.DRHO ./BPVHGTRIMAD/-300.DRHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-300/Vscf3D_af_Laplace_correction.out ./BPVHGTRIMAD/-300.VT
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-300/Vhartree3D_af_Laplace_correction.out ./BPVHGTRIMAD/-300.VH
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-300/Vhartree03D_af_Laplace_correction.out ./BPVHGTRIMAD/-300.VH0
+echo "-200"
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-200/main.RHO ./BPVHGTRIMAD/-200.RHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-200/main.DRHO ./BPVHGTRIMAD/-200.DRHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-200/Vscf3D_af_Laplace_correction.out ./BPVHGTRIMAD/-200.VT
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-200/Vhartree3D_af_Laplace_correction.out ./BPVHGTRIMAD/-200.VH
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-200/Vhartree03D_af_Laplace_correction.out ./BPVHGTRIMAD/-200.VH0
+echo "-100"
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-100/main.RHO ./BPVHGTRIMAD/-100.RHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-100/main.DRHO ./BPVHGTRIMAD/-100.DRHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-100/Vscf3D_af_Laplace_correction.out ./BPVHGTRIMAD/-100.VT
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-100/Vhartree3D_af_Laplace_correction.out ./BPVHGTRIMAD/-100.VH
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_-100/Vhartree03D_af_Laplace_correction.out ./BPVHGTRIMAD/-100.VH0
+echo "0"
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_0/main.RHO ./BPVHGTRIMAD/0.RHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_0/main.DRHO ./BPVHGTRIMAD/0.DRHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_0/Vscf3D_af_Laplace_correction.out ./BPVHGTRIMAD/0.VT
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_0/Vhartree3D_af_Laplace_correction.out ./BPVHGTRIMAD/0.VH
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_0/Vhartree03D_af_Laplace_correction.out ./BPVHGTRIMAD/0.VH0
+echo "100"
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_100/main.RHO ./BPVHGTRIMAD/100.RHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_100/main.DRHO ./BPVHGTRIMAD/100.DRHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_100/Vscf3D_af_Laplace_correction.out ./BPVHGTRIMAD/100.VT
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_100/Vhartree3D_af_Laplace_correction.out ./BPVHGTRIMAD/100.VH
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_100/Vhartree03D_af_Laplace_correction.out ./BPVHGTRIMAD/100.VH0
+echo "200"
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_200/main.RHO ./BPVHGTRIMAD/200.RHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_200/main.DRHO ./BPVHGTRIMAD/200.DRHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_200/Vscf3D_af_Laplace_correction.out ./BPVHGTRIMAD/200.VT
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_200/Vhartree3D_af_Laplace_correction.out ./BPVHGTRIMAD/200.VH
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_200/Vhartree03D_af_Laplace_correction.out ./BPVHGTRIMAD/200.VH0
+echo "300"
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_300/main.RHO ./BPVHGTRIMAD/300.RHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_300/main.DRHO ./BPVHGTRIMAD/300.DRHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_300/Vscf3D_af_Laplace_correction.out ./BPVHGTRIMAD/300.VT
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_300/Vhartree3D_af_Laplace_correction.out ./BPVHGTRIMAD/300.VH
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_300/Vhartree03D_af_Laplace_correction.out ./BPVHGTRIMAD/300.VH0
+echo "400"
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_400/main.RHO ./BPVHGTRIMAD/400.RHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_400/main.DRHO ./BPVHGTRIMAD/400.DRHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_400/Vscf3D_af_Laplace_correction.out ./BPVHGTRIMAD/400.VT
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_400/Vhartree3D_af_Laplace_correction.out ./BPVHGTRIMAD/400.VH
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_400/Vhartree03D_af_Laplace_correction.out ./BPVHGTRIMAD/400.VH0
+echo "500"
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_500/main.RHO ./BPVHGTRIMAD/500.RHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_500/main.DRHO ./BPVHGTRIMAD/500.DRHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_500/Vscf3D_af_Laplace_correction.out ./BPVHGTRIMAD/500.VT
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_500/Vhartree3D_af_Laplace_correction.out ./BPVHGTRIMAD/500.VH
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_500/Vhartree03D_af_Laplace_correction.out ./BPVHGTRIMAD/500.VH0
+echo "600"
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_600/main.RHO ./BPVHGTRIMAD/600.RHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_600/main.DRHO ./BPVHGTRIMAD/600.DRHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_600/Vscf3D_af_Laplace_correction.out ./BPVHGTRIMAD/600.VT
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_600/Vhartree3D_af_Laplace_correction.out ./BPVHGTRIMAD/600.VH
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_600/Vhartree03D_af_Laplace_correction.out ./BPVHGTRIMAD/600.VH0
+echo "700"
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_700/main.RHO ./BPVHGTRIMAD/700.RHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_700/main.DRHO ./BPVHGTRIMAD/700.DRHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_700/Vscf3D_af_Laplace_correction.out ./BPVHGTRIMAD/700.VT
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_700/Vhartree3D_af_Laplace_correction.out ./BPVHGTRIMAD/700.VH
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_700/Vhartree03D_af_Laplace_correction.out ./BPVHGTRIMAD/700.VH0
+echo "800"
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_800/main.RHO ./BPVHGTRIMAD/800.RHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_800/main.DRHO ./BPVHGTRIMAD/800.DRHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_800/Vscf3D_af_Laplace_correction.out ./BPVHGTRIMAD/800.VT
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_800/Vhartree3D_af_Laplace_correction.out ./BPVHGTRIMAD/800.VH
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_800/Vhartree03D_af_Laplace_correction.out ./BPVHGTRIMAD/800.VH0
+echo "900"
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_900/main.RHO ./BPVHGTRIMAD/900.RHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_900/main.DRHO ./BPVHGTRIMAD/900.DRHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_900/Vscf3D_af_Laplace_correction.out ./BPVHGTRIMAD/900.VT
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_900/Vhartree3D_af_Laplace_correction.out ./BPVHGTRIMAD/900.VH
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_900/Vhartree03D_af_Laplace_correction.out ./BPVHGTRIMAD/900.VH0
+echo "1000"
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_1000/main.RHO ./BPVHGTRIMAD/1000.RHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_1000/main.DRHO ./BPVHGTRIMAD/1000.DRHO
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_1000/Vscf3D_af_Laplace_correction.out ./BPVHGTRIMAD/1000.VT
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_1000/Vhartree3D_af_Laplace_correction.out ./BPVHGTRIMAD/1000.VH
+cp /mako/scratch/pdarancet/BP_VeryHighG_TrimAd/PyridineBias_1000/Vhartree03D_af_Laplace_correction.out ./BPVHGTRIMAD/1000.VH0
+
+
+cd ..
+echo "tar"
+tar -zcvf Transfer.gz Transfer
+echo "Done"
+
+
+

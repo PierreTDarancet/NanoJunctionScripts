@@ -1,0 +1,258 @@
+!
+! Copyright (C) 2006 LEPES-CNRS
+!               2007 Institut Neel CNRS/UJF Grenoble
+! This file is distributed under the terms of the
+! GNU General Public License. See the file `License'
+! in the root directory of the present distribution,
+! or http://www.gnu.org/copyleft/gpl.txt .
+!
+! Contributors  : Pierre DARANCET
+!***********************************************************************************
+   SUBROUTINE green_tout_neuf( rec_chain, ene, g,  dim_mat, n_iter, cut_chain, cut_iter)
+   !***********************************************************************************
+   !
+   !  Construct green's functions
+   !     
+   !
+   USE kinds
+   USE constants, ONLY : CZERO, CONE, CI, ZERO
+   USE timing_module, ONLY : timing
+   IMPLICIT NONE
+
+   !
+   ! I/O variables
+   !
+   INTEGER,      INTENT(in)    :: dim_mat
+   INTEGER,      INTENT(in)    :: n_iter
+   COMPLEX(dbl), INTENT(in)    :: rec_chain(2, n_iter , dim_mat , dim_mat )
+   INTEGER, INTENT(in)         :: cut_iter( dim_mat , dim_mat )
+   LOGICAL, INTENT(in)         :: cut_chain
+   COMPLEX(dbl), INTENT(in)    :: ene
+   COMPLEX(dbl), INTENT(out)   :: g(dim_mat,dim_mat)
+
+   !
+   ! local variables
+   !
+   INTEGER                   :: i_mat, j_mat, ierr, iter, shift_iter
+   REAL(dbl)                 :: spectra_min, spectra_max
+   COMPLEX(dbl)              :: work(dim_mat,dim_mat)
+   COMPLEX(dbl)              :: g_work(dim_mat,dim_mat)
+   COMPLEX(dbl)              :: delta
+   CHARACTER(15)             :: subname='green_tout_neuf'
+!
+!----------------------------------------
+! main Body
+!----------------------------------------
+!
+   CALL timing('green_tout_neuf',OPR='start')
+!  local variables
+   g_work(:,:) = CZERO
+   work(:,:) = CZERO
+   g(:,:)=CZERO
+!  output variable
+
+
+
+! Solve GN
+! definir g_workN pour tous les cas 
+! |a>    |a+b>  |a+c>  |a+d>  |a+e>
+! |a+ib> |b>    |b+c>  |b+d>  |b+e>
+! |a+ic> |b+ic> |c>    |c+d>  |c+e>
+! |a+id> |b+id> |c+id> |d>    |d+e>
+! |a+ie> |b+ie> |c+ie> |d+ie> |e>
+!
+ 
+
+    IF (cut_chain) THEN
+         !
+         DO i_mat=1, dim_mat
+            !
+            DO j_mat=1, dim_mat
+               !
+               spectra_min= rec_chain(1, cut_iter(i_mat, j_mat), i_mat, j_mat) - 2 * ABS (rec_chain(2,cut_iter(i_mat, j_mat), i_mat, j_mat))
+               spectra_max= rec_chain(1, cut_iter(i_mat, j_mat), i_mat, j_mat) + 2 * ABS (rec_chain(2,cut_iter(i_mat, j_mat), i_mat, j_mat))
+               !
+               !
+               IF ( ( REAL(ene) <= spectra_max ) .AND. ( REAL (ene) >=  spectra_min )) THEN
+                     !
+                     ! b² - 4ac
+                     !
+                     delta = (rec_chain(1, cut_iter(i_mat, j_mat), i_mat, j_mat) - REAL(ene) )**2 - 4 * (rec_chain(2, cut_iter(i_mat, j_mat), i_mat, j_mat)**2)
+                     IF (REAL(delta) > ZERO )  CALL errore(subname, 'delta > 0', INT(ABS(delta+1)) )
+                     !
+                     !
+                     g_work(i_mat,j_mat)= (  ( ene - rec_chain(1, cut_iter(i_mat, j_mat), i_mat, j_mat)  ) - CI* SQRT ( -delta ) ) / (2* (rec_chain(2, cut_iter(i_mat, j_mat), i_mat, j_mat)**2))
+                     !
+                     !
+                     work(i_mat,j_mat) = g_work(i_mat,j_mat)
+                     !
+                     DO iter=1, (cut_iter(i_mat, j_mat)-1)
+                        shift_iter = cut_iter(i_mat, j_mat) - iter
+                        !
+                        work(i_mat,j_mat)= CONE / (ene - rec_chain(1, shift_iter, i_mat, j_mat) - ((rec_chain(2, shift_iter, i_mat, j_mat) **2) * work(i_mat,j_mat)))
+                        !
+                     ENDDO
+                     !
+                     !
+               ELSE 
+                     !
+                     g_work(i_mat,j_mat) = CZERO
+                     !
+                     work(i_mat,j_mat) = CZERO
+                     !
+               ENDIF
+            ENDDO
+            !
+         ENDDO
+         !
+    ELSE
+         DO i_mat=1, dim_mat
+            !
+            DO j_mat=1, dim_mat
+               !
+               spectra_min= rec_chain(1, n_iter-1, i_mat, j_mat) - 2 * ABS (rec_chain(2, n_iter-1, i_mat, j_mat))
+               spectra_max= rec_chain(1, n_iter-1, i_mat, j_mat) + 2 * ABS (rec_chain(2, n_iter-1, i_mat, j_mat))
+               !
+               !
+               IF ( ( REAL(ene) <= spectra_max ) .AND. ( REAL (ene) >=  spectra_min )) THEN
+                     !
+                     ! b² - 4ac
+                     !
+                     delta = (rec_chain(1, n_iter-1, i_mat, j_mat) - ene)**2 - 4 * (rec_chain(2, n_iter-1, i_mat, j_mat)**2)
+                     IF (REAL(delta) > ZERO )  CALL errore(subname, 'delta > 0', INT(ABS(delta+1)) )
+                     !
+                     !
+                     g_work(i_mat,j_mat)= (  -(rec_chain(1, n_iter-1, i_mat, j_mat) - ene) - CI* SQRT ( -delta ) ) / (2* (rec_chain(2, n_iter-1, i_mat, j_mat)**2))
+                     !
+                     !
+                     work(i_mat,j_mat) = g_work(i_mat,j_mat)
+                     !
+                     DO iter=1, n_iter-1
+                        shift_iter = n_iter - iter
+                        !
+                        work(i_mat,j_mat)= CONE / (ene - rec_chain(1, shift_iter, i_mat, j_mat) - ((rec_chain(2, shift_iter, i_mat, j_mat) **2) * work(i_mat,j_mat)))
+                        !
+                     ENDDO
+                     !
+                     !
+               ELSE 
+                     !
+                     g_work(i_mat,j_mat) = CZERO
+                     !
+                     work(i_mat,j_mat) = CZERO
+                     !
+               ENDIF
+            ENDDO
+            !
+         ENDDO
+    ENDIF
+    ! 
+
+!
+!    work(:,:) = g_work(:,:)
+!
+
+
+    !
+!       !
+!     DO i_mat=1, dim_mat
+!       ! 
+!       DO j_mat=1, dim_mat
+!          !
+!          DO iter=1, n_iter
+!             shift_iter = n_iter + 1 - iter
+!             !
+!             work(i_mat,j_mat)= CONE / (ene - rec_chain(1, shift_iter, i_mat, j_mat) - ((rec_chain(2, shift_iter, i_mat, j_mat) **2) * work(i_mat,j_mat)))
+!             !
+!          ENDDO
+!          !
+!       ENDDO
+!       !
+!     ENDDO
+!     !
+
+! Correction de normes pour
+! <a|G|a>        <a+b|G|a+b>    <a+c|G|a+c>    <a+d|G|a+d>    <a+e|G|a+e>
+! <a-ib|G|a+ib>  <b|G|b>        <b+c|G|b+c>    <b+d|G|b+d>    <b+e|G|b+e>
+! <a-ic|G|a+ic>  <b-ic|G|b+ic>  <c|G|c>        <c+d|G|c+d>    <c+e|G|c+e>
+! <a-id|G|a+id>  <b-id|G|b+id>  <c-id|G|c+id>  <d|G|d>        <d+e|G|d+e>
+! <a-ie|G|a+ie>  <b-ie|G|b+ie>  <c-ie|G|c+ie>  <d-ie|G|d+ie>  <e|G|e>
+
+    !
+    g_work(:,:) = CZERO
+    !
+    DO i_mat=1, dim_mat
+        !
+        DO j_mat=1, dim_mat
+            !
+            IF (i_mat == j_mat ) THEN
+               !
+               g_work(i_mat,j_mat) = work(i_mat,j_mat)
+               !
+            ELSE
+               !
+               g_work(i_mat,j_mat) = work(i_mat,j_mat) * 2
+               !
+            ENDIF
+            !
+        ENDDO
+        !
+    ENDDO
+    !
+
+!
+! Transformation de :
+!
+! <a|G|a>        <a+b|G|a+b>    <a+c|G|a+c>    <a+d|G|a+d>    <a+e|G|a+e>
+! <a+ib|G|a+ib>  <b|G|b>        <b+c|G|b+c>    <b+d|G|b+d>    <b+e|G|b+e>
+! <a+ic|G|a+ic>  <b+ic|G|b+ic>  <c|G|c>        <c+d|G|c+d>    <c+e|G|c+e>
+! <a+id|G|a+id>  <b+id|G|b+id>  <c+id|G|c+id>  <d|G|d>        <d+e|G|d+e>
+! <a+ie|G|a+ie>  <b+ie|G|b+ie>  <c+ie|G|c+ie>  <d+ie|G|d+ie>  <e|G|e>
+!
+! en :
+!
+! <a|G|a>  <a|G|b>  <a|G|c>  <a|G|d>  <a|G|e>
+! <b|G|a>  <b|G|b>  <b|G|c>  <b|G|d>  <b|G|e>
+! <c|G|a>  <c|G|b>  <c|G|c>  <c|G|d>  <c|G|e>
+! <d|G|a>  <d|G|b>  <d|G|c>  <d|G|d>  <d|G|e>
+! <e|G|a>  <e|G|b>  <e|G|c>  <e|G|d>  <e|G|e>
+
+    !
+    g(:,:) = CZERO
+    !
+
+    !
+    DO i_mat=1, dim_mat
+        !
+        g(i_mat,i_mat) = g_work(i_mat,i_mat)
+        !
+    ENDDO
+    !
+
+    !
+    DO i_mat=1, dim_mat-1
+        !
+        DO j_mat=i_mat+1, dim_mat
+            !
+            g(i_mat,j_mat) = 0.500000 * ((g_work(i_mat,j_mat) - g_work(i_mat,i_mat) - g_work(j_mat,j_mat)) - &
+                             ((g_work(j_mat,i_mat) - g_work(i_mat,i_mat) + g_work(j_mat,j_mat))*CI))
+            !
+            g(j_mat,i_mat) = 0.500000 * ((g_work(i_mat,j_mat) - g_work(i_mat,i_mat) - g_work(j_mat,j_mat)) + &
+                             ((g_work(j_mat,i_mat) - g_work(i_mat,i_mat) + g_work(j_mat,j_mat))*CI))
+
+
+            !
+        ENDDO
+        !
+    ENDDO
+   !
+
+
+
+
+
+   CALL timing('green_tout_neuf',OPR='stop')
+    !
+
+END SUBROUTINE green_tout_neuf
+

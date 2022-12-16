@@ -1,0 +1,6 @@
+#in eV
+YMIN=0
+YMAX=2
+YTICS=10.0
+YLABEL = 'Normalized Absorption [a.u.]'
+

@@ -1,0 +1,13 @@
+PLOT_TYPE="Density&Potential2panels"
+it=900
+load "specs.ingp"
+
+load "PS_density.setgp"
+
+load "4plots.2x2D_2xCt.setgp"
+
+load "oneshot.4plots.2D2Pc.rungp"
+
+load "close.rungp"
+
+

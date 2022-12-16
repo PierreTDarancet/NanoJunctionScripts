@@ -1,0 +1,7 @@
+
+############## 
+istart=65
+istop=147
+INPUT_FILE_1='./InputFig/gnuZTemp_'
+INPUT_FILE_2_A='./InputFig/Spikes'
+INPUT_FILE_2_B='./InputFig/avgAbsorp_PNB_dur_dmb_RC_2712_SR_20x30ELP'

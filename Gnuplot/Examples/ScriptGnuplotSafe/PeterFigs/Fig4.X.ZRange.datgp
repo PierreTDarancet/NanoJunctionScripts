@@ -1,0 +1,6 @@
+#in eV
+XMIN=-9.0
+XMAX=9.0
+XTICS=2
+XLABEL = 'Molecular Long Axis [Ang]'
+

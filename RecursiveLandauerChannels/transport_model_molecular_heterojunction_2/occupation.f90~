@@ -1,0 +1,239 @@
+!
+! Copyright (C) 2009 Molecular Foundry Berkeley
+!
+! This file is distributed under the terms of the
+! GNU General Public License. See the file `License'
+! in the root directory of the present distribution,
+! or http://www.gnu.org/copyleft/gpl.txt .
+!
+! Contributors  : Pierre DARANCET
+!***********************************************
+   MODULE occupation_module
+   !***********************************************
+  USE kinds, ONLY : dbl
+  USE constants, ONLY : ZERO, ONE, CZERO, CONE, CI,PI
+  USE T_egrid_module, ONLY : nemax
+  USE photon_module, ONLY : nphotonfrequency
+   IMPLICIT NONE
+   PRIVATE 
+   SAVE
+!
+
+
+   ! Public
+   REAL(dbl), ALLOCATABLE ::  f_L(:) ! Occupation function fL (\omega - bias/2) where f is a fermi dirac distribution
+   REAL(dbl), ALLOCATABLE ::  f_R(:) ! Occupation function fR (\omega + bias/2) where f is a fermi dirac distribution
+   REAL(dbl), ALLOCATABLE ::  f_shifted_L(:,:) ! Occupation function fL (\omega - bias/2 - \omega_i) where \omega_i is varrying as specified by photon grid
+   REAL(dbl), ALLOCATABLE ::  f_shifted_R(:,:) ! Occupation function fR (\omega + bias/2 - \omega_i) where \omega_i is varrying as specified by photon grid
+   REAL(dbl), ALLOCATABLE ::  f_shifted_max_L(:) ! Occupation function fL (\omega - bias/2 - \omega_res) where \omega_res corresponds for each bias to LUMO - HOMO
+   REAL(dbl), ALLOCATABLE ::  f_shifted_max_R(:)  ! Occupation function fR (\omega + bias/2 - \omega_res) where \omega_res corresponds for each bias to LUMO - HOMO
+
+   ! Private
+   LOGICAL :: alloc = .FALSE.
+   REAL(dbl), PARAMETER :: kBT= 0.0001*ONE
+
+   ! Public variables
+   PUBLIC                 :: f_L
+   PUBLIC                 :: f_R
+   PUBLIC                 :: f_shifted_L
+   PUBLIC                 :: f_shifted_R
+   PUBLIC                 :: f_shifted_max_L
+   PUBLIC                 :: f_shifted_max_R
+
+   ! Public routines:
+   PUBLIC                 :: occupation_allocate
+   PUBLIC                 :: occupation_deallocate
+   PUBLIC                 :: occupation_function_init
+
+   CONTAINS 
+!***********************************************
+   SUBROUTINE occupation_allocate
+   !***********************************************
+   IMPLICIT NONE
+       CHARACTER(19)      :: subname="occupation_allocate"
+
+       INTEGER  :: ierr
+       !
+        IF( alloc ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Already allocated"
+            STOP
+         ENDIF 
+
+        IF( nemax <= 0 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Error in nemax definition", " nemax ", nemax
+            STOP
+         ENDIF 
+
+
+        IF( nphotonfrequency <= 0 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Error in nphotonfrequency definition", " nphotonfrequency = ", nphotonfrequency
+            STOP
+         ENDIF 
+
+       ALLOCATE( f_L(nemax), STAT=ierr )
+       IF( ierr /=0 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Error allocating fL"
+            STOP
+       ENDIF 
+       ALLOCATE( f_R(nemax), STAT=ierr )
+       IF( ierr /=0 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Error allocating fR"
+            STOP
+       ENDIF 
+       ALLOCATE( f_shifted_L(nphotonfrequency, nemax), STAT=ierr )
+       IF( ierr /=0 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Error allocating f_shifted_L"
+            STOP
+       ENDIF 
+       ALLOCATE( f_shifted_R(nphotonfrequency, nemax), STAT=ierr )
+       IF( ierr /=0 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Error allocating f_shifted_R"
+            STOP
+       ENDIF 
+ 
+      ALLOCATE( f_shifted_max_L(nemax), STAT=ierr )
+       IF( ierr /=0 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Error allocating f_shifted_max_L"
+            STOP
+       ENDIF 
+       ALLOCATE( f_shifted_max_R(nemax), STAT=ierr )
+       IF( ierr /=0 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Error allocating f_shifted_max_R"
+            STOP
+       ENDIF 
+
+
+       f_R(:) = ZERO
+       f_L(:) = ZERO
+
+       f_shifted_R(:) = ZERO
+       f_shifted_L(:) = ZERO
+
+       f_shifted_max_R(:) = ZERO
+       f_shifted_max_L(:) = ZERO
+
+       alloc = .TRUE.
+
+
+  END SUBROUTINE occupation_allocate
+!***********************************************
+   SUBROUTINE occupation_deallocate 
+   !***********************************************
+  IMPLICIT NONE
+       CHARACTER(21)      :: subname="occupation_deallocate"
+       INTEGER :: ierr
+
+
+       IF ( ALLOCATED(f_R) ) THEN
+            DEALLOCATE(f_R, STAT=ierr)
+            IF( ierr /=0 ) THEN 
+               PRINT*, "Error in Routine ",  TRIM(subname) 
+               PRINT*, "Error deallocating f_R"
+               STOP
+           ENDIF 
+       ENDIF
+
+       IF ( ALLOCATED(f_L) ) THEN
+            DEALLOCATE(f_L, STAT=ierr)
+            IF( ierr /=0 ) THEN 
+               PRINT*, "Error in Routine ",  TRIM(subname) 
+               PRINT*, "Error deallocating f_L"
+               STOP
+           ENDIF 
+       ENDIF
+       IF ( ALLOCATED( f_shifted_R) ) THEN
+            DEALLOCATE( f_shifted_R, STAT=ierr)
+            IF( ierr /=0 ) THEN 
+               PRINT*, "Error in Routine ",  TRIM(subname) 
+               PRINT*, "Error deallocating f_shifted_R"
+               STOP
+           ENDIF 
+       ENDIF
+       IF ( ALLOCATED(f_shifted_L) ) THEN
+            DEALLOCATE(f_shifted_L, STAT=ierr)
+            IF( ierr /=0 ) THEN 
+               PRINT*, "Error in Routine ",  TRIM(subname) 
+               PRINT*, "Error deallocating f_shifted_L"
+               STOP
+           ENDIF 
+       ENDIF
+       IF ( ALLOCATED(f_shifted_max_R) ) THEN
+            DEALLOCATE(f_shifted_max_R, STAT=ierr)
+            IF( ierr /=0 ) THEN 
+               PRINT*, "Error in Routine ",  TRIM(subname) 
+               PRINT*, "Error deallocating f_shifted_max_R"
+               STOP
+           ENDIF 
+       ENDIF
+       IF ( ALLOCATED(f_shifted_max_L) ) THEN
+            DEALLOCATE(f_shifted_max_L, STAT=ierr)
+            IF( ierr /=0 ) THEN 
+               PRINT*, "Error in Routine ",  TRIM(subname) 
+               PRINT*, "Error deallocating f_shifted_max_L"
+               STOP
+           ENDIF 
+       ENDIF
+
+       alloc = .FALSE.
+
+   END SUBROUTINE occupation_deallocate
+
+!***********************************************
+   SUBROUTINE occupation_function_init(f_L_aux, f_R_aux, f_shifted_L_aux, f_shifted_R_aux, f_shifted_max_L_aux, f_shifted_max_R_aux, ene, bias,  photonfrequencies, omegamax, nphoton )
+   !***********************************************
+  IMPLICIT NONE
+   REAL(dbl), INTENT(out) ::  f_L_aux ! Occupation function fL (\omega - bias/2) where f is a fermi dirac distribution
+   REAL(dbl), INTENT(out) ::  f_R_aux ! Occupation function fR (\omega + bias/2) where f is a fermi dirac distribution
+   REAL(dbl), INTENT(out) ::  f_shifted_L_aux(nphoton)  ! Occupation function fL (\omega - bias/2 - \omega_i) where \omega_i is varrying as specified by photon grid
+   REAL(dbl), INTENT(out) ::  f_shifted_R_aux(nphoton) ! Occupation function fR (\omega + bias/2 - \omega_i) where \omega_i is varrying as specified by photon grid
+   REAL(dbl), INTENT(out) ::  f_shifted_max_L_aux ! Occupation function fL (\omega - bias/2 - \omega_res) where \omega_res corresponds for each bias to LUMO - HOMO
+   REAL(dbl), INTENT(out) ::  f_shifted_max_R_aux  ! Occupation function fR (\omega + bias/2 - \omega_res) where \omega_res corresponds for each bias to LUMO - HOMO
+   REAL(dbl), INTENT(in)  ::  ene
+   REAL(dbl), INTENT(in)  ::  bias
+   REAL(dbl), INTENT(in)  ::  photonfrequencies(nphoton)
+   REAL(dbl), INTENT(in)  ::  omegamax
+   INTEGER, INTENT(in)    ::  nphoton
+
+    CHARACTER(24)      :: subname="occupation_function_init"
+    INTEGER :: ierr, iphoton
+
+        IF( .NOT. alloc ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Not allocated"
+            STOP
+         ENDIF 
+        !
+         IF( nphoton <= 0 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Error in nphoton definition", " nphoton ", nphoton
+            STOP
+         ENDIF 
+
+        !(exp{(omega - \mu)/k_b T} + 1 )^{-1}
+        ! Only Fermi Dirac distributions for the moment
+	f_L_aux = ONE / ( EXP( ( ene - ( bias/(2.0*ONE) ) )/ (kBT) )  + ONE) ! Left Electrode at the potential E_Fermi (+0eV) + bias/2
+	f_R_aux = ONE / ( EXP( ( ene + ( bias/(2.0*ONE) ) )/ (kBT) )  + ONE) ! Right Electrode at the potential E_Fermi (+0eV) - bias/2
+	f_shifted_max_L_aux = ONE / ( EXP( ( ene - omegamax - ( bias/(2.0*ONE) ) )/ (kBT) )  + ONE) ! Left Electrode at the potential E_Fermi (+0eV) + bias/2
+	f_shifted_max_R_aux = ONE / ( EXP( ( ene - omegamax + ( bias/(2.0*ONE) ) )/ (kBT) )  + ONE) ! Right Electrode at the potential E_Fermi (+0eV) - bias/2
+
+	DO iphoton=1, nphoton 
+		f_shifted_L_aux(iphoton) =  ONE / ( EXP( ( ene - photonfrequencies(iphoton) - ( bias/(2.0*ONE) ) )/ (kBT) )  + ONE) ! Left Electrode at the potential E_Fermi (+0eV) + bias/2
+		f_shifted_R_aux(iphoton) =  ONE / ( EXP( ( ene - photonfrequencies(iphoton) + ( bias/(2.0*ONE) ) )/ (kBT) )  + ONE) ! Right Electrode at the potential E_Fermi (+0eV) - bias/2
+        ENDDO 
+
+
+   END SUBROUTINE occupation_function_init
+
+
+  END  MODULE occupation_module
+
+ 

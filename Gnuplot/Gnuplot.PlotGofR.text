@@ -1,0 +1,599 @@
+
+set terminal aqua enhanced title "Si2 Naphthalene bond" font "Helvetica,20"
+set title "Si-Si"
+set style fill solid 0.5 #fillstyle
+set size ratio 1/2.
+
+max=3.0 ; min=2.0 ; n=40 ;  width=(max-min)/n ; print width ; set xrange [min:max] ; hist(x,width)=width*floor(x/width)+width/2.0
+set xtics 0.1
+
+lwidth=2.0
+set style line  1 lt 1 lc rgb '#352a87' lw lwidth # blue
+set style line  2 lt 1 lc rgb '#0f5cdd' lw lwidth  # blue
+set style line  3 lt 1 lc rgb '#1481d6' lw lwidth  # blue
+set style line  4 lt 1 lc rgb '#06a4ca' lw lwidth  # cyan
+set style line  5 lt 1 lc rgb '#2eb7a4' lw lwidth  # green
+set style line  6 lt 1 lc rgb '#87bf77' lw lwidth  # green
+set style line  7 lt 1 lc rgb '#d1bb59' lw lwidth  # orange
+set style line  8 lt 1 lc rgb '#fec832' lw lwidth  # orange
+set style line  9 lt 1 lc rgb '#f9fb0e' lw lwidth  # yellow
+set style line  10 lt 1 lc rgb '#ffee00' lw lwidth  # yellow
+set style line  11 lt 1 lc rgb '#ff7000' lw lwidth  # yellow
+set style line  12 lt 1 lc rgb '#ee0000' lw lwidth  # yellow
+set style line  13 lt 1 lc rgb '#be0000' lw lwidth  # yellow
+set style line  14 lt 1 lc rgb '#7f0000' lw lwidth  # yellow
+scalefactor=3.0
+
+set xlabel "Distance (Angstroms)"
+set ylabel "Counts"
+plot \
+"< tail -n 1500 ../500K/tmp.dist" u (hist($1,width)):(1.0) smooth freq w impulses ls 1  t "500K", \
+"< tail -n 1500 ../600K/tmp.dist" u (hist($1,width)):(1.0) smooth freq w impulses ls 3  t "600K", \
+"< tail -n 1500 ../700K/tmp.dist" u (hist($1,width)):(1.0) smooth freq w impulses ls 6  t "700K", \
+"< tail -n 1500 ../800K/tmp.dist" u (hist($1,width)):(1.0) smooth freq w impulses ls 9  t "800K", \
+"< tail -n 1500 ../900K/tmp.dist" u (hist($1,width)):(1.0) smooth freq w impulses ls 14  t "900K"
+
+
+
+
+set terminal aqua enhanced title "Si-Si" font "Helvetica,20"
+set title "Si2: Silicon-Silicon bond"
+set style fill solid 0.5 #fillstyle
+set size ratio 1/2.
+
+max=2.8 ; min=2.2 ; n=40 ;  width=(max-min)/n ; print width ; set xrange [min:max] ; hist(x,width)=width*floor(x/width)+width/2.0
+set xtics 0.1
+
+lwidth=2.0
+set style line  1 lt 1 lc rgb '#352a87' lw lwidth # blue
+set style line  2 lt 1 lc rgb '#0f5cdd' lw lwidth  # blue
+set style line  3 lt 1 lc rgb '#1481d6' lw lwidth  # blue
+set style line  4 lt 1 lc rgb '#06a4ca' lw lwidth  # cyan
+set style line  5 lt 1 lc rgb '#2eb7a4' lw lwidth  # green
+set style line  6 lt 1 lc rgb '#87bf77' lw lwidth  # green
+set style line  7 lt 1 lc rgb '#d1bb59' lw lwidth  # orange
+set style line  8 lt 1 lc rgb '#fec832' lw lwidth  # orange
+set style line  9 lt 1 lc rgb '#f9fb0e' lw lwidth  # yellow
+set style line  10 lt 1 lc rgb '#ffee00' lw lwidth  # yellow
+set style line  11 lt 1 lc rgb '#ff7000' lw lwidth  # yellow
+set style line  12 lt 1 lc rgb '#ee0000' lw lwidth  # yellow
+set style line  13 lt 1 lc rgb '#be0000' lw lwidth  # yellow
+set style line  14 lt 1 lc rgb '#7f0000' lw lwidth  # yellow
+scalefactor=3.0
+
+set xlabel "Distance (Angstroms)"
+set ylabel "Counts"
+plot \
+"< tail -n 3000 ./Si2.SiSiDist.300.ANI" u (hist($1,width)):(1.0) smooth freq w impulses ls 1  t "300K", \
+"< tail -n 3000 ./Si2.SiSiDist.400.ANI" u (hist($1,width)):(1.0) smooth freq w impulses ls 2  t "400K", \
+"< tail -n 3000 ./Si2.SiSiDist.500.ANI" u (hist($1,width)):(1.0) smooth freq w impulses ls 3  t "500K", \
+"< tail -n 3000 ./Si2.SiSiDist.600.ANI" u (hist($1,width)):(1.0) smooth freq w impulses ls 4  t "600K", \
+"< tail -n 3000 ./Si2.SiSiDist.700.ANI" u (hist($1,width)):(1.0) smooth freq w impulses ls 5  t "700K", \
+"< tail -n 3000 ./Si2.SiSiDist.800.ANI" u (hist($1,width)):(1.0) smooth freq w impulses ls 6  t "800K", \
+"< tail -n 3000 ./Si2.SiSiDist.900.ANI" u (hist($1,width)):(1.0) smooth freq w impulses ls 7  t "900K", \
+"< tail -n 3000 ./Si2.SiSiDist.1000.ANI" u (hist($1,width)):(1.0) smooth freq w impulses ls 8  t "1000K", \
+"< tail -n 3000 ./Si2.SiSiDist.1100.ANI" u (hist($1,width)):(1.0) smooth freq w impulses ls 9  t "1100K", \
+"< tail -n 3000 ./Si2.SiSiDist.1200.ANI" u (hist($1,width)):(1.0) smooth freq w impulses ls 10 t "1200K", \
+"< tail -n 3000 ./Si2.SiSiDist.1300.ANI" u (hist($1,width)):(1.0) smooth freq w impulses ls 11 t "1300K", \
+"< tail -n 3000 ./Si2.SiSiDist.1400.ANI" u (hist($1,width)):(1.0) smooth freq w impulses ls 12 t "1400K", \
+"< tail -n 3000 ./Si2.SiSiDist.1500.ANI" u (hist($1,width)):(1.0) smooth freq w impulses ls 13 t "1500K", \
+"< tail -n 3000 ./Si2.SiSiDist.1600.ANI" u (hist($1,width)):(1.0) smooth freq w impulses ls 14 t "1600K", \
+"< tail -n 3000 ./Si2.SiSiDist.300.ANI" u (hist($1,scalefactor*width)):(1.0/scalefactor) smooth freq w l ls 1  notitle , \
+"< tail -n 3000 ./Si2.SiSiDist.400.ANI" u (hist($1,scalefactor*width)):(1.0/scalefactor) smooth freq w l ls 2  notitle , \
+"< tail -n 3000 ./Si2.SiSiDist.500.ANI" u (hist($1,scalefactor*width)):(1.0/scalefactor) smooth freq w l ls 3  notitle , \
+"< tail -n 3000 ./Si2.SiSiDist.600.ANI" u (hist($1,scalefactor*width)):(1.0/scalefactor) smooth freq w l ls 4  notitle , \
+"< tail -n 3000 ./Si2.SiSiDist.700.ANI" u (hist($1,scalefactor*width)):(1.0/scalefactor) smooth freq w l ls 5  notitle , \
+"< tail -n 3000 ./Si2.SiSiDist.800.ANI" u (hist($1,scalefactor*width)):(1.0/scalefactor) smooth freq w l ls 6  notitle , \
+"< tail -n 3000 ./Si2.SiSiDist.900.ANI" u (hist($1,scalefactor*width)):(1.0/scalefactor) smooth freq w l ls 7  notitle , \
+"< tail -n 3000 ./Si2.SiSiDist.1000.ANI" u (hist($1,scalefactor*width)):(1.0/scalefactor) smooth freq w l ls 8  notitle , \
+"< tail -n 3000 ./Si2.SiSiDist.1100.ANI" u (hist($1,scalefactor*width)):(1.0/scalefactor) smooth freq w l ls 9  notitle , \
+"< tail -n 3000 ./Si2.SiSiDist.1200.ANI" u (hist($1,scalefactor*width)):(1.0/scalefactor) smooth freq w l ls 10 notitle , \
+"< tail -n 3000 ./Si2.SiSiDist.1300.ANI" u (hist($1,scalefactor*width)):(1.0/scalefactor) smooth freq w l ls 11 notitle , \
+"< tail -n 3000 ./Si2.SiSiDist.1400.ANI" u (hist($1,scalefactor*width)):(1.0/scalefactor) smooth freq w l ls 12 notitle , \
+"< tail -n 3000 ./Si2.SiSiDist.1500.ANI" u (hist($1,scalefactor*width)):(1.0/scalefactor) smooth freq w l ls 13 notitle , \
+"< tail -n 3000 ./Si2.SiSiDist.1600.ANI" u (hist($1,scalefactor*width)):(1.0/scalefactor) smooth freq w l ls 14 notitle 
+
+
+
+
+
+
+set terminal aqua enhanced title "Si2NaphtaleneSiSi" font "Helvetica,20"
+set title "Si2Naph: Silicon-Silicon bond"
+set style fill solid 0.5 #fillstyle
+set size ratio 1/2.
+
+max=2.8 ; min=2.2 ; n=40 ;  width=(max-min)/n ; print width ; set xrange [min:max] ; hist(x,width)=width*floor(x/width)+width/2.0
+set xtics 0.1
+
+lwidth=2.0
+set style line  1 lt 1 lc rgb '#352a87' lw lwidth # blue
+set style line  2 lt 1 lc rgb '#0f5cdd' lw lwidth  # blue
+set style line  3 lt 1 lc rgb '#1481d6' lw lwidth  # blue
+set style line  4 lt 1 lc rgb '#06a4ca' lw lwidth  # cyan
+set style line  5 lt 1 lc rgb '#2eb7a4' lw lwidth  # green
+set style line  6 lt 1 lc rgb '#87bf77' lw lwidth  # green
+set style line  7 lt 1 lc rgb '#d1bb59' lw lwidth  # orange
+set style line  8 lt 1 lc rgb '#fec832' lw lwidth  # orange
+set style line  9 lt 1 lc rgb '#f9fb0e' lw lwidth  # yellow
+set style line  10 lt 1 lc rgb '#ffee00' lw lwidth  # yellow
+set style line  11 lt 1 lc rgb '#ff7000' lw lwidth  # yellow
+set style line  12 lt 1 lc rgb '#ee0000' lw lwidth  # yellow
+set style line  13 lt 1 lc rgb '#be0000' lw lwidth  # yellow
+set style line  14 lt 1 lc rgb '#7f0000' lw lwidth  # yellow
+ 
+
+
+
+set xlabel "Distance (Angstroms)"
+set ylabel "Counts"
+
+plot \
+"< tail -n 2000 ./Si2Naph.SiSiDist.300.ANI" u (hist($1,width)):(1.0) smooth freq w impulses ls 1  t "300K", \
+"< tail -n 2000 ./Si2Naph.SiSiDist.400.ANI" u (hist($1,width)):(1.0) smooth freq w impulses ls 2  t "400K", \
+"< tail -n 2000 ./Si2Naph.SiSiDist.500.ANI" u (hist($1,width)):(1.0) smooth freq w impulses ls 3  t "500K", \
+"< tail -n 2000 ./Si2Naph.SiSiDist.600.ANI" u (hist($1,width)):(1.0) smooth freq w impulses ls 4  t "600K", \
+"< tail -n 2000 ./Si2Naph.SiSiDist.700.ANI" u (hist($1,width)):(1.0) smooth freq w impulses ls 5  t "700K", \
+"< tail -n 2000 ./Si2Naph.SiSiDist.800.ANI" u (hist($1,width)):(1.0) smooth freq w impulses ls 6  t "800K", \
+"< tail -n 2000 ./Si2Naph.SiSiDist.900.ANI" u (hist($1,width)):(1.0) smooth freq w impulses ls 7  t "900K", \
+"< tail -n 2000 ./Si2Naph.SiSiDist.1000.ANI" u (hist($1,width)):(1.0) smooth freq w impulses ls 8  t "1000K", \
+"< tail -n 2000 ./Si2Naph.SiSiDist.1100.ANI" u (hist($1,width)):(1.0) smooth freq w impulses ls 9  t "1100K", \
+"< tail -n 2000 ./Si2Naph.SiSiDist.1200.ANI" u (hist($1,width)):(1.0) smooth freq w impulses ls 10 t "1200K", \
+"< tail -n 2000 ./Si2Naph.SiSiDist.1300.ANI" u (hist($1,width)):(1.0) smooth freq w impulses ls 11 t "1300K", \
+"< tail -n 2000 ./Si2Naph.SiSiDist.1400.ANI" u (hist($1,width)):(1.0) smooth freq w impulses ls 12 t "1400K", \
+"< tail -n 2000 ./Si2Naph.SiSiDist.1500.ANI" u (hist($1,width)):(1.0) smooth freq w impulses ls 13 t "1500K", \
+"< tail -n 2000 ./Si2Naph.SiSiDist.1600.ANI" u (hist($1,width)):(1.0) smooth freq w impulses ls 14 t "1600K", \
+"< tail -n 2000 ./Si2Naph.SiSiDist.300.ANI" u (hist($1,scalefactor*width)):(1.0/scalefactor) smooth freq w l ls 1  notitle , \
+"< tail -n 2000 ./Si2Naph.SiSiDist.400.ANI" u (hist($1,scalefactor*width)):(1.0/scalefactor) smooth freq w l ls 2  notitle , \
+"< tail -n 2000 ./Si2Naph.SiSiDist.500.ANI" u (hist($1,scalefactor*width)):(1.0/scalefactor) smooth freq w l ls 3  notitle , \
+"< tail -n 2000 ./Si2Naph.SiSiDist.600.ANI" u (hist($1,scalefactor*width)):(1.0/scalefactor) smooth freq w l ls 4  notitle , \
+"< tail -n 2000 ./Si2Naph.SiSiDist.700.ANI" u (hist($1,scalefactor*width)):(1.0/scalefactor) smooth freq w l ls 5  notitle , \
+"< tail -n 2000 ./Si2Naph.SiSiDist.800.ANI" u (hist($1,scalefactor*width)):(1.0/scalefactor) smooth freq w l ls 6  notitle , \
+"< tail -n 2000 ./Si2Naph.SiSiDist.900.ANI" u (hist($1,scalefactor*width)):(1.0/scalefactor) smooth freq w l ls 7  notitle , \
+"< tail -n 2000 ./Si2Naph.SiSiDist.1000.ANI" u (hist($1,scalefactor*width)):(1.0/scalefactor) smooth freq w l ls 8  notitle , \
+"< tail -n 2000 ./Si2Naph.SiSiDist.1100.ANI" u (hist($1,scalefactor*width)):(1.0/scalefactor) smooth freq w l ls 9  notitle , \
+"< tail -n 2000 ./Si2Naph.SiSiDist.1200.ANI" u (hist($1,scalefactor*width)):(1.0/scalefactor) smooth freq w l ls 10 notitle , \
+"< tail -n 2000 ./Si2Naph.SiSiDist.1300.ANI" u (hist($1,scalefactor*width)):(1.0/scalefactor) smooth freq w l ls 11 notitle , \
+"< tail -n 2000 ./Si2Naph.SiSiDist.1400.ANI" u (hist($1,scalefactor*width)):(1.0/scalefactor) smooth freq w l ls 12 notitle , \
+"< tail -n 2000 ./Si2Naph.SiSiDist.1500.ANI" u (hist($1,scalefactor*width)):(1.0/scalefactor) smooth freq w l ls 13 notitle , \
+"< tail -n 2000 ./Si2Naph.SiSiDist.1600.ANI" u (hist($1,scalefactor*width)):(1.0/scalefactor) smooth freq w l ls 14 notitle 
+
+
+####
+
+
+
+#################################################
+
+set terminal aqua enhanced title "Si-Si" font "Helvetica,20"
+set title "Si2: Silicon-Silicon bond"
+set style fill solid 0.5 #fillstyle
+set size ratio 1/2.
+
+max=3.2 ; min=2.2 ; n=100 ;  width=(max-min)/n ; print width ; set xrange [min:max] ; hist(x,width)=width*floor(x/width)+width/2.0
+set xtics 0.1
+set key reverse
+
+# line styles
+set style line  1 lt 1 lc rgb '#352a87' # blue
+set style line  2 lt 1 lc rgb '#0f5cdd' # blue
+set style line  3 lt 1 lc rgb '#1481d6' # blue
+set style line  4 lt 1 lc rgb '#06a4ca' # cyan
+set style line  5 lt 1 lc rgb '#2eb7a4' # green
+set style line  6 lt 1 lc rgb '#87bf77' # green
+set style line  7 lt 1 lc rgb '#d1bb59' # orange
+set style line  8 lt 1 lc rgb '#fec832' # orange
+set style line  9 lt 1 lc rgb '#f9fb0e' # yellow
+set style line  10 lt 1 lc rgb '#ffee00' # yellow
+set style line  11 lt 1 lc rgb '#ff7000' # yellow
+set style line  12 lt 1 lc rgb '#ee0000' # yellow
+set style line  13 lt 1 lc rgb '#be0000' # yellow
+set style line  14 lt 1 lc rgb '#7f0000' # yellow
+ 
+
+set xlabel "Distance (Angstroms)"
+set ylabel "Counts"
+plot \
+"./SiSi.300K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 1  t "300K", \
+"./SiSi.400K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 2  t "400K", \
+"./SiSi.500K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 3  t "500K", \
+"./SiSi.600K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 4  t "600K", \
+"./SiSi.700K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 5  t "700K", \
+"./SiSi.800K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 6  t "800K", \
+"./SiSi.900K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 7  t "900K", \
+"./SiSi.1000K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 8  t "1000K", \
+"./SiSi.1100K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 9  t "1100K", \
+"./SiSi.1200K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 10 t "1200K", \
+"./SiSi.1300K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 11 t "1300K", \
+"./SiSi.1400K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 12 t "1400K", \
+"./SiSi.1500K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 13 t "1500K", \
+"./SiSi.1600K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 14 t "1600K", \
+"./SiSi.300K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 1  notitle , \
+"./SiSi.400K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 2  notitle , \
+"./SiSi.500K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 3  notitle , \
+"./SiSi.600K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 4  notitle , \
+"./SiSi.700K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 5  notitle , \
+"./SiSi.800K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 6  notitle , \
+"./SiSi.900K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 7  notitle , \
+"./SiSi.1000K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 8  notitle , \
+"./SiSi.1100K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 9  notitle , \
+"./SiSi.1200K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 10 notitle , \
+"./SiSi.1300K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 11 notitle , \
+"./SiSi.1400K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 12 notitle , \
+"./SiSi.1500K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 13 notitle , \
+"./SiSi.1600K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 14 notitle 
+
+#################################################
+
+set terminal aqua enhanced title "S-Au left" font "Helvetica,20"
+set title "Si2: S-Au (left) bond"
+set style fill solid 0.5 #fillstyle
+set size ratio 1/2.
+
+max=3. ; min=2. ; n=100 ;  width=(max-min)/n ; print width ; set xrange [min:max] ; hist(x,width)=width*floor(x/width)+width/2.0
+set xtics 0.1
+
+
+# line styles
+set style line  1 lt 1 lc rgb '#352a87' # blue
+set style line  2 lt 1 lc rgb '#0f5cdd' # blue
+set style line  3 lt 1 lc rgb '#1481d6' # blue
+set style line  4 lt 1 lc rgb '#06a4ca' # cyan
+set style line  5 lt 1 lc rgb '#2eb7a4' # green
+set style line  6 lt 1 lc rgb '#87bf77' # green
+set style line  7 lt 1 lc rgb '#d1bb59' # orange
+set style line  8 lt 1 lc rgb '#fec832' # orange
+set style line  9 lt 1 lc rgb '#f9fb0e' # yellow
+set style line  10 lt 1 lc rgb '#ffee00' # yellow
+set style line  11 lt 1 lc rgb '#ff7000' # yellow
+set style line  12 lt 1 lc rgb '#ee0000' # yellow
+set style line  13 lt 1 lc rgb '#be0000' # yellow
+set style line  14 lt 1 lc rgb '#7f0000' # yellow
+ 
+
+set xlabel "Distance (Angstroms)"
+set ylabel "Counts"
+plot \
+"./SAu1.300K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 1  t "300K", \
+"./SAu1.400K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 2  t "400K", \
+"./SAu1.500K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 3  t "500K", \
+"./SAu1.600K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 4  t "600K", \
+"./SAu1.700K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 5  t "700K", \
+"./SAu1.800K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 6  t "800K", \
+"./SAu1.900K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 7  t "900K", \
+"./SAu1.1000K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 8  t "1000K", \
+"./SAu1.1100K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 9  t "1100K", \
+"./SAu1.1200K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 10 t "1200K", \
+"./SAu1.1300K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 11 t "1300K", \
+"./SAu1.1400K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 12 t "1400K", \
+"./SAu1.1500K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 13 t "1500K", \
+"./SAu1.1600K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 14 t "1600K", \
+"./SAu1.300K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 1  notitle , \
+"./SAu1.400K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 2  notitle , \
+"./SAu1.500K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 3  notitle , \
+"./SAu1.600K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 4  notitle , \
+"./SAu1.700K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 5  notitle , \
+"./SAu1.800K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 6  notitle , \
+"./SAu1.900K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 7  notitle , \
+"./SAu1.1000K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 8  notitle , \
+"./SAu1.1100K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 9  notitle , \
+"./SAu1.1200K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 10 notitle , \
+"./SAu1.1300K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 11 notitle , \
+"./SAu1.1400K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 12 notitle , \
+"./SAu1.1500K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 13 notitle , \
+"./SAu1.1600K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 14 notitle 
+
+
+
+
+#################################################
+set terminal aqua enhanced title "S-Au right" font "Helvetica,20"
+set title "Si2: S-Au (right) bond"
+set style fill solid 0.5 #fillstyle
+set size ratio 1/2.
+
+max=3. ; min=2. ; n=100 ;  width=(max-min)/n ; print width ; set xrange [min:max] ; hist(x,width)=width*floor(x/width)+width/2.0
+set xtics 0.1
+
+
+# line styles
+set style line  1 lt 1 lc rgb '#352a87' # blue
+set style line  2 lt 1 lc rgb '#0f5cdd' # blue
+set style line  3 lt 1 lc rgb '#1481d6' # blue
+set style line  4 lt 1 lc rgb '#06a4ca' # cyan
+set style line  5 lt 1 lc rgb '#2eb7a4' # green
+set style line  6 lt 1 lc rgb '#87bf77' # green
+set style line  7 lt 1 lc rgb '#d1bb59' # orange
+set style line  8 lt 1 lc rgb '#fec832' # orange
+set style line  9 lt 1 lc rgb '#f9fb0e' # yellow
+set style line  10 lt 1 lc rgb '#ffee00' # yellow
+set style line  11 lt 1 lc rgb '#ff7000' # yellow
+set style line  12 lt 1 lc rgb '#ee0000' # yellow
+set style line  13 lt 1 lc rgb '#be0000' # yellow
+set style line  14 lt 1 lc rgb '#7f0000' # yellow
+ 
+
+set xlabel "Distance (Angstroms)"
+set ylabel "Counts"
+plot \
+"./SAu2.300K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 1  t "300K", \
+"./SAu2.400K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 2  t "400K", \
+"./SAu2.500K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 3  t "500K", \
+"./SAu2.600K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 4  t "600K", \
+"./SAu2.700K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 5  t "700K", \
+"./SAu2.800K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 6  t "800K", \
+"./SAu2.900K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 7  t "900K", \
+"./SAu2.1000K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 8  t "1000K", \
+"./SAu2.1100K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 9  t "1100K", \
+"./SAu2.1200K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 10 t "1200K", \
+"./SAu2.1300K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 11 t "1300K", \
+"./SAu2.1400K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 12 t "1400K", \
+"./SAu2.1500K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 13 t "1500K", \
+"./SAu2.1600K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 14 t "1600K", \
+"./SAu2.300K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 1  notitle , \
+"./SAu2.400K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 2  notitle , \
+"./SAu2.500K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 3  notitle , \
+"./SAu2.600K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 4  notitle , \
+"./SAu2.700K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 5  notitle , \
+"./SAu2.800K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 6  notitle , \
+"./SAu2.900K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 7  notitle , \
+"./SAu2.1000K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 8  notitle , \
+"./SAu2.1100K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 9  notitle , \
+"./SAu2.1200K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 10 notitle , \
+"./SAu2.1300K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 11 notitle , \
+"./SAu2.1400K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 12 notitle , \
+"./SAu2.1500K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 13 notitle , \
+"./SAu2.1600K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 14 notitle 
+
+
+
+#################################################
+set terminal aqua enhanced title "S-Backbone left" font "Helvetica,20"
+set title "Si2: S-C (left) bond"
+set style fill solid 0.5 #fillstyle
+set size ratio 1/2.
+
+max=2.4 ; min=1.4 ; n=100 ;  width=(max-min)/n ; print width ; set xrange [min:max] ; hist(x,width)=width*floor(x/width)+width/2.0
+set xtics 0.1
+
+
+# line styles
+set style line  1 lt 1 lc rgb '#352a87' # blue
+set style line  2 lt 1 lc rgb '#0f5cdd' # blue
+set style line  3 lt 1 lc rgb '#1481d6' # blue
+set style line  4 lt 1 lc rgb '#06a4ca' # cyan
+set style line  5 lt 1 lc rgb '#2eb7a4' # green
+set style line  6 lt 1 lc rgb '#87bf77' # green
+set style line  7 lt 1 lc rgb '#d1bb59' # orange
+set style line  8 lt 1 lc rgb '#fec832' # orange
+set style line  9 lt 1 lc rgb '#f9fb0e' # yellow
+set style line  10 lt 1 lc rgb '#ffee00' # yellow
+set style line  11 lt 1 lc rgb '#ff7000' # yellow
+set style line  12 lt 1 lc rgb '#ee0000' # yellow
+set style line  13 lt 1 lc rgb '#be0000' # yellow
+set style line  14 lt 1 lc rgb '#7f0000' # yellow
+ 
+SC2set xlabel "Distance (Angstroms)"
+set ylabel "Counts"
+plot \
+"./SC1.300K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 1  t "300K", \
+"./SC1.400K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 2  t "400K", \
+"./SC1.500K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 3  t "500K", \
+"./SC1.600K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 4  t "600K", \
+"./SC1.700K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 5  t "700K", \
+"./SC1.800K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 6  t "800K", \
+"./SC1.900K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 7  t "900K", \
+"./SC1.1000K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 8  t "1000K", \
+"./SC1.1100K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 9  t "1100K", \
+"./SC1.1200K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 10 t "1200K", \
+"./SC1.1300K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 11 t "1300K", \
+"./SC1.1400K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 12 t "1400K", \
+"./SC1.1500K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 13 t "1500K", \
+"./SC1.1600K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 14 t "1600K", \
+"./SC1.300K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 1  notitle , \
+"./SC1.400K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 2  notitle , \
+"./SC1.500K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 3  notitle , \
+"./SC1.600K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 4  notitle , \
+"./SC1.700K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 5  notitle , \
+"./SC1.800K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 6  notitle , \
+"./SC1.900K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 7  notitle , \
+"./SC1.1000K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 8  notitle , \
+"./SC1.1100K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 9  notitle , \
+"./SC1.1200K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 10 notitle , \
+"./SC1.1300K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 11 notitle , \
+"./SC1.1400K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 12 notitle , \
+"./SC1.1500K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 13 notitle , \
+"./SC1.1600K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 14 notitle 
+
+
+
+
+
+
+#################################################
+set terminal aqua enhanced title "S-Backbone right" font "Helvetica,20"
+set title "Si2: S-C (right) bond"
+set style fill solid 0.5 #fillstyle
+set size ratio 1/2.
+
+max=2.4 ; min=1.4 ; n=100 ;  width=(max-min)/n ; print width ; set xrange [min:max] ; hist(x,width)=width*floor(x/width)+width/2.0
+set xtics 0.1
+
+
+# line styles
+set style line  1 lt 1 lc rgb '#352a87' # blue
+set style line  2 lt 1 lc rgb '#0f5cdd' # blue
+set style line  3 lt 1 lc rgb '#1481d6' # blue
+set style line  4 lt 1 lc rgb '#06a4ca' # cyan
+set style line  5 lt 1 lc rgb '#2eb7a4' # green
+set style line  6 lt 1 lc rgb '#87bf77' # green
+set style line  7 lt 1 lc rgb '#d1bb59' # orange
+set style line  8 lt 1 lc rgb '#fec832' # orange
+set style line  9 lt 1 lc rgb '#f9fb0e' # yellow
+set style line  10 lt 1 lc rgb '#ffee00' # yellow
+set style line  11 lt 1 lc rgb '#ff7000' # yellow
+set style line  12 lt 1 lc rgb '#ee0000' # yellow
+set style line  13 lt 1 lc rgb '#be0000' # yellow
+set style line  14 lt 1 lc rgb '#7f0000' # yellow
+ 
+SC2set xlabel "Distance (Angstroms)"
+set ylabel "Counts"
+plot \
+"./SC2.300K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 1  t "300K", \
+"./SC2.400K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 2  t "400K", \
+"./SC2.500K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 3  t "500K", \
+"./SC2.600K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 4  t "600K", \
+"./SC2.700K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 5  t "700K", \
+"./SC2.800K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 6  t "800K", \
+"./SC2.900K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 7  t "900K", \
+"./SC2.1000K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 8  t "1000K", \
+"./SC2.1100K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 9  t "1100K", \
+"./SC2.1200K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 10 t "1200K", \
+"./SC2.1300K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 11 t "1300K", \
+"./SC2.1400K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 12 t "1400K", \
+"./SC2.1500K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 13 t "1500K", \
+"./SC2.1600K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 14 t "1600K", \
+"./SC2.300K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 1  notitle , \
+"./SC2.400K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 2  notitle , \
+"./SC2.500K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 3  notitle , \
+"./SC2.600K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 4  notitle , \
+"./SC2.700K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 5  notitle , \
+"./SC2.800K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 6  notitle , \
+"./SC2.900K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 7  notitle , \
+"./SC2.1000K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 8  notitle , \
+"./SC2.1100K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 9  notitle , \
+"./SC2.1200K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 10 notitle , \
+"./SC2.1300K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 11 notitle , \
+"./SC2.1400K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 12 notitle , \
+"./SC2.1500K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 13 notitle , \
+"./SC2.1600K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 14 notitle 
+
+
+
+#################################################
+set terminal aqua enhanced title "Si-C left" font "Helvetica,20"
+set title "Si2: Si-C (left) bond"
+set style fill solid 0.5 #fillstyle
+set size ratio 1/2.
+
+max=2.7 ; min=1.7 ; n=100 ;  width=(max-min)/n ; print width ; set xrange [min:max] ; hist(x,width)=width*floor(x/width)+width/2.0
+set xtics 0.1
+
+
+# line styles
+set style line  1 lt 1 lc rgb '#352a87' # blue
+set style line  2 lt 1 lc rgb '#0f5cdd' # blue
+set style line  3 lt 1 lc rgb '#1481d6' # blue
+set style line  4 lt 1 lc rgb '#06a4ca' # cyan
+set style line  5 lt 1 lc rgb '#2eb7a4' # green
+set style line  6 lt 1 lc rgb '#87bf77' # green
+set style line  7 lt 1 lc rgb '#d1bb59' # orange
+set style line  8 lt 1 lc rgb '#fec832' # orange
+set style line  9 lt 1 lc rgb '#f9fb0e' # yellow
+set style line  10 lt 1 lc rgb '#ffee00' # yellow
+set style line  11 lt 1 lc rgb '#ff7000' # yellow
+set style line  12 lt 1 lc rgb '#ee0000' # yellow
+set style line  13 lt 1 lc rgb '#be0000' # yellow
+set style line  14 lt 1 lc rgb '#7f0000' # yellow
+ 
+set xlabel "Distance (Angstroms)"
+set ylabel "Counts"
+plot \
+"./SiCbb1.300K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 1  t "300K", \
+"./SiCbb1.400K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 2  t "400K", \
+"./SiCbb1.500K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 3  t "500K", \
+"./SiCbb1.600K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 4  t "600K", \
+"./SiCbb1.700K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 5  t "700K", \
+"./SiCbb1.800K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 6  t "800K", \
+"./SiCbb1.900K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 7  t "900K", \
+"./SiCbb1.1000K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 8  t "1000K", \
+"./SiCbb1.1100K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 9  t "1100K", \
+"./SiCbb1.1200K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 10 t "1200K", \
+"./SiCbb1.1300K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 11 t "1300K", \
+"./SiCbb1.1400K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 12 t "1400K", \
+"./SiCbb1.1500K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 13 t "1500K", \
+"./SiCbb1.1600K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 14 t "1600K", \
+"./SiCbb1.300K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 1  notitle , \
+"./SiCbb1.400K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 2  notitle , \
+"./SiCbb1.500K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 3  notitle , \
+"./SiCbb1.600K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 4  notitle , \
+"./SiCbb1.700K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 5  notitle , \
+"./SiCbb1.800K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 6  notitle , \
+"./SiCbb1.900K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 7  notitle , \
+"./SiCbb1.1000K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 8  notitle , \
+"./SiCbb1.1100K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 9  notitle , \
+"./SiCbb1.1200K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 10 notitle , \
+"./SiCbb1.1300K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 11 notitle , \
+"./SiCbb1.1400K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 12 notitle , \
+"./SiCbb1.1500K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 13 notitle , \
+"./SiCbb1.1600K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 14 notitle 
+
+
+
+
+
+
+#################################################
+set terminal aqua enhanced title "Si-C right" font "Helvetica,20"
+set title "Si2: Si-C (right) bond"
+set style fill solid 0.5 #fillstyle
+set size ratio 1/2.
+
+max=2.7 ; min=1.7 ; n=100 ;  width=(max-min)/n ; print width ; set xrange [min:max] ; hist(x,width)=width*floor(x/width)+width/2.0
+set xtics 0.1
+
+
+# line styles
+set style line  1 lt 1 lc rgb '#352a87' # blue
+set style line  2 lt 1 lc rgb '#0f5cdd' # blue
+set style line  3 lt 1 lc rgb '#1481d6' # blue
+set style line  4 lt 1 lc rgb '#06a4ca' # cyan
+set style line  5 lt 1 lc rgb '#2eb7a4' # green
+set style line  6 lt 1 lc rgb '#87bf77' # green
+set style line  7 lt 1 lc rgb '#d1bb59' # orange
+set style line  8 lt 1 lc rgb '#fec832' # orange
+set style line  9 lt 1 lc rgb '#f9fb0e' # yellow
+set style line  10 lt 1 lc rgb '#ffee00' # yellow
+set style line  11 lt 1 lc rgb '#ff7000' # yellow
+set style line  12 lt 1 lc rgb '#ee0000' # yellow
+set style line  13 lt 1 lc rgb '#be0000' # yellow
+set style line  14 lt 1 lc rgb '#7f0000' # yellow
+ 
+SC2set xlabel "Distance (Angstroms)"
+set ylabel "Counts"
+plot \
+"./SiCbb2.300K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 1  t "300K", \
+"./SiCbb2.400K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 2  t "400K", \
+"./SiCbb2.500K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 3  t "500K", \
+"./SiCbb2.600K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 4  t "600K", \
+"./SiCbb2.700K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 5  t "700K", \
+"./SiCbb2.800K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 6  t "800K", \
+"./SiCbb2.900K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 7  t "900K", \
+"./SiCbb2.1000K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 8  t "1000K", \
+"./SiCbb2.1100K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 9  t "1100K", \
+"./SiCbb2.1200K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 10 t "1200K", \
+"./SiCbb2.1300K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 11 t "1300K", \
+"./SiCbb2.1400K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 12 t "1400K", \
+"./SiCbb2.1500K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 13 t "1500K", \
+"./SiCbb2.1600K.dat" u (hist($1,width)):(1.0) smooth freq w boxes ls 14 t "1600K", \
+"./SiCbb2.300K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 1  notitle , \
+"./SiCbb2.400K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 2  notitle , \
+"./SiCbb2.500K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 3  notitle , \
+"./SiCbb2.600K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 4  notitle , \
+"./SiCbb2.700K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 5  notitle , \
+"./SiCbb2.800K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 6  notitle , \
+"./SiCbb2.900K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 7  notitle , \
+"./SiCbb2.1000K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 8  notitle , \
+"./SiCbb2.1100K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 9  notitle , \
+"./SiCbb2.1200K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 10 notitle , \
+"./SiCbb2.1300K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 11 notitle , \
+"./SiCbb2.1400K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 12 notitle , \
+"./SiCbb2.1500K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 13 notitle , \
+"./SiCbb2.1600K.dat" u (hist($1,5.*width)):(1.0/5.) smooth freq w l ls 14 notitle 
+
+
+
+
+
+
+

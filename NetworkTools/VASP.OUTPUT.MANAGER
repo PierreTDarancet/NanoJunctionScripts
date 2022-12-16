@@ -1,0 +1,135 @@
+#!/bin/bash
+##  ENV #####
+MYNAME="VASP.OUTPUT.MANAGER" 
+MYVERSION="0.1"
+MACHINE=`hostname`
+WORKDIR=`pwd`
+if [ -e /etc/profile ]; then
+	source /etc/profile
+fi
+if [ -e /etc/profile ]; then
+	source ~/.profile
+fi
+SCRIPTBEGINTIME=`date`
+COMMONDIR="COMMON"
+OUTPUTPROGDIR="JobProgress"
+FILECHECKOUTPUT="CHG  CHGCAR   CONTCAR  DOSCAR  EIGENVAL IBZKPT INCAR KPOINTS LOCPOT OSZICAR OUTCAR PCDAT POSCAR POTCAR PROCAR  XDATCAR vasprun.xml WAVECAR wannier90.win wannier90.wout wannier90.eig wannier90.mmn wannier90.up.mmn wannier90.up.eig wannier90.dn.mmn wannier90.dn.eig"
+
+##  \ENV #####
+# Copyright (C) 2012 Colunbia University
+#
+# This file is distributed under the terms of the
+# GNU General Public License. See the file `License'
+# in the root directory of the present distribution,
+# or http://www.gnu.org/copyleft/gpl.txt .
+#
+# Contributors  : Pierre Darancet
+# ***********************************************
+#
+# This program calls the Oneshot.General Script to launch 
+# a calculation on a given machine
+# ARGUMENTS  
+# $1 = JOBTYPE LIST
+echo '# *********************************************************#'
+echo '# *  Vasp OUTPUT.MANAGER: Version 0.1                    *#'
+echo '# *********************************************************#'
+echo '# Copyright (C) 2013 Colunbia University                   #'
+echo '#                                                          #'
+echo '# This file is distributed under the terms of the          #'
+echo '# GNU General Public License. See the file License         #'
+echo '# in the root directory of the present distribution,       #'
+echo '# or http://www.gnu.org/copyleft/gpl.txt .                 #'
+echo '#                                                          #'
+echo '# Contributors  : Pierre Darancet                          #'
+echo '# *********************************************************#'
+echo '#                                                          #'
+echo '# This program generates input for vasp and call Vasp      #'
+echo '# ARGUMENTS                                                #'
+echo '# $1 = JOBTYPE LIST                                        #'
+echo '# *********************************************************#'
+echo '# This shell is running in the following directory:        #'
+echo "$WORKDIR"
+
+
+##################################################
+# EXECUTION
+##################################################
+echo "$MYNAME $MYVERSION beginning at" `date`  >> $WORKDIR/README
+##################################################
+
+
+
+
+##################################################
+###### CHECK IF THE ARG MAKES SENSE ##############
+##################################################
+JOBTYPELIST="$1"
+for JOBTYPE in  $JOBTYPELIST
+do
+	echo "Job type:"  $JOBTYPE
+	FOUND=".FALSE."
+	for JOBTYPECHECK in  $JOBTYPELIST
+	do
+		if [ "$JOBTYPECHECK" = "$JOBTYPE" ] ; then
+			FOUND=".TRUE."
+		fi
+	done
+	if [ "$FOUND" = ".TRUE." ] ; then
+		echo "... supported!"
+	else
+		echo "ERROR: $JOBTYPE is NOT supported... EXITING NOW"
+		echo "ERROR: $JOBTYPE is NOT supported... EXITING NOW" >> $WORKDIR/README
+		exit 
+	fi
+done
+
+for JOBTYPE in  $JOBTYPELIST
+do
+	if [ -e $WORKDIR/OUTCAR ] ; then
+		Testtmp=`tail -n 1 OUTCAR | awk '{print $1}'`
+		if [ "$Testtmp" = "Voluntary" ] ; then
+			for OUTPUTFILE in $FILECHECKOUTPUT
+			do
+				MOVEDFILE=`echo "${JOBTYPE}.$OUTPUTFILE" | tr -d ' '`
+				if [ -e $WORKDIR/$OUTPUTFILE ] ; then
+					echo "Moving File $OUTPUTFILE to $MOVEDFILE"  >>$WORKDIR/README
+					mv  $WORKDIR/$OUTPUTFILE  $WORKDIR/$MOVEDFILE
+				else
+					echo "$OUTPUTFILE Not present in the DIR"  >>$WORKDIR/README
+				fi
+			done
+			MOVEDFILE=`echo "${JOBTYPE}.README" | tr -d ' '`
+			echo "Moving README File --End of edits"  >> $WORKDIR/README
+			mv  $WORKDIR/README  $WORKDIR/$MOVEDFILE
+		else #if [ "$Testtmp" = "Voluntary" ] ; then
+			# CALCULATION NON CONVERGED
+			NOW=`date "+%Y-%m-%dT-%H%M%S"`
+			for OUTPUTFILE in $FILECHECKOUTPUT
+			do
+				MOVEDFILE=`echo "${JOBTYPE}.$OUTPUTFILE.NOTCONVERGED" | tr -d ' '`
+				if [ -e $WORKDIR/$OUTPUTFILE ] ; then
+					echo "Moving File $OUTPUTFILE to $MOVEDFILE"  >>$WORKDIR/README
+					mv  $WORKDIR/$OUTPUTFILE  $WORKDIR/$MOVEDFILE
+				else
+					echo "$OUTPUTFILE Not present in the DIR"  >>$WORKDIR/README
+				fi
+			done
+			MOVEDFILE=`echo "${JOBTYPE}.README.NOTCONVERGED.$NOW" | tr -d ' '`
+			echo "Moving README File --End of edits"  >> $WORKDIR/README
+			cp  $WORKDIR/README  $WORKDIR/$MOVEDFILE
+			MOVEDFILE=`echo "${JOBTYPE}.README.NOTCONVERGED" | tr -d ' '`
+			mv  $WORKDIR/README  $WORKDIR/$MOVEDFILE
+			echo `pwd` ": Calculation not converged"
+		fi #if [ "$Testtmp" = "F=" ] ; then
+	else #if [ -e $WORKDIR/${JOBTYPE}.out ] ; then
+		echo `pwd` ": OUTCAR doesn't exist"
+	fi #if [ -e $WORKDIR/${JOBTYPE}.out ] ; then
+done #for JOBTYPE in  $JOBTYPELIST
+#####################################################
+
+
+
+
+
+
+

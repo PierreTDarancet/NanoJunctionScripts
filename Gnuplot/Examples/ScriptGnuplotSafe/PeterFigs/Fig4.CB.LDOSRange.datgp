@@ -1,0 +1,5 @@
+#in eV-1
+CBMIN=0.0
+CBMAX=0.03
+CBTICS=0.05
+CBLABEL =  "LDOS [a.u.]"

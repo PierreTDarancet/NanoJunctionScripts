@@ -1,0 +1,71 @@
+#!/bin/bash
+#############################################
+##### Calculation VARIABLES		#####
+#############################################
+SCRATCHDIRECTORY=`pwd`
+OUTDIRECTORY="PlotsTransmission"
+JUNCTIONLIST="DASADAD DASTRIMAD DASTRIMTRIM BAPAADAD BAPATRIMAD BAPATRIMTRIM BPADAD BPADAD_re BPTRIMAD BPTRIMTRIM BPVHGTRIMAD HDAADAD HDATRIMAD HDATRIMTRIM"
+BIASLIST="-1000 -500 0 500 1000"
+#############################################
+##### GNUPLOT VARIABLES			#####
+#############################################
+GNUPLOTFILE="Makeplot.Transmission.1page.PS.rungp"
+GNUPLOTEXE="gnuplot"
+GNUPLOTDIRECTORYCOMMON=$SCRATCHDIRECTORY/GPFILES
+SPECSCOMMON=$SCRATCHDIRECTORY/SPECSFILES
+#############################################
+#############################################
+#############################################
+
+mkdir $SCRATCHDIRECTORY/temp
+mkdir $SCRATCHDIRECTORY/$OUTDIRECTORY/
+
+echo SCRATCHDIRECTORY
+echo $SCRATCHDIRECTORY
+
+#############################################
+#############################################
+#############################################
+#LOOP for LOCAL_M in 1 2 3 4 5
+for LOCALDIR in $JUNCTIONLIST
+do
+cd $SCRATCHDIRECTORY/temp
+echo "Launching Junction: " $LOCALDIR
+cd $SCRATCHDIRECTORY/$LOCALDIR
+echo "Target Directory: "  $SCRATCHDIRECTORY/$LOCALDIR
+echo "Actual Directory: " `pwd`
+#############################################
+mkdir $SCRATCHDIRECTORY/$LOCALDIR/$OUTDIRECTORY
+cd $SCRATCHDIRECTORY/temp/
+rm $SCRATCHDIRECTORY/temp/*
+
+cp $SCRATCHDIRECTORY/$LOCALDIR/*Small.gp $SCRATCHDIRECTORY/temp/
+cp $SCRATCHDIRECTORY/$LOCALDIR/*Large.gp $SCRATCHDIRECTORY/temp/
+
+ln -s $SCRATCHDIRECTORY/GPFILES/*.setgp $SCRATCHDIRECTORY/temp/
+ln -s $SCRATCHDIRECTORY/GPFILES/*.rungp $SCRATCHDIRECTORY/temp/
+ln -s $SCRATCHDIRECTORY/GPFILES/*.plt  $SCRATCHDIRECTORY/temp/
+cp $SCRATCHDIRECTORY/SPECSFILES/common.ingp  $SCRATCHDIRECTORY/temp/common.ingp 
+cp $SCRATCHDIRECTORY/SPECSFILES/$LOCALDIR\.ingp $SCRATCHDIRECTORY/temp/specs.ingp
+
+for BIAS in $BIASLIST
+do
+sort -n $SCRATCHDIRECTORY/temp/$BIAS\.DFT.Small.gp $SCRATCHDIRECTORY/temp/$BIAS\.DFT.Large.gp  | awk '{print $1,$2}' > $SCRATCHDIRECTORY/temp/$BIAS\.DFT.gp
+sort -n $SCRATCHDIRECTORY/temp/$BIAS\.DFT+S.Small.gp $SCRATCHDIRECTORY/temp/$BIAS\.DFT+S.Large.gp | awk '{print $1,$2}' > $SCRATCHDIRECTORY/temp/$BIAS\.DFT+S.gp
+done
+
+$GNUPLOTEXE $GNUPLOTFILE > $SCRATCHDIRECTORY/temp/$LOCALDIR\.$GNUPLOTFILE\.out 
+echo  "Copying Output Files"
+cp $SCRATCHDIRECTORY/temp/$LOCALDIR\.$GNUPLOTFILE\.out $SCRATCHDIRECTORY/$LOCALDIR/$OUTDIRECTORY/
+cp $SCRATCHDIRECTORY/temp/*.gif $SCRATCHDIRECTORY/$LOCALDIR/$OUTDIRECTORY/
+cp $SCRATCHDIRECTORY/temp/*.png $SCRATCHDIRECTORY/$LOCALDIR/$OUTDIRECTORY/
+cp $SCRATCHDIRECTORY/temp/*.ps $SCRATCHDIRECTORY/$LOCALDIR/$OUTDIRECTORY/
+echo "Completed for Junction: "  $LOCALDIR
+cp $SCRATCHDIRECTORY/temp/*.ps  $SCRATCHDIRECTORY/$OUTDIRECTORY/
+
+done
+
+echo "Done"
+
+
+

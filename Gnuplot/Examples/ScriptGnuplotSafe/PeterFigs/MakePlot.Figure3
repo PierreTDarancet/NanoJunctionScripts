@@ -1,0 +1,65 @@
+reset
+PLOT_TYPE="Fig3_Correlations"
+PLOTNAME="Fig3_Correlation_TheoryVsExp"
+set terminal  postscript enhanced font 'Helvetica,20'
+unset pm3d
+OUTPUT_NAME=sprintf("%s.ps",PLOTNAME);
+RydtoeV=13.605
+eVtoRyd=1.0/13.605
+
+set output OUTPUT_NAME
+
+
+
+load "PS.setgp"
+load  "Fig3.1plot.setgp"
+load  "Fig3.INPUTFILES.datgp"
+load  "Fig3.X.EnergyRange.datgp"
+load  "Fig3.Y.EnergyRange.datgp"
+load "Fig3.Styles.ColorBar.setgp"
+load "Fig3.Styles.Points.setgp"
+
+
+set size ratio SIZE_RATIO
+LMARGIN = LMARGIN_1
+RMARGIN = RMARGIN_1
+TMARGIN = TMARGIN_1
+BMARGIN = BMARGIN_1
+SETXLABEL = SETXLABEL_1
+SETYLABEL = SETYLABEL_1
+
+set border
+unset colorbox
+set key outside
+unset title
+unset contour
+unset xlabel
+unset ylabel
+unset cblabel
+unset xtics
+unset ytics
+unset cbtics
+set lmargin at screen LMARGIN
+set rmargin at screen RMARGIN
+set tmargin at screen TMARGIN
+set bmargin at screen BMARGIN
+
+set xrange [XMIN:XMAX]
+set yrange [YMIN:YMAX]
+set cbrange [0:7]
+if (SETXLABEL) set xlabel XLABEL font 'Helvetica,20' offset 0,-1
+set xtics  XTICS   font 'Helvetica,0.1'
+set mxtics 2
+if (SETXLABEL) set xtics  XTICS   font 'Helvetica,20'
+if (SETYLABEL) set ylabel YLABEL font 'Helvetica,20'  offset -2,0
+set ytics  YTICS   font 'Helvetica,0.1'
+if (SETYLABEL) set ytics  YTICS font 'Helvetica,20'
+set mytics 2
+
+
+
+plot x notitle  w l ls 14, INPUT_FILE_A using 1:5:6 w p ls 10 title "{/Helvetica=20 DFT-RPA}", INPUT_FILE_A using 1:4:6 w p ls 9 title "{/Helvetica=20 GW-RPA}", INPUT_FILE_A using 1:2:6 w p ls 5  title "{/Helvetica=20 GW-BSE}", INPUT_FILE_A using 1:3:6 w p ls 6 title "{/Helvetica=20 GW-BSE Solvent}"
+
+
+
+#, INPUT_FILE_B using 1:2:4  with labels font 'Helvetica,20'  offset +8

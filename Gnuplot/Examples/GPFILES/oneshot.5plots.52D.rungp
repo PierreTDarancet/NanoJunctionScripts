@@ -1,0 +1,158 @@
+print(it);
+
+LMARGIN = LMARGIN_1
+RMARGIN = RMARGIN_1 
+TMARGIN = TMARGIN_1 
+BMARGIN = BMARGIN_1
+SETXLABEL = SETXLABEL_1
+SETYLABEL = SETYLABEL_1
+SETCBLABEL = SETCBLABEL_1
+SETTITLE = SETTITLE_1
+XOFFSET = XOFFSET_1
+YOFFSET = YOFFSET_1
+CBOFFSET = CBOFFSET_1
+
+it=-1000
+INPUT_FILE1=sprintf("%d.%s.gp", it,Filename_TransmissionSmallDFT);
+INPUT_FILE2=sprintf("%d.%s.gp", it,Filename_TransmissionLargeDFT);
+INPUT_FILE3=sprintf("%d.States.gp", it);
+Scaling_factor_X = Scaling_factor_X_TransmissionLargeDFT
+XMAX   = XMAX_TransmissionLargeDFT
+XMIN   =  XMIN_TransmissionLargeDFT
+XTICS  = XTICS_TransmissionLargeDFT 
+XLABEL = XLABEL_TransmissionLargeDFT 
+Scaling_factor_Y = Scaling_factor_Y_TransmissionLargeDFT
+YMAX    = YMAX_TransmissionLargeDFT
+YMIN    = YMIN_TransmissionLargeDFT
+YTICS   = YTICS_TransmissionLargeDFT
+YLABEL  = YLABEL_TransmissionLargeDFT
+
+load "plottransmission_2files.plt"
+
+LMARGIN = LMARGIN_2
+RMARGIN = RMARGIN_2 
+TMARGIN = TMARGIN_2 
+BMARGIN = BMARGIN_2
+SETXLABEL = SETXLABEL_2
+SETYLABEL = SETYLABEL_2
+SETCBLABEL = SETCBLABEL_2
+SETTITLE = SETTITLE_2
+XOFFSET = XOFFSET_2
+YOFFSET = YOFFSET_2
+CBOFFSET = CBOFFSET_2
+
+it=-500
+INPUT_FILE1=sprintf("%d.%s.gp", it,Filename_TransmissionSmallDFT);
+INPUT_FILE2=sprintf("%d.%s.gp", it,Filename_TransmissionLargeDFT);
+INPUT_FILE3=sprintf("%d.States.gp", it);
+Scaling_factor_X = Scaling_factor_X_SeebeckDFT
+Scaling_factor_X = Scaling_factor_X_TransmissionLargeDFT
+XMAX   = XMAX_TransmissionLargeDFT
+XMIN   =  XMIN_TransmissionLargeDFT
+XTICS  = XTICS_TransmissionLargeDFT 
+XLABEL = XLABEL_TransmissionLargeDFT 
+Scaling_factor_Y = Scaling_factor_Y_TransmissionLargeDFT
+YMAX    = YMAX_TransmissionLargeDFT
+YMIN    = YMIN_TransmissionLargeDFT
+YTICS   = YTICS_TransmissionLargeDFT
+YLABEL  = YLABEL_TransmissionLargeDFT
+
+
+
+load "plottransmission_2files.plt"
+
+LMARGIN = LMARGIN_3
+RMARGIN = RMARGIN_3 
+TMARGIN = TMARGIN_3 
+BMARGIN = BMARGIN_3
+SETXLABEL = SETXLABEL_3
+SETYLABEL = SETYLABEL_3
+SETCBLABEL = SETCBLABEL_3
+SETTITLE = SETTITLE_3
+XOFFSET = XOFFSET_3
+YOFFSET = YOFFSET_3
+CBOFFSET = CBOFFSET_3
+it=0
+INPUT_FILE1=sprintf("%d.%s.gp", it,Filename_TransmissionSmallDFT);
+INPUT_FILE2=sprintf("%d.%s.gp", it,Filename_TransmissionLargeDFT);
+INPUT_FILE3=sprintf("%d.States.gp", it);
+Scaling_factor_X = Scaling_factor_X_TransmissionLargeDFTS
+Scaling_factor_X = Scaling_factor_X_TransmissionLargeDFT
+XMAX   = XMAX_TransmissionLargeDFT
+XMIN   =  XMIN_TransmissionLargeDFT
+XTICS  = XTICS_TransmissionLargeDFT 
+XLABEL = XLABEL_TransmissionLargeDFT 
+Scaling_factor_Y = Scaling_factor_Y_TransmissionLargeDFT
+YMAX    = YMAX_TransmissionLargeDFT
+YMIN    = YMIN_TransmissionLargeDFT
+YTICS   = YTICS_TransmissionLargeDFT
+YLABEL  = YLABEL_TransmissionLargeDFT
+
+load "plottransmission_2files.plt"
+
+
+LMARGIN = LMARGIN_4
+RMARGIN = RMARGIN_4 
+TMARGIN = TMARGIN_4 
+BMARGIN = BMARGIN_4
+SETXLABEL = SETXLABEL_4
+SETYLABEL = SETYLABEL_4
+SETCBLABEL = SETCBLABEL_4
+SETTITLE = SETTITLE_4
+XOFFSET = XOFFSET_4
+YOFFSET = YOFFSET_4
+CBOFFSET = CBOFFSET_4
+
+it=500
+INPUT_FILE1=sprintf("%d.%s.gp", it,Filename_TransmissionSmallDFT);
+INPUT_FILE2=sprintf("%d.%s.gp", it,Filename_TransmissionLargeDFT);
+INPUT_FILE3=sprintf("%d.States.gp", it);
+Scaling_factor_X = Scaling_factor_X_TransmissionLargeDFT
+XMAX   = XMAX_TransmissionLargeDFT
+XMIN   =  XMIN_TransmissionLargeDFT
+XTICS  = XTICS_TransmissionLargeDFT 
+XLABEL = XLABEL_TransmissionLargeDFT 
+Scaling_factor_Y = Scaling_factor_Y_TransmissionLargeDFT
+YMAX    = YMAX_TransmissionLargeDFT
+YMIN    = YMIN_TransmissionLargeDFT
+YTICS   = YTICS_TransmissionLargeDFT
+YLABEL  = YLABEL_TransmissionLargeDFT
+
+load "plottransmission_2files.plt"
+
+
+
+LMARGIN = LMARGIN_5
+RMARGIN = RMARGIN_5 
+TMARGIN = TMARGIN_5 
+BMARGIN = BMARGIN_5
+SETXLABEL = SETXLABEL_5
+SETYLABEL = SETYLABEL_5
+SETCBLABEL = SETCBLABEL_5
+SETTITLE = SETTITLE_5
+XOFFSET = XOFFSET_5
+YOFFSET = YOFFSET_5
+CBOFFSET = CBOFFSET_5
+it=1000
+
+INPUT_FILE1=sprintf("%d.%s.gp", it,Filename_TransmissionSmallDFT);
+INPUT_FILE2=sprintf("%d.%s.gp", it,Filename_TransmissionLargeDFT);
+INPUT_FILE3=sprintf("%d.States.gp", it);
+Scaling_factor_X = Scaling_factor_X_TransmissionLargeDFT
+XMAX   = XMAX_TransmissionLargeDFT
+XMIN   =  XMIN_TransmissionLargeDFT
+XTICS  = XTICS_TransmissionLargeDFT 
+XLABEL = XLABEL_TransmissionLargeDFT 
+Scaling_factor_Y = Scaling_factor_Y_TransmissionLargeDFT
+YMAX    = YMAX_TransmissionLargeDFT
+YMIN    = YMIN_TransmissionLargeDFT
+YTICS   = YTICS_TransmissionLargeDFT
+YLABEL  = YLABEL_TransmissionLargeDFT
+
+load "plottransmission_2files.plt"
+
+
+
+
+
+

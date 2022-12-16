@@ -1,0 +1,18 @@
+############ GIF ############# 
+DELAYTIME = 400 
+SIZE_X =1600
+SIZE_Y =3200
+SIZE_RATIO = SIZE_Y/SIZE_X
+
+#############################
+
+set termoption enhanced
+set term gif size SIZE_X,SIZE_Y xffffff x000000 x404040 \
+                       xff0000 xffa500 x66cdaa xcdb5cd \
+                       xadd8e6 x0000ff xdda0dd x9500d3    # defaults
+set pm3d map
+
+set size ratio SIZE_RATIO
+
+
+

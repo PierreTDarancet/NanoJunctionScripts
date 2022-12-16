@@ -1,0 +1,984 @@
+#!/bin/bash
+
+HOMETEST=`pwd`
+echo HOMETEST
+echo $HOMETEST
+
+mkdir $HOMETEST/PlotsThermopower
+rm $HOMETEST/PlotsThermopower/Results.dat 
+
+LOCALDIR="DASTRIMAD"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+
+cd $HOMETEST/$LOCALDIR
+
+echo "DASTRIMAD"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+ln -s $HOMETEST/GPFILES/*.setgp  $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp  $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt  $HOMETEST/$LOCALDIR/
+
+cp $HOMETEST/SPECSFILES/$LOCALDIR\.ingp  $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Animated Seebeck"
+nohup gnuplot Makeplot.Seebeck.rungp  > Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Gnuplot.out >> $HOMETEST/PlotsThermopower/Results.dat  
+echo "É É Done"
+
+cp   $HOMETEST/$LOCALDIR/*.ps  $HOMETEST/$LOCALDIR/*.gif  $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsThermopower/
+
+cd $HOMETEST
+
+LOCALDIR="DASADAD"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+cd $HOMETEST/$LOCALDIR
+echo "DASADAD"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/DASADAD.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Animated Seebeck"
+nohup gnuplot Makeplot.Seebeck.rungp  > Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Gnuplot.out >> $HOMETEST/PlotsThermopower/Results.dat 
+echo "É É Done"
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif  $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsThermopower/
+cd $HOMETEST
+
+LOCALDIR="DASTRIMTRIM"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+
+pwd
+
+cd $HOMETEST/$LOCALDIR
+echo "DASTRIMTRIM"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/DASTRIMTRIM.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Animated Seebeck"
+nohup gnuplot Makeplot.Seebeck.rungp  > Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Gnuplot.out >> $HOMETEST/PlotsThermopower/Results.dat 
+echo "É É Done"
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif  $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsThermopower/
+cd $HOMETEST
+
+
+LOCALDIR="DASTETRATETRA"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+
+
+cd $HOMETEST/$LOCALDIR
+echo "DASTETRATETRA"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/DASTETRATETRA.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Animated Seebeck"
+nohup gnuplot Makeplot.Seebeck.rungp  > Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Gnuplot.out >> $HOMETEST/PlotsThermopower/Results.dat 
+echo "É É Done"
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif  $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsThermopower/
+cd $HOMETEST
+
+
+LOCALDIR="DASTETRATETRA-0.1"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+
+cd $HOMETEST/$LOCALDIR
+echo "DASTETRATETRA-0.1"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/DASTETRATETRA-0.1.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Animated Seebeck"
+nohup gnuplot Makeplot.Seebeck.rungp  > Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Gnuplot.out >> $HOMETEST/PlotsThermopower/Results.dat 
+echo "É É Done"
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsThermopower/
+cd $HOMETEST
+#######################################################################
+LOCALDIR="BAPATRIMAD"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+cd $HOMETEST/$LOCALDIR
+echo "BAPATRIMAD"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/BAPATRIMAD.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Animated Seebeck"
+nohup gnuplot Makeplot.Seebeck.rungp  > Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Gnuplot.out >> $HOMETEST/PlotsThermopower/Results.dat 
+echo "É É Done"
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsThermopower/
+cd $HOMETEST
+#######################################################################
+LOCALDIR="BAPAADAD"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+cd $HOMETEST/$LOCALDIR
+echo "BAPAADAD"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/BAPAADAD.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+
+echo "É Animated Seebeck"
+nohup gnuplot Makeplot.Seebeck.rungp  > Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Gnuplot.out >> $HOMETEST/PlotsThermopower/Results.dat 
+echo "É É Done"
+
+cp  $HOMETEST/BAPAADAD/*.ps $HOMETEST/BAPAADAD/*.gif $HOMETEST/BAPAADAD/*.png $HOMETEST/PlotsThermopower/
+cd $HOMETEST
+#######################################################################
+LOCALDIR="BAPATRIMTRIM"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+cd $HOMETEST/$LOCALDIR
+echo "BAPATRIMTRIM"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+
+cp $HOMETEST/SPECSFILES/BAPATRIMTRIM.ingp  $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Animated Seebeck"
+nohup gnuplot Makeplot.Seebeck.rungp  > Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Gnuplot.out >> $HOMETEST/PlotsThermopower/Results.dat 
+echo "É É Done"
+
+
+cp   $HOMETEST/$LOCALDIR/*.ps  $HOMETEST/$LOCALDIR/*.gif  $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsThermopower/
+cd $HOMETEST
+
+
+LOCALDIR="HDATRIMTRIM"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+cd $HOMETEST/$LOCALDIR
+echo "HDATRIMTRIM"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/HDATRIMTRIM.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Animated Seebeck"
+nohup gnuplot Makeplot.Seebeck.rungp  > Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Gnuplot.out >> $HOMETEST/PlotsThermopower/Results.dat 
+echo "É É Done"
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif $HOMETEST/PlotsThermopower/
+cd $HOMETEST
+
+LOCALDIR="HDATRIMAD"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+cd $HOMETEST/$LOCALDIR
+echo "HDATRIMAD"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/HDATRIMAD.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Animated Seebeck"
+nohup gnuplot Makeplot.Seebeck.rungp  > Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Gnuplot.out >> $HOMETEST/PlotsThermopower/Results.dat 
+echo "É É Done"
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsThermopower/
+cd $HOMETEST
+
+LOCALDIR="HDAADAD"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+
+cd $HOMETEST/$LOCALDIR
+echo "HDAADAD"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+ 
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/HDAADAD.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Animated Seebeck"
+nohup gnuplot Makeplot.Seebeck.rungp  > Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Gnuplot.out >> $HOMETEST/PlotsThermopower/Results.dat 
+echo "É É Done"
+
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsThermopower/
+cd $HOMETEST
+
+LOCALDIR="BPTRIMTRIM"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+
+cd $HOMETEST/$LOCALDIR
+echo "BPTRIMTRIM"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+ 
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/BPTRIMTRIM.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Animated Seebeck"
+nohup gnuplot Makeplot.Seebeck.rungp  > Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Gnuplot.out >> $HOMETEST/PlotsThermopower/Results.dat 
+echo "É É Done"
+
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsThermopower/
+cd $HOMETEST
+
+LOCALDIR="BPTRIMAD"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+cd $HOMETEST/$LOCALDIR
+echo "BPTRIMAD"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/BPTRIMAD.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Animated Seebeck"
+nohup gnuplot Makeplot.Seebeck.rungp  > Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Gnuplot.out >> $HOMETEST/PlotsThermopower/Results.dat 
+echo "É É Done"
+
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsThermopower/
+cd $HOMETEST
+
+LOCALDIR="BPADAD"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+cd $HOMETEST/$LOCALDIR
+echo "BPADAD"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/BPADAD.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Animated Seebeck"
+nohup gnuplot Makeplot.Seebeck.rungp  > Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Gnuplot.out >> $HOMETEST/PlotsThermopower/Results.dat 
+echo "É É Done"
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsThermopower/
+cd $HOMETEST
+
+LOCALDIR="BPADAD_re"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+cd $HOMETEST/$LOCALDIR
+echo "BPADAD_re"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/BPADAD_re.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Animated Seebeck"
+nohup gnuplot Makeplot.Seebeck.rungp  > Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Gnuplot.out >> $HOMETEST/PlotsThermopower/Results.dat 
+echo "É É Done"
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsThermopower/
+cd $HOMETEST
+
+LOCALDIR="BPLOWGTRIMTRIM"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+cd $HOMETEST/$LOCALDIR
+echo "BPLOWGTRIMTRIM"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/BPLOWGTRIMTRIM.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Animated Seebeck"
+nohup gnuplot Makeplot.Seebeck.rungp  > Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Gnuplot.out >> $HOMETEST/PlotsThermopower/Results.dat 
+echo "É É Done"
+
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif  $HOMETEST/$LOCALDIR/*.png  $HOMETEST/PlotsThermopower/
+cd $HOMETEST
+
+LOCALDIR="BPLOWGTRIMAD"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+cd $HOMETEST/$LOCALDIR
+echo "BPLOWGTRIMAD"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/BPLOWGTRIMAD.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Animated Seebeck"
+nohup gnuplot Makeplot.Seebeck.rungp  > Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Gnuplot.out >> $HOMETEST/PlotsThermopower/Results.dat 
+echo "É É Done"
+
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif $HOMETEST/PlotsThermopower/
+cd $HOMETEST
+
+LOCALDIR="BPLOWGADAD"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+cd $HOMETEST/$LOCALDIR
+echo "BPLOWGADAD"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/BPLOWGADAD.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Animated Seebeck"
+nohup gnuplot Makeplot.Seebeck.rungp  > Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Gnuplot.out >> $HOMETEST/PlotsThermopower/Results.dat 
+echo "É É Done"
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsThermopower/
+cd $HOMETEST
+
+LOCALDIR="BPVHGTRIMAD"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+cd $HOMETEST/$LOCALDIR
+echo "BPVHGTRIMAD"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/BPVHGTRIMAD.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Animated Seebeck"
+nohup gnuplot Makeplot.Seebeck.rungp  > Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Gnuplot.out >> $HOMETEST/PlotsThermopower/Results.dat 
+echo "É É Done"
+
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif  $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsThermopower/
+cd $HOMETEST
+
+LOCALDIR="BPELOWGTRIMAD"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+echo "BPELOWGTRIMAD"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp  $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp  $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt  $HOMETEST/$LOCALDIR/
+
+cp $HOMETEST/SPECSFILES/BPELOWGTRIMAD.ingp  $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Animated Seebeck"
+nohup gnuplot Makeplot.Seebeck.rungp  > Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Gnuplot.out >> $HOMETEST/PlotsThermopower/Results.dat 
+echo "É É Done"
+
+cp   $HOMETEST/$LOCALDIR/*.ps  $HOMETEST/$LOCALDIR/*.gif $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsThermopower/
+
+cd $HOMETEST
+
+LOCALDIR="BPELOWGADAD"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+cd $HOMETEST/$LOCALDIR
+echo "BPELOWGADAD"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/BPELOWGADAD.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Animated Seebeck"
+nohup gnuplot Makeplot.Seebeck.rungp  > Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Gnuplot.out >> $HOMETEST/PlotsThermopower/Results.dat 
+echo "É É Done"
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsThermopower/
+cd $HOMETEST
+
+
+LOCALDIR="BPELOWGTRIMTRIM"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+cd $HOMETEST/$LOCALDIR
+echo "BPELOWGTRIMTRIM"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/BPELOWGTRIMTRIM.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Animated Seebeck"
+nohup gnuplot Makeplot.Seebeck.rungp  > Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Gnuplot.out >> $HOMETEST/PlotsThermopower/Results.dat 
+echo "É É Done"
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsThermopower/
+cd $HOMETEST
+
+LOCALDIR="BPEHIGHGTRIMAD"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+cd $HOMETEST/$LOCALDIR
+
+echo "BPEHIGHGTRIMAD"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+ 
+ln -s $HOMETEST/GPFILES/*.setgp  $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp  $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt  $HOMETEST/$LOCALDIR/
+
+cp $HOMETEST/SPECSFILES/BPEHIGHGTRIMAD.ingp  $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Animated Seebeck"
+nohup gnuplot Makeplot.Seebeck.rungp  > Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Gnuplot.out >> $HOMETEST/PlotsThermopower/Results.dat 
+echo "É É Done"
+
+cp   $HOMETEST/$LOCALDIR/*.ps  $HOMETEST/$LOCALDIR/*.gif $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsThermopower/
+
+cd $HOMETEST
+
+LOCALDIR="BPEHIGHGADAD"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+cd $HOMETEST/$LOCALDIR
+echo "BPEHIGHGADAD"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/BPEHIGHGADAD.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Animated Seebeck"
+nohup gnuplot Makeplot.Seebeck.rungp  > Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Gnuplot.out >> $HOMETEST/PlotsThermopower/Results.dat 
+echo "É É Done"
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsThermopower/
+cd $HOMETEST
+
+LOCALDIR="BPEHIGHGTRIMTRIM"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+cd $HOMETEST/$LOCALDIR
+echo "BPEHIGHGTRIMTRIM"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/BPEHIGHGTRIMTRIM.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Animated Seebeck"
+nohup gnuplot Makeplot.Seebeck.rungp  > Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Gnuplot.out >> $HOMETEST/PlotsThermopower/Results.dat 
+echo "É É Done"
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsThermopower/
+cd $HOMETEST
+
+
+
+
+LOCALDIR="BPEHIGHGCONSTRTRIMAD"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+cd $HOMETEST/$LOCALDIR
+
+echo $LOCALDIR
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+ 
+ln -s $HOMETEST/GPFILES/*.setgp  $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp  $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt  $HOMETEST/$LOCALDIR/
+
+cp $HOMETEST/SPECSFILES/$LOCALDIR\.ingp  $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Animated Seebeck"
+nohup gnuplot Makeplot.Seebeck.rungp  > Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Gnuplot.out >> $HOMETEST/PlotsThermopower/Results.dat 
+echo "É É Done"
+
+cp   $HOMETEST/$LOCALDIR/*.ps  $HOMETEST/$LOCALDIR/*.gif $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsThermopower/
+
+cd $HOMETEST
+
+LOCALDIR="BPEHIGHGCONSTRADAD"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+cd $HOMETEST/$LOCALDIR
+echo $LOCALDIR
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/$LOCALDIR\.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Animated Seebeck"
+nohup gnuplot Makeplot.Seebeck.rungp  > Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Gnuplot.out >> $HOMETEST/PlotsThermopower/Results.dat 
+echo "É É Done"
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsThermopower/
+cd $HOMETEST
+
+LOCALDIR="BPEHIGHGCONSTRTRIMTRIM"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+cd $HOMETEST/$LOCALDIR
+echo  $LOCALDIR
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/$LOCALDIR\.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Animated Seebeck"
+nohup gnuplot Makeplot.Seebeck.rungp  > Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Gnuplot.out >> $HOMETEST/PlotsThermopower/Results.dat 
+echo "É É Done"
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsThermopower/
+cd $HOMETEST
+
+LOCALDIR="BPEHIGHG2CONSTRTRIMAD"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+cd $HOMETEST/$LOCALDIR
+
+echo $LOCALDIR
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+ 
+ln -s $HOMETEST/GPFILES/*.setgp  $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp  $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt  $HOMETEST/$LOCALDIR/
+
+cp $HOMETEST/SPECSFILES/$LOCALDIR\.ingp  $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Animated Seebeck"
+nohup gnuplot Makeplot.Seebeck.rungp  > Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Gnuplot.out >> $HOMETEST/PlotsThermopower/Results.dat 
+echo "É É Done"
+
+cp   $HOMETEST/$LOCALDIR/*.ps  $HOMETEST/$LOCALDIR/*.gif $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsThermopower/
+
+cd $HOMETEST
+
+LOCALDIR="BPEHIGHG2CONSTRADAD"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+cd $HOMETEST/$LOCALDIR
+echo $LOCALDIR
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/$LOCALDIR\.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Animated Seebeck"
+nohup gnuplot Makeplot.Seebeck.rungp  > Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Gnuplot.out >> $HOMETEST/PlotsThermopower/Results.dat 
+echo "É É Done"
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsThermopower/
+cd $HOMETEST
+
+LOCALDIR="BPEHIGHG2CONSTRTRIMTRIM"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+cd $HOMETEST/$LOCALDIR
+echo $LOCALDIR
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/$LOCALDIR\.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Animated Seebeck"
+nohup gnuplot Makeplot.Seebeck.rungp  > Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Gnuplot.out >> $HOMETEST/PlotsThermopower/Results.dat 
+echo "É É Done"
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsThermopower/
+cd $HOMETEST
+
+
+
+
+
+
+LOCALDIR="DMPPTRIMAD"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+
+cd $HOMETEST/$LOCALDIR
+
+echo "DMPPTRIMAD"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+ 
+ln -s $HOMETEST/GPFILES/*.setgp  $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp  $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt  $HOMETEST/$LOCALDIR/
+
+cp $HOMETEST/SPECSFILES/DMPPTRIMAD.ingp  $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Animated Seebeck"
+nohup gnuplot Makeplot.Seebeck.rungp  > Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Gnuplot.out >> $HOMETEST/PlotsThermopower/Results.dat 
+echo "É É Done"
+
+cp   $HOMETEST/$LOCALDIR/*.ps  $HOMETEST/$LOCALDIR/*.gif $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsThermopower/
+
+cd $HOMETEST
+LOCALDIR="DMPPADAD"
+cd $HOMETEST/$LOCALDIR/
+echo "DMPPADAD"
+echo $HOMETEST/$LOCALDIR
+pwd
+
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/DMPPADAD.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+
+echo "É Animated Seebeck"
+nohup gnuplot Makeplot.Seebeck.rungp  > Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Gnuplot.out >> $HOMETEST/PlotsThermopower/Results.dat 
+echo "É É Done"
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsThermopower/
+cd $HOMETEST
+
+LOCALDIR="DMPPTRIMTRIM"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+echo "DMPPTRIMTRIM"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/DMPPTRIMTRIM.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Animated Seebeck"
+nohup gnuplot Makeplot.Seebeck.rungp  > Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Gnuplot.out >> $HOMETEST/PlotsThermopower/Results.dat 
+echo "É É Done"
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsThermopower/
+cd $HOMETEST
+
+
+
+LOCALDIR="CGOLDTRIMTRIM"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+echo $LOCALDIR
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/$LOCALDIR\.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Animated Seebeck"
+nohup gnuplot Makeplot.Seebeck.rungp  > Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Gnuplot.out >> $HOMETEST/PlotsThermopower/Results.dat 
+echo "É É Done"
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsThermopower/
+cd $HOMETEST
+
+LOCALDIR="PPV1TRIMTRIM"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+echo $LOCALDIR
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/$LOCALDIR\.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Animated Seebeck"
+nohup gnuplot Makeplot.Seebeck.rungp  > Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Gnuplot.out >> $HOMETEST/PlotsThermopower/Results.dat 
+echo "É É Done"
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsThermopower/
+cd $HOMETEST
+
+

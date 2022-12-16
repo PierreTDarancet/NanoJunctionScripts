@@ -1,0 +1,56 @@
+
+############## Column 1 D_{1}B_{1}A_{1}
+LABEL_1="D_{1}B_{1}A_{1}"
+INPUT_FILE_1_1_A='./AbsAbs/avgAbsorp_TriFB_Dur_Th_SR_20x30_ELP'
+INPUT_FILE_1_1_B='./InputFig/D1B1A1eV'
+INPUT_FILE_2_1='./InputFig/D1B1A1_corr_temp'
+INPUT_FILE_3_1='./InputFig/D1B1A1_corr_temp'
+
+############## Column 2 D_{1}B_{1}A_{3}
+LABEL_2="D_{1}B_{1}A_{3}"
+INPUT_FILE_1_2_A='./AbsAbs/avgAbsorp_NO2B_Dur_Th_SR_20x30_ELP'
+INPUT_FILE_1_2_B='./InputFig/D1B1A3eV'
+INPUT_FILE_2_2='./InputFig/D1B1A3_corr_temp'
+INPUT_FILE_3_2='./InputFig/D1B1A3_corr_temp'
+
+############## Column 3 D_{2}B_{1}A_{1}
+LABEL_3="D_{2}B_{1}A_{1}"
+INPUT_FILE_1_3_A='./AbsAbs/avgAbsorp_TriFB_dur_dmb_SR_20x30_ELP'
+INPUT_FILE_1_3_B='./InputFig/D2B1A1eV'
+INPUT_FILE_2_3='./InputFig/D2B1A1_corr_temp'
+INPUT_FILE_3_3='./InputFig/D2B1A1_corr_temp'
+
+############## Column 4  D_{2}B_{1}A_{2}
+LABEL_4="D_{2}B_{1}A_{2}"
+INPUT_FILE_1_4_A='./AbsAbs/avgAbsorp_PNB_dur_dmb_RC_2712_SR_20x30_ELP'
+INPUT_FILE_1_4_B='./InputFig/D2B1A2eV'
+INPUT_FILE_2_4='./InputFig/D2B1A2_corr_temp'
+INPUT_FILE_3_4='./InputFig/D2B1A2_corr_temp'
+
+
+############## Column  D_{2}B_{1}A_{3}
+LABEL_5="D_{2}B_{1}A_{3}"
+
+INPUT_FILE_1_5_A='./AbsAbs/avgAbsorp_NO2B_dur_dmb_SR_20x30_ELP'
+INPUT_FILE_1_5_B='./InputFig/D2B1A3eV'
+INPUT_FILE_2_5='./InputFig/D2B1A3_corr_temp'
+INPUT_FILE_3_5='./InputFig/D2B1A3_corr_temp'
+
+
+############## Column 6 D2B2A2
+
+LABEL_67="D_{2}B_{2}A_{2}"
+
+
+INPUT_FILE_1_6_A='./InputFig/avgPNB_b_dmb_BoltzELP'
+INPUT_FILE_1_6_B='./InputFig/D2B2A2eV'
+INPUT_FILE_2_6='./InputFig/D2B2A2_30_40_corr_temp'
+INPUT_FILE_3_6='./InputFig/D2B2A2_30_40_corr_temp'
+
+
+############## Column 4 D2B2A2
+INPUT_FILE_1_7_A='./AbsAbs/avgAbsorp_PNB_b_dmb_flat_SR_20x30_ELP'
+INPUT_FILE_1_7_B='./InputFig/D2B2A2eV'
+INPUT_FILE_2_7='./InputFig/D2B2A2_flat_corr_temp'
+INPUT_FILE_3_7='./InputFig/D2B2A2_flat_corr_temp'
+

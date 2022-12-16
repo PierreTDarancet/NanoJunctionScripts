@@ -1,0 +1,2358 @@
+#!/bin/bash
+
+
+HOMETEST=`pwd`
+echo HOMETEST
+echo $HOMETEST
+mkdir $HOMETEST/Plots
+mkdir $HOMETEST/temp
+cd $HOMETEST/temp
+cd $HOMETEST/DASTRIMAD
+
+
+echo "DASTRIMAD"
+rm $HOMETEST/DASTRIMAD/*.setgp
+rm  $HOMETEST/DASTRIMAD/*.rungp
+rm $HOMETEST/DASTRIMAD/*.plt 
+ln -s $HOMETEST/*.setgp $HOMETEST/DASTRIMAD/
+ln -s $HOMETEST/*.rungp $HOMETEST/DASTRIMAD/
+ln -s $HOMETEST/*.plt $HOMETEST/DASTRIMAD/
+
+cp $HOMETEST/DASTRIMAD.ingp $HOMETEST/DASTRIMAD/specs.ingp
+
+echo "É Animated Gif Potential"
+gnuplot Makeplot.AGifPotential.rungp
+echo "É É Done"
+
+#echo "É Animated Gif Density"
+#gnuplot Makeplot.AGifDensity.rungp
+#echo "É É Done"
+
+#echo "É Animated Gif All"
+#gnuplot Makeplot.AGifCommon.rungp
+#echo "É É Done"
+
+echo "É Animated Gif All Contour"
+gnuplot Makeplot.AGifCommon2panels.rungp
+echo "É É Done"
+
+#echo "É Post Script -1000 Potential"
+#gnuplot Makeplot.PSPotential-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Potential"
+#gnuplot Makeplot.PSPotential-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Potential"
+#gnuplot Makeplot.PSPotential500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Potential"
+#gnuplot Makeplot.PSPotential1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -1000 Density"
+#gnuplot Makeplot.PSDensity-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Density"
+#gnuplot Makeplot.PSDensity-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Density"
+#gnuplot Makeplot.PSDensity500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Density"
+#gnuplot Makeplot.PSDensity1000.rungp
+#echo "É É Done"
+#
+
+#echo "É Post Script -1000 Common"
+#gnuplot Makeplot.PSCommon-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Common"
+#gnuplot Makeplot.PSCommon-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Common"
+#gnuplot Makeplot.PSCommon500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Common"
+#gnuplot Makeplot.PSCommon1000.rungp
+#echo "É É Done"
+
+
+echo "É Post Script -1000 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels-1000.rungp
+echo "É É Done"
+
+echo "É Post Script -500 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels-500.rungp
+echo "É É Done"
+
+echo "É Post Script 500 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels500.rungp
+echo "É É Done"
+
+echo "É Post Script 1000 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels1000.rungp
+echo "É É Done"
+
+
+#echo "É Post Script Potential xy averages"
+##gnuplot Makeplot.PSPotentialxyAverage.rungp
+#echo "É É Done"
+
+#echo "É Post Script Potential xy averages scale"
+##gnuplot Makeplot.PSPotentialxyAveragescale.rungp
+#echo "É É Done"
+
+cp  $HOMETEST/DASTRIMAD/*.ps $HOMETEST/DASTRIMAD/*.gif $HOMETEST/Plots/
+
+cd $HOMETEST/temp/
+
+
+
+cd $HOMETEST/DASADAD
+echo "DASADAD"
+rm $HOMETEST/DASADAD/*.setgp
+rm  $HOMETEST/DASADAD/*.rungp
+rm $HOMETEST/DASADAD/*.plt 
+ln -s $HOMETEST/*.setgp $HOMETEST/DASADAD/
+ln -s $HOMETEST/*.rungp $HOMETEST/DASADAD/
+ln -s $HOMETEST/*.plt $HOMETEST/DASADAD/
+cp $HOMETEST/DASADAD.ingp $HOMETEST/DASADAD/specs.ingp
+
+echo "É Animated Gif Potential"
+gnuplot Makeplot.AGifPotential.rungp
+echo "É É Done"
+
+#echo "É Animated Gif Density"
+#gnuplot Makeplot.AGifDensity.rungp
+#echo "É É Done"
+
+#echo "É Animated Gif All"
+#gnuplot Makeplot.AGifCommon.rungp
+#echo "É É Done"
+
+echo "É Animated Gif All Contour"
+gnuplot Makeplot.AGifCommon2panels.rungp
+echo "É É Done"
+
+
+#echo "É Post Script -1000 Potential"
+#gnuplot Makeplot.PSPotential-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Potential"
+#gnuplot Makeplot.PSPotential-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Potential"
+#gnuplot Makeplot.PSPotential500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Potential"
+#gnuplot Makeplot.PSPotential1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -1000 Density"
+#gnuplot Makeplot.PSDensity-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Density"
+#gnuplot Makeplot.PSDensity-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Density"
+#gnuplot Makeplot.PSDensity500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Density"
+#gnuplot Makeplot.PSDensity1000.rungp
+#echo "É É Done"
+#
+
+
+#echo "É Post Script -1000 Common"
+#gnuplot Makeplot.PSCommon-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Common"
+#gnuplot Makeplot.PSCommon-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Common"
+#gnuplot Makeplot.PSCommon500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Common"
+#gnuplot Makeplot.PSCommon1000.rungp
+#echo "É É Done"
+
+
+echo "É Post Script -1000 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels-1000.rungp
+echo "É É Done"
+
+echo "É Post Script -500 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels-500.rungp
+echo "É É Done"
+
+echo "É Post Script 500 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels500.rungp
+echo "É É Done"
+
+echo "É Post Script 1000 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels1000.rungp
+echo "É É Done"
+
+
+echo "É Post Script Potential xy averages"
+#gnuplot Makeplot.PSPotentialxyAverage.rungp
+echo "É É Done"
+
+echo "É Post Script Potential xy averages scale"
+#gnuplot Makeplot.PSPotentialxyAveragescale.rungp
+echo "É É Done"
+
+cp  $HOMETEST/DASADAD/*.ps $HOMETEST/DASADAD/*.gif $HOMETEST/Plots/
+
+
+cd $HOMETEST/temp/
+
+
+
+cd $HOMETEST/DASTRIMTRIM
+echo "DASTRIMTRIM"
+rm $HOMETEST/DASTRIMTRIM/*.setgp
+rm  $HOMETEST/DASTRIMTRIM/*.rungp
+rm $HOMETEST/DASTRIMTRIM/*.plt 
+ln -s $HOMETEST/*.setgp $HOMETEST/DASTRIMTRIM/
+ln -s $HOMETEST/*.rungp $HOMETEST/DASTRIMTRIM/
+ln -s $HOMETEST/*.plt $HOMETEST/DASTRIMTRIM/
+cp $HOMETEST/DASTRIMTRIM.ingp $HOMETEST/DASTRIMTRIM/specs.ingp
+
+echo "É Animated Gif Potential"
+gnuplot Makeplot.AGifPotential.rungp
+echo "É É Done"
+
+#echo "É Animated Gif Density"
+#gnuplot Makeplot.AGifDensity.rungp
+#echo "É É Done"
+
+#echo "É Animated Gif All"
+#gnuplot Makeplot.AGifCommon.rungp
+#echo "É É Done"
+
+echo "É Animated Gif All Contour"
+gnuplot Makeplot.AGifCommon2panels.rungp
+echo "É É Done"
+
+
+#echo "É Post Script -1000 Potential"
+#gnuplot Makeplot.PSPotential-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Potential"
+#gnuplot Makeplot.PSPotential-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Potential"
+#gnuplot Makeplot.PSPotential500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Potential"
+#gnuplot Makeplot.PSPotential1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -1000 Density"
+#gnuplot Makeplot.PSDensity-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Density"
+#gnuplot Makeplot.PSDensity-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Density"
+#gnuplot Makeplot.PSDensity500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Density"
+#gnuplot Makeplot.PSDensity1000.rungp
+#echo "É É Done"
+#
+
+
+#echo "É Post Script -1000 Common"
+#gnuplot Makeplot.PSCommon-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Common"
+#gnuplot Makeplot.PSCommon-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Common"
+#gnuplot Makeplot.PSCommon500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Common"
+#gnuplot Makeplot.PSCommon1000.rungp
+#echo "É É Done"
+
+
+echo "É Post Script -1000 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels-1000.rungp
+echo "É É Done"
+
+echo "É Post Script -500 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels-500.rungp
+echo "É É Done"
+
+echo "É Post Script 500 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels500.rungp
+echo "É É Done"
+
+echo "É Post Script 1000 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels1000.rungp
+echo "É É Done"
+
+
+echo "É Post Script Potential xy averages"
+#gnuplot Makeplot.PSPotentialxyAverage.rungp
+echo "É É Done"
+
+echo "É Post Script Potential xy averages scale"
+#gnuplot Makeplot.PSPotentialxyAveragescale.rungp
+echo "É É Done"
+
+cp  $HOMETEST/DASTRIMTRIM/*.ps $HOMETEST/DASTRIMTRIM/*.gif $HOMETEST/Plots/
+
+
+
+cd $HOMETEST/temp/
+
+
+cd $HOMETEST/BAPATRIMAD
+echo "BAPATRIMAD"
+rm $HOMETEST/BAPATRIMAD/*.setgp
+rm $HOMETEST/BAPATRIMAD/*.rungp
+rm $HOMETEST/BAPATRIMAD/*.plt 
+ln -s $HOMETEST/*.setgp $HOMETEST/BAPATRIMAD/
+ln -s $HOMETEST/*.rungp $HOMETEST/BAPATRIMAD/
+ln -s $HOMETEST/*.plt $HOMETEST/BAPATRIMAD/
+
+cp $HOMETEST/BAPATRIMAD.ingp $HOMETEST/BAPATRIMAD/specs.ingp
+
+echo "É Animated Gif Potential"
+gnuplot Makeplot.AGifPotential.rungp
+echo "É É Done"
+
+#echo "É Animated Gif Density"
+#gnuplot Makeplot.AGifDensity.rungp
+#echo "É É Done"
+
+#echo "É Animated Gif All"
+#gnuplot Makeplot.AGifCommon.rungp
+#echo "É É Done"
+
+
+echo "É Animated Gif All Contour"
+gnuplot Makeplot.AGifCommon2panels.rungp
+echo "É É Done"
+
+
+#echo "É Post Script -1000 Potential"
+#gnuplot Makeplot.PSPotential-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Potential"
+#gnuplot Makeplot.PSPotential-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Potential"
+#gnuplot Makeplot.PSPotential500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Potential"
+#gnuplot Makeplot.PSPotential1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -1000 Density"
+#gnuplot Makeplot.PSDensity-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Density"
+#gnuplot Makeplot.PSDensity-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Density"
+#gnuplot Makeplot.PSDensity500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Density"
+#gnuplot Makeplot.PSDensity1000.rungp
+#echo "É É Done"
+#
+
+
+#echo "É Post Script -1000 Common"
+#gnuplot Makeplot.PSCommon-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Common"
+#gnuplot Makeplot.PSCommon-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Common"
+#gnuplot Makeplot.PSCommon500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Common"
+#gnuplot Makeplot.PSCommon1000.rungp
+#echo "É É Done"
+
+
+echo "É Post Script -1000 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels-1000.rungp
+echo "É É Done"
+
+echo "É Post Script -500 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels-500.rungp
+echo "É É Done"
+
+echo "É Post Script 500 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels500.rungp
+echo "É É Done"
+
+echo "É Post Script 1000 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels1000.rungp
+echo "É É Done"
+
+echo "É Post Script Potential xy averages"
+#gnuplot Makeplot.PSPotentialxyAverage.rungp
+echo "É É Done"
+
+echo "É Post Script Potential xy averages scale"
+#gnuplot Makeplot.PSPotentialxyAveragescale.rungp
+echo "É É Done"
+
+cp  $HOMETEST/BAPATRIMAD/*.ps $HOMETEST/BAPATRIMAD/*.gif $HOMETEST/Plots/
+
+
+cd $HOMETEST/temp/
+
+
+cd $HOMETEST/BAPATRIMTRIM
+echo "BAPATRIMTRIM"
+rm $HOMETEST/BAPATRIMTRIM/*.setgp
+rm $HOMETEST/BAPATRIMTRIM/*.rungp
+rm $HOMETEST/BAPATRIMTRIM/*.plt 
+ln -s $HOMETEST/*.setgp $HOMETEST/BAPATRIMTRIM/
+ln -s $HOMETEST/*.rungp $HOMETEST/BAPATRIMTRIM/
+ln -s $HOMETEST/*.plt $HOMETEST/BAPATRIMTRIM/
+
+cp $HOMETEST/BAPATRIMTRIM.ingp $HOMETEST/BAPATRIMTRIM/specs.ingp
+
+echo "É Animated Gif Potential"
+gnuplot Makeplot.AGifPotential.rungp
+echo "É É Done"
+
+#echo "É Animated Gif Density"
+#gnuplot Makeplot.AGifDensity.rungp
+#echo "É É Done"
+
+#echo "É Animated Gif All"
+#gnuplot Makeplot.AGifCommon.rungp
+#echo "É É Done"
+
+
+echo "É Animated Gif All Contour"
+gnuplot Makeplot.AGifCommon2panels.rungp
+echo "É É Done"
+
+
+#echo "É Post Script -1000 Potential"
+#gnuplot Makeplot.PSPotential-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Potential"
+#gnuplot Makeplot.PSPotential-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Potential"
+#gnuplot Makeplot.PSPotential500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Potential"
+#gnuplot Makeplot.PSPotential1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -1000 Density"
+#gnuplot Makeplot.PSDensity-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Density"
+#gnuplot Makeplot.PSDensity-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Density"
+#gnuplot Makeplot.PSDensity500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Density"
+#gnuplot Makeplot.PSDensity1000.rungp
+#echo "É É Done"
+#
+
+
+#echo "É Post Script -1000 Common"
+#gnuplot Makeplot.PSCommon-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Common"
+#gnuplot Makeplot.PSCommon-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Common"
+#gnuplot Makeplot.PSCommon500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Common"
+#gnuplot Makeplot.PSCommon1000.rungp
+#echo "É É Done"
+
+
+echo "É Post Script -1000 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels-1000.rungp
+echo "É É Done"
+
+echo "É Post Script -500 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels-500.rungp
+echo "É É Done"
+
+echo "É Post Script 500 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels500.rungp
+echo "É É Done"
+
+echo "É Post Script 1000 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels1000.rungp
+echo "É É Done"
+
+echo "É Post Script Potential xy averages"
+#gnuplot Makeplot.PSPotentialxyAverage.rungp
+echo "É É Done"
+
+echo "É Post Script Potential xy averages scale"
+#gnuplot Makeplot.PSPotentialxyAveragescale.rungp
+echo "É É Done"
+
+cp  $HOMETEST/BAPATRIMTRIM/*.ps $HOMETEST/BAPATRIMTRIM/*.gif $HOMETEST/Plots/
+
+cd $HOMETEST/temp/
+
+cd $HOMETEST/BAPAADAD
+echo "BAPAADAD"
+rm $HOMETEST/BAPAADAD/*.setgp
+rm $HOMETEST/BAPAADAD/*.rungp
+rm $HOMETEST/BAPAADAD/*.plt 
+ln -s $HOMETEST/*.setgp $HOMETEST/BAPAADAD/
+ln -s $HOMETEST/*.rungp $HOMETEST/BAPAADAD/
+ln -s $HOMETEST/*.plt $HOMETEST/BAPAADAD/
+cp $HOMETEST/BAPAADAD.ingp $HOMETEST/BAPAADAD/specs.ingp
+
+echo "É Animated Gif Potential"
+gnuplot Makeplot.AGifPotential.rungp
+echo "É É Done"
+
+#echo "É Animated Gif Density"
+#gnuplot Makeplot.AGifDensity.rungp
+#echo "É É Done"
+
+#echo "É Animated Gif All"
+#gnuplot Makeplot.AGifCommon.rungp
+#echo "É É Done"
+
+echo "É Animated Gif All Contour"
+gnuplot Makeplot.AGifCommon2panels.rungp
+echo "É É Done"
+
+
+#echo "É Post Script -1000 Potential"
+#gnuplot Makeplot.PSPotential-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Potential"
+#gnuplot Makeplot.PSPotential-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Potential"
+#gnuplot Makeplot.PSPotential500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Potential"
+#gnuplot Makeplot.PSPotential1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -1000 Density"
+#gnuplot Makeplot.PSDensity-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Density"
+#gnuplot Makeplot.PSDensity-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Density"
+#gnuplot Makeplot.PSDensity500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Density"
+#gnuplot Makeplot.PSDensity1000.rungp
+#echo "É É Done"
+#
+
+
+#echo "É Post Script -1000 Common"
+#gnuplot Makeplot.PSCommon-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Common"
+#gnuplot Makeplot.PSCommon-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Common"
+#gnuplot Makeplot.PSCommon500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Common"
+#gnuplot Makeplot.PSCommon1000.rungp
+#echo "É É Done"
+
+
+echo "É Post Script -1000 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels-1000.rungp
+echo "É É Done"
+
+echo "É Post Script -500 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels-500.rungp
+echo "É É Done"
+
+echo "É Post Script 500 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels500.rungp
+echo "É É Done"
+
+echo "É Post Script 1000 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels1000.rungp
+echo "É É Done"
+
+echo "É Post Script Potential xy averages"
+#gnuplot Makeplot.PSPotentialxyAverage.rungp
+echo "É É Done"
+
+echo "É Post Script Potential xy averages scale"
+#gnuplot Makeplot.PSPotentialxyAveragescale.rungp
+echo "É É Done"
+
+cp  $HOMETEST/BAPAADAD/*.ps $HOMETEST/BAPAADAD/*.gif $HOMETEST/Plots/
+cd $HOMETEST/temp/
+
+
+cd $HOMETEST/HDATRIMAD
+echo "HDATRIMAD"
+rm $HOMETEST/HDATRIMAD/*.setgp
+rm  $HOMETEST/HDATRIMAD/*.rungp
+rm $HOMETEST/HDATRIMAD/*.plt 
+ln -s $HOMETEST/*.setgp $HOMETEST/HDATRIMAD/
+ln -s $HOMETEST/*.rungp $HOMETEST/HDATRIMAD/
+ln -s $HOMETEST/*.plt $HOMETEST/HDATRIMAD/
+cp $HOMETEST/HDATRIMAD.ingp $HOMETEST/HDATRIMAD/specs.ingp
+
+echo "É Animated Gif Potential"
+gnuplot Makeplot.AGifPotential.rungp
+echo "É É Done"
+
+#echo "É Animated Gif Density"
+#gnuplot Makeplot.AGifDensity.rungp
+#echo "É É Done"
+
+#echo "É Animated Gif All"
+#gnuplot Makeplot.AGifCommon.rungp
+#echo "É É Done"
+
+echo "É Animated Gif All Contour"
+gnuplot Makeplot.AGifCommon2panels.rungp
+echo "É É Done"
+
+#echo "É Post Script -1000 Potential"
+#gnuplot Makeplot.PSPotential-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Potential"
+#gnuplot Makeplot.PSPotential-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Potential"
+#gnuplot Makeplot.PSPotential500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Potential"
+#gnuplot Makeplot.PSPotential1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -1000 Density"
+#gnuplot Makeplot.PSDensity-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Density"
+#gnuplot Makeplot.PSDensity-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Density"
+#gnuplot Makeplot.PSDensity500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Density"
+#gnuplot Makeplot.PSDensity1000.rungp
+#echo "É É Done"
+#
+
+#echo "É Post Script -1000 Common"
+#gnuplot Makeplot.PSCommon-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Common"
+#gnuplot Makeplot.PSCommon-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Common"
+#gnuplot Makeplot.PSCommon500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Common"
+#gnuplot Makeplot.PSCommon1000.rungp
+#echo "É É Done"
+
+
+echo "É Post Script -1000 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels-1000.rungp
+echo "É É Done"
+
+echo "É Post Script -500 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels-500.rungp
+echo "É É Done"
+
+echo "É Post Script 500 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels500.rungp
+echo "É É Done"
+
+echo "É Post Script 1000 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels1000.rungp
+echo "É É Done"
+
+
+echo "É Post Script Potential xy averages"
+#gnuplot Makeplot.PSPotentialxyAverage.rungp
+echo "É É Done"
+
+echo "É Post Script Potential xy averages scale"
+#gnuplot Makeplot.PSPotentialxyAveragescale.rungp
+echo "É É Done"
+
+cp  $HOMETEST/HDATRIMAD/*.ps $HOMETEST/HDATRIMAD/*.gif $HOMETEST/Plots/
+cd $HOMETEST/temp/
+
+cd $HOMETEST/HDATRIMTRIM
+echo "HDATRIMTRIM"
+rm $HOMETEST/HDATRIMTRIM/*.setgp
+rm  $HOMETEST/HDATRIMTRIM/*.rungp
+rm $HOMETEST/HDATRIMTRIM/*.plt 
+ln -s $HOMETEST/*.setgp $HOMETEST/HDATRIMTRIM/
+ln -s $HOMETEST/*.rungp $HOMETEST/HDATRIMTRIM/
+ln -s $HOMETEST/*.plt $HOMETEST/HDATRIMTRIM/
+cp $HOMETEST/HDATRIMTRIM.ingp $HOMETEST/HDATRIMTRIM/specs.ingp
+
+echo "É Animated Gif Potential"
+gnuplot Makeplot.AGifPotential.rungp
+echo "É É Done"
+
+#echo "É Animated Gif Density"
+#gnuplot Makeplot.AGifDensity.rungp
+#echo "É É Done"
+
+#echo "É Animated Gif All"
+#gnuplot Makeplot.AGifCommon.rungp
+#echo "É É Done"
+
+echo "É Animated Gif All Contour"
+gnuplot Makeplot.AGifCommon2panels.rungp
+echo "É É Done"
+
+#echo "É Post Script -1000 Potential"
+#gnuplot Makeplot.PSPotential-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Potential"
+#gnuplot Makeplot.PSPotential-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Potential"
+#gnuplot Makeplot.PSPotential500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Potential"
+#gnuplot Makeplot.PSPotential1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -1000 Density"
+#gnuplot Makeplot.PSDensity-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Density"
+#gnuplot Makeplot.PSDensity-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Density"
+#gnuplot Makeplot.PSDensity500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Density"
+#gnuplot Makeplot.PSDensity1000.rungp
+#echo "É É Done"
+#
+
+#echo "É Post Script -1000 Common"
+#gnuplot Makeplot.PSCommon-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Common"
+#gnuplot Makeplot.PSCommon-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Common"
+#gnuplot Makeplot.PSCommon500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Common"
+#gnuplot Makeplot.PSCommon1000.rungp
+#echo "É É Done"
+
+
+echo "É Post Script -1000 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels-1000.rungp
+echo "É É Done"
+
+echo "É Post Script -500 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels-500.rungp
+echo "É É Done"
+
+echo "É Post Script 500 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels500.rungp
+echo "É É Done"
+
+echo "É Post Script 1000 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels1000.rungp
+echo "É É Done"
+
+
+echo "É Post Script Potential xy averages"
+#gnuplot Makeplot.PSPotentialxyAverage.rungp
+echo "É É Done"
+
+echo "É Post Script Potential xy averages scale"
+#gnuplot Makeplot.PSPotentialxyAveragescale.rungp
+echo "É É Done"
+
+cp  $HOMETEST/HDATRIMTRIM/*.ps $HOMETEST/HDATRIMTRIM/*.gif $HOMETEST/Plots/
+cd $HOMETEST/temp/
+cd $HOMETEST/HDAADAD
+echo "HDAADAD"
+rm $HOMETEST/HDAADAD/*.setgp
+rm  $HOMETEST/HDAADAD/*.rungp
+rm $HOMETEST/HDAADAD/*.plt 
+ln -s $HOMETEST/*.setgp $HOMETEST/HDAADAD/
+ln -s $HOMETEST/*.rungp $HOMETEST/HDAADAD/
+ln -s $HOMETEST/*.plt $HOMETEST/HDAADAD/
+cp $HOMETEST/HDAADAD.ingp $HOMETEST/HDAADAD/specs.ingp
+
+echo "É Animated Gif Potential"
+gnuplot Makeplot.AGifPotential.rungp
+echo "É É Done"
+
+#echo "É Animated Gif Density"
+#gnuplot Makeplot.AGifDensity.rungp
+#echo "É É Done"
+
+#echo "É Animated Gif All"
+#gnuplot Makeplot.AGifCommon.rungp
+#echo "É É Done"
+
+echo "É Animated Gif All Contour"
+gnuplot Makeplot.AGifCommon2panels.rungp
+echo "É É Done"
+
+#echo "É Post Script -1000 Potential"
+#gnuplot Makeplot.PSPotential-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Potential"
+#gnuplot Makeplot.PSPotential-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Potential"
+#gnuplot Makeplot.PSPotential500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Potential"
+#gnuplot Makeplot.PSPotential1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -1000 Density"
+#gnuplot Makeplot.PSDensity-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Density"
+#gnuplot Makeplot.PSDensity-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Density"
+#gnuplot Makeplot.PSDensity500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Density"
+#gnuplot Makeplot.PSDensity1000.rungp
+#echo "É É Done"
+#
+
+#echo "É Post Script -1000 Common"
+#gnuplot Makeplot.PSCommon-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Common"
+#gnuplot Makeplot.PSCommon-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Common"
+#gnuplot Makeplot.PSCommon500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Common"
+#gnuplot Makeplot.PSCommon1000.rungp
+#echo "É É Done"
+
+echo "É Post Script -1000 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels-1000.rungp
+echo "É É Done"
+
+echo "É Post Script -500 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels-500.rungp
+echo "É É Done"
+
+echo "É Post Script 500 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels500.rungp
+echo "É É Done"
+
+echo "É Post Script 1000 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels1000.rungp
+echo "É É Done"
+
+
+echo "É Post Script Potential xy averages"
+#gnuplot Makeplot.PSPotentialxyAverage.rungp
+echo "É É Done"
+
+echo "É Post Script Potential xy averages scale"
+#gnuplot Makeplot.PSPotentialxyAveragescale.rungp
+echo "É É Done"
+
+cp  $HOMETEST/HDAADAD/*.ps $HOMETEST/HDAADAD/*.gif $HOMETEST/Plots/
+cd $HOMETEST/temp/
+
+
+cd $HOMETEST/BPTRIMAD
+echo "BPTRIMAD"
+rm $HOMETEST/BPTRIMAD/*.setgp
+rm $HOMETEST/BPTRIMAD/*.rungp
+rm $HOMETEST/BPTRIMAD/*.plt 
+ln -s $HOMETEST/*.setgp $HOMETEST/BPTRIMAD/
+ln -s $HOMETEST/*.rungp $HOMETEST/BPTRIMAD/
+ln -s $HOMETEST/*.plt $HOMETEST/BPTRIMAD/
+cp $HOMETEST/BPTRIMAD.ingp $HOMETEST/BPTRIMAD/specs.ingp
+
+echo "É Animated Gif Potential"
+gnuplot Makeplot.AGifPotential.rungp
+echo "É É Done"
+
+#echo "É Animated Gif Density"
+#gnuplot Makeplot.AGifDensity.rungp
+#echo "É É Done"
+
+#echo "É Animated Gif All"
+#gnuplot Makeplot.AGifCommon.rungp
+#echo "É É Done"
+
+echo "É Animated Gif All Contour"
+gnuplot Makeplot.AGifCommon2panels.rungp
+echo "É É Done"
+
+#echo "É Post Script -1000 Potential"
+#gnuplot Makeplot.PSPotential-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Potential"
+#gnuplot Makeplot.PSPotential-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Potential"
+#gnuplot Makeplot.PSPotential500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Potential"
+#gnuplot Makeplot.PSPotential1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -1000 Density"
+#gnuplot Makeplot.PSDensity-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Density"
+#gnuplot Makeplot.PSDensity-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Density"
+#gnuplot Makeplot.PSDensity500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Density"
+#gnuplot Makeplot.PSDensity1000.rungp
+#echo "É É Done"
+#
+
+
+#echo "É Post Script -1000 Common"
+#gnuplot Makeplot.PSCommon-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Common"
+#gnuplot Makeplot.PSCommon-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Common"
+#gnuplot Makeplot.PSCommon500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Common"
+#gnuplot Makeplot.PSCommon1000.rungp
+#echo "É É Done"
+
+echo "É Post Script -1000 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels-1000.rungp
+echo "É É Done"
+
+echo "É Post Script -500 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels-500.rungp
+echo "É É Done"
+
+echo "É Post Script 500 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels500.rungp
+echo "É É Done"
+
+echo "É Post Script 1000 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels1000.rungp
+echo "É É Done"
+
+
+echo "É Post Script Potential xy averages"
+#gnuplot Makeplot.PSPotentialxyAverage.rungp
+echo "É É Done"
+
+echo "É Post Script Potential xy averages scale"
+#gnuplot Makeplot.PSPotentialxyAveragescale.rungp
+echo "É É Done"
+
+cp  $HOMETEST/BPTRIMAD/*.ps $HOMETEST/BPTRIMAD/*.gif $HOMETEST/Plots/
+cd $HOMETEST/temp/
+
+
+cd $HOMETEST/BPTRIMTRIM
+echo "BPTRIMTRIM"
+rm $HOMETEST/BPTRIMTRIM/*.setgp
+rm $HOMETEST/BPTRIMTRIM/*.rungp
+rm $HOMETEST/BPTRIMTRIM/*.plt 
+ln -s $HOMETEST/*.setgp $HOMETEST/BPTRIMTRIM/
+ln -s $HOMETEST/*.rungp $HOMETEST/BPTRIMTRIM/
+ln -s $HOMETEST/*.plt $HOMETEST/BPTRIMTRIM/
+cp $HOMETEST/BPTRIMTRIM.ingp $HOMETEST/BPTRIMTRIM/specs.ingp
+
+echo "É Animated Gif Potential"
+gnuplot Makeplot.AGifPotential.rungp
+echo "É É Done"
+
+#echo "É Animated Gif Density"
+#gnuplot Makeplot.AGifDensity.rungp
+#echo "É É Done"
+
+#echo "É Animated Gif All"
+#gnuplot Makeplot.AGifCommon.rungp
+#echo "É É Done"
+
+echo "É Animated Gif All Contour"
+gnuplot Makeplot.AGifCommon2panels.rungp
+echo "É É Done"
+
+#echo "É Post Script -1000 Potential"
+#gnuplot Makeplot.PSPotential-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Potential"
+#gnuplot Makeplot.PSPotential-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Potential"
+#gnuplot Makeplot.PSPotential500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Potential"
+#gnuplot Makeplot.PSPotential1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -1000 Density"
+#gnuplot Makeplot.PSDensity-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Density"
+#gnuplot Makeplot.PSDensity-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Density"
+#gnuplot Makeplot.PSDensity500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Density"
+#gnuplot Makeplot.PSDensity1000.rungp
+#echo "É É Done"
+#
+
+
+#echo "É Post Script -1000 Common"
+#gnuplot Makeplot.PSCommon-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Common"
+#gnuplot Makeplot.PSCommon-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Common"
+#gnuplot Makeplot.PSCommon500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Common"
+#gnuplot Makeplot.PSCommon1000.rungp
+#echo "É É Done"
+
+echo "É Post Script -1000 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels-1000.rungp
+echo "É É Done"
+
+echo "É Post Script -500 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels-500.rungp
+echo "É É Done"
+
+echo "É Post Script 500 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels500.rungp
+echo "É É Done"
+
+echo "É Post Script 1000 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels1000.rungp
+echo "É É Done"
+
+
+echo "É Post Script Potential xy averages"
+#gnuplot Makeplot.PSPotentialxyAverage.rungp
+echo "É É Done"
+
+echo "É Post Script Potential xy averages scale"
+#gnuplot Makeplot.PSPotentialxyAveragescale.rungp
+echo "É É Done"
+
+cp  $HOMETEST/BPTRIMTRIM/*.ps $HOMETEST/BPTRIMTRIM/*.gif $HOMETEST/Plots/
+cd $HOMETEST/temp/
+
+cd $HOMETEST/BPADAD
+echo "BPADAD"
+rm $HOMETEST/BPADAD/*.setgp
+rm  $HOMETEST/BPADAD/*.rungp
+rm $HOMETEST/BPADAD/*.plt 
+ln -s $HOMETEST/*.setgp $HOMETEST/BPADAD/
+ln -s $HOMETEST/*.rungp $HOMETEST/BPADAD/
+ln -s $HOMETEST/*.plt $HOMETEST/BPADAD/
+cp $HOMETEST/BPADAD.ingp $HOMETEST/BPADAD/specs.ingp
+
+echo "É Animated Gif Potential"
+gnuplot Makeplot.AGifPotential.rungp
+echo "É É Done"
+
+#echo "É Animated Gif Density"
+#gnuplot Makeplot.AGifDensity.rungp
+#echo "É É Done"
+
+#echo "É Animated Gif All"
+#gnuplot Makeplot.AGifCommon.rungp
+#echo "É É Done"
+
+echo "É Animated Gif All Contour"
+gnuplot Makeplot.AGifCommon2panels.rungp
+echo "É É Done"
+
+#echo "É Post Script -1000 Potential"
+#gnuplot Makeplot.PSPotential-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Potential"
+#gnuplot Makeplot.PSPotential-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Potential"
+#gnuplot Makeplot.PSPotential500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Potential"
+#gnuplot Makeplot.PSPotential1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -1000 Density"
+#gnuplot Makeplot.PSDensity-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Density"
+#gnuplot Makeplot.PSDensity-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Density"
+#gnuplot Makeplot.PSDensity500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Density"
+#gnuplot Makeplot.PSDensity1000.rungp
+#echo "É É Done"
+#
+
+#echo "É Post Script -1000 Common"
+#gnuplot Makeplot.PSCommon-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Common"
+#gnuplot Makeplot.PSCommon-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Common"
+#gnuplot Makeplot.PSCommon500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Common"
+#gnuplot Makeplot.PSCommon1000.rungp
+#echo "É É Done"
+
+
+echo "É Post Script -1000 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels-1000.rungp
+echo "É É Done"
+
+echo "É Post Script -500 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels-500.rungp
+echo "É É Done"
+
+echo "É Post Script 500 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels500.rungp
+echo "É É Done"
+
+echo "É Post Script 1000 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels1000.rungp
+echo "É É Done"
+
+
+echo "É Post Script Potential xy averages"
+#gnuplot Makeplot.PSPotentialxyAverage.rungp
+echo "É É Done"
+
+echo "É Post Script Potential xy averages scale"
+#gnuplot Makeplot.PSPotentialxyAveragescale.rungp
+echo "É É Done"
+
+cp   $HOMETEST/BPADAD/*.ps  $HOMETEST/BPADAD/*.gif $HOMETEST/Plots/
+cd $HOMETEST/temp/
+
+cd $HOMETEST/BPADAD_re
+echo "BPADAD_re"
+rm $HOMETEST/BPADAD_re/*.setgp
+rm  $HOMETEST/BPADAD_re/*.rungp
+rm $HOMETEST/BPADAD_re/*.plt 
+ln -s $HOMETEST/*.setgp $HOMETEST/BPADAD_re/
+ln -s $HOMETEST/*.rungp $HOMETEST/BPADAD_re/
+ln -s $HOMETEST/*.plt $HOMETEST/BPADAD_re/
+cp $HOMETEST/BPADAD_re.ingp $HOMETEST/BPADAD_re/specs.ingp
+
+echo "É Animated Gif Potential"
+gnuplot Makeplot.AGifPotential.rungp
+echo "É É Done"
+
+#echo "É Animated Gif Density"
+#gnuplot Makeplot.AGifDensity.rungp
+#echo "É É Done"
+
+#echo "É Animated Gif All"
+#gnuplot Makeplot.AGifCommon.rungp
+#echo "É É Done"
+
+echo "É Animated Gif All Contour"
+gnuplot Makeplot.AGifCommon2panels.rungp
+echo "É É Done"
+
+#echo "É Post Script -1000 Potential"
+#gnuplot Makeplot.PSPotential-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Potential"
+#gnuplot Makeplot.PSPotential-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Potential"
+#gnuplot Makeplot.PSPotential500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Potential"
+#gnuplot Makeplot.PSPotential1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -1000 Density"
+#gnuplot Makeplot.PSDensity-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Density"
+#gnuplot Makeplot.PSDensity-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Density"
+#gnuplot Makeplot.PSDensity500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Density"
+#gnuplot Makeplot.PSDensity1000.rungp
+#echo "É É Done"
+#
+
+#echo "É Post Script -1000 Common"
+#gnuplot Makeplot.PSCommon-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Common"
+#gnuplot Makeplot.PSCommon-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Common"
+#gnuplot Makeplot.PSCommon500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Common"
+#gnuplot Makeplot.PSCommon1000.rungp
+#echo "É É Done"
+
+
+echo "É Post Script -1000 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels-1000.rungp
+echo "É É Done"
+
+echo "É Post Script -500 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels-500.rungp
+echo "É É Done"
+
+echo "É Post Script 500 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels500.rungp
+echo "É É Done"
+
+echo "É Post Script 1000 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels1000.rungp
+echo "É É Done"
+
+
+echo "É Post Script Potential xy averages"
+#gnuplot Makeplot.PSPotentialxyAverage.rungp
+echo "É É Done"
+
+echo "É Post Script Potential xy averages scale"
+#gnuplot Makeplot.PSPotentialxyAveragescale.rungp
+echo "É É Done"
+
+cp   $HOMETEST/BPADAD_re/*.ps  $HOMETEST/BPADAD_re/*.gif $HOMETEST/Plots/
+cd $HOMETEST/temp/
+
+
+cd $HOMETEST/BPLOWGTRIMAD
+echo "BPLOWGTRIMAD"
+rm $HOMETEST/BPLOWGTRIMAD/*.setgp
+rm $HOMETEST/BPLOWGTRIMAD/*.rungp
+rm $HOMETEST/BPLOWGTRIMAD/*.plt 
+ln -s $HOMETEST/*.setgp $HOMETEST/BPLOWGTRIMAD/
+ln -s $HOMETEST/*.rungp $HOMETEST/BPLOWGTRIMAD/
+ln -s $HOMETEST/*.plt $HOMETEST/BPLOWGTRIMAD/
+cp $HOMETEST/BPLOWGTRIMAD.ingp $HOMETEST/BPLOWGTRIMAD/specs.ingp
+
+echo "É Animated Gif Potential"
+gnuplot Makeplot.AGifPotential.rungp
+echo "É É Done"
+
+#echo "É Animated Gif Density"
+#gnuplot Makeplot.AGifDensity.rungp
+#echo "É É Done"
+
+#echo "É Animated Gif All"
+#gnuplot Makeplot.AGifCommon.rungp
+#echo "É É Done"
+
+echo "É Animated Gif All Contour"
+gnuplot Makeplot.AGifCommon2panels.rungp
+echo "É É Done"
+
+#echo "É Post Script -1000 Potential"
+#gnuplot Makeplot.PSPotential-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Potential"
+#gnuplot Makeplot.PSPotential-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Potential"
+#gnuplot Makeplot.PSPotential500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Potential"
+#gnuplot Makeplot.PSPotential1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -1000 Density"
+#gnuplot Makeplot.PSDensity-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Density"
+#gnuplot Makeplot.PSDensity-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Density"
+#gnuplot Makeplot.PSDensity500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Density"
+#gnuplot Makeplot.PSDensity1000.rungp
+#echo "É É Done"
+#
+
+
+#echo "É Post Script -1000 Common"
+#gnuplot Makeplot.PSCommon-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Common"
+#gnuplot Makeplot.PSCommon-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Common"
+#gnuplot Makeplot.PSCommon500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Common"
+#gnuplot Makeplot.PSCommon1000.rungp
+#echo "É É Done"
+
+echo "É Post Script -1000 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels-1000.rungp
+echo "É É Done"
+
+echo "É Post Script -500 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels-500.rungp
+echo "É É Done"
+
+echo "É Post Script 500 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels500.rungp
+echo "É É Done"
+
+echo "É Post Script 1000 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels1000.rungp
+echo "É É Done"
+
+
+echo "É Post Script Potential xy averages"
+#gnuplot Makeplot.PSPotentialxyAverage.rungp
+echo "É É Done"
+
+echo "É Post Script Potential xy averages scale"
+#gnuplot Makeplot.PSPotentialxyAveragescale.rungp
+echo "É É Done"
+
+cp  $HOMETEST/BPLOWGTRIMAD/*.ps $HOMETEST/BPLOWGTRIMAD/*.gif $HOMETEST/Plots/
+cd $HOMETEST/temp/
+
+
+cd $HOMETEST/BPLOWGTRIMTRIM
+echo "BPLOWGTRIMTRIM"
+rm $HOMETEST/BPLOWGTRIMTRIM/*.setgp
+rm $HOMETEST/BPLOWGTRIMTRIM/*.rungp
+rm $HOMETEST/BPLOWGTRIMTRIM/*.plt 
+ln -s $HOMETEST/*.setgp $HOMETEST/BPLOWGTRIMTRIM/
+ln -s $HOMETEST/*.rungp $HOMETEST/BPLOWGTRIMTRIM/
+ln -s $HOMETEST/*.plt $HOMETEST/BPLOWGTRIMTRIM/
+cp $HOMETEST/BPLOWGTRIMTRIM.ingp $HOMETEST/BPLOWGTRIMTRIM/specs.ingp
+
+echo "É Animated Gif Potential"
+gnuplot Makeplot.AGifPotential.rungp
+echo "É É Done"
+
+#echo "É Animated Gif Density"
+#gnuplot Makeplot.AGifDensity.rungp
+#echo "É É Done"
+
+#echo "É Animated Gif All"
+#gnuplot Makeplot.AGifCommon.rungp
+#echo "É É Done"
+
+echo "É Animated Gif All Contour"
+gnuplot Makeplot.AGifCommon2panels.rungp
+echo "É É Done"
+
+#echo "É Post Script -1000 Potential"
+#gnuplot Makeplot.PSPotential-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Potential"
+#gnuplot Makeplot.PSPotential-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Potential"
+#gnuplot Makeplot.PSPotential500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Potential"
+#gnuplot Makeplot.PSPotential1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -1000 Density"
+#gnuplot Makeplot.PSDensity-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Density"
+#gnuplot Makeplot.PSDensity-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Density"
+#gnuplot Makeplot.PSDensity500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Density"
+#gnuplot Makeplot.PSDensity1000.rungp
+#echo "É É Done"
+#
+
+
+#echo "É Post Script -1000 Common"
+#gnuplot Makeplot.PSCommon-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Common"
+#gnuplot Makeplot.PSCommon-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Common"
+#gnuplot Makeplot.PSCommon500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Common"
+#gnuplot Makeplot.PSCommon1000.rungp
+#echo "É É Done"
+
+echo "É Post Script -1000 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels-1000.rungp
+echo "É É Done"
+
+echo "É Post Script -500 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels-500.rungp
+echo "É É Done"
+
+echo "É Post Script 500 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels500.rungp
+echo "É É Done"
+
+echo "É Post Script 1000 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels1000.rungp
+echo "É É Done"
+
+
+echo "É Post Script Potential xy averages"
+#gnuplot Makeplot.PSPotentialxyAverage.rungp
+echo "É É Done"
+
+echo "É Post Script Potential xy averages scale"
+#gnuplot Makeplot.PSPotentialxyAveragescale.rungp
+echo "É É Done"
+
+cp  $HOMETEST/BPLOWGTRIMTRIM/*.ps $HOMETEST/BPLOWGTRIMTRIM/*.gif $HOMETEST/Plots/
+cd $HOMETEST/temp/
+
+cd $HOMETEST/BPLOWGADAD
+echo "BPLOWGADAD"
+rm $HOMETEST/BPLOWGADAD/*.setgp
+rm  $HOMETEST/BPLOWGADAD/*.rungp
+rm $HOMETEST/BPLOWGADAD/*.plt 
+ln -s $HOMETEST/*.setgp $HOMETEST/BPLOWGADAD/
+ln -s $HOMETEST/*.rungp $HOMETEST/BPLOWGADAD/
+ln -s $HOMETEST/*.plt $HOMETEST/BPLOWGADAD/
+cp $HOMETEST/BPLOWGADAD.ingp $HOMETEST/BPLOWGADAD/specs.ingp
+
+echo "É Animated Gif Potential"
+gnuplot Makeplot.AGifPotential.rungp
+echo "É É Done"
+
+#echo "É Animated Gif Density"
+#gnuplot Makeplot.AGifDensity.rungp
+#echo "É É Done"
+
+#echo "É Animated Gif All"
+#gnuplot Makeplot.AGifCommon.rungp
+#echo "É É Done"
+
+echo "É Animated Gif All Contour"
+gnuplot Makeplot.AGifCommon2panels.rungp
+echo "É É Done"
+
+#echo "É Post Script -1000 Potential"
+#gnuplot Makeplot.PSPotential-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Potential"
+#gnuplot Makeplot.PSPotential-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Potential"
+#gnuplot Makeplot.PSPotential500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Potential"
+#gnuplot Makeplot.PSPotential1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -1000 Density"
+#gnuplot Makeplot.PSDensity-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Density"
+#gnuplot Makeplot.PSDensity-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Density"
+#gnuplot Makeplot.PSDensity500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Density"
+#gnuplot Makeplot.PSDensity1000.rungp
+#echo "É É Done"
+#
+
+#echo "É Post Script -1000 Common"
+#gnuplot Makeplot.PSCommon-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Common"
+#gnuplot Makeplot.PSCommon-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Common"
+#gnuplot Makeplot.PSCommon500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Common"
+#gnuplot Makeplot.PSCommon1000.rungp
+#echo "É É Done"
+
+
+echo "É Post Script -1000 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels-1000.rungp
+echo "É É Done"
+
+echo "É Post Script -500 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels-500.rungp
+echo "É É Done"
+
+echo "É Post Script 500 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels500.rungp
+echo "É É Done"
+
+echo "É Post Script 1000 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels1000.rungp
+echo "É É Done"
+
+
+echo "É Post Script Potential xy averages"
+#gnuplot Makeplot.PSPotentialxyAverage.rungp
+echo "É É Done"
+
+echo "É Post Script Potential xy averages scale"
+#gnuplot Makeplot.PSPotentialxyAveragescale.rungp
+echo "É É Done"
+
+cp   $HOMETEST/BPLOWGADAD/*.ps  $HOMETEST/BPLOWGADAD/*.gif $HOMETEST/Plots/
+cd $HOMETEST/temp/
+
+
+
+################################################################################
+
+
+
+cd $HOMETEST/BPELOWGTRIMAD
+echo "BPELOWGTRIMAD"
+rm $HOMETEST/BPELOWGTRIMAD/*.setgp
+rm $HOMETEST/BPELOWGTRIMAD/*.rungp
+rm $HOMETEST/BPELOWGTRIMAD/*.plt 
+ln -s $HOMETEST/*.setgp $HOMETEST/BPELOWGTRIMAD/
+ln -s $HOMETEST/*.rungp $HOMETEST/BPELOWGTRIMAD/
+ln -s $HOMETEST/*.plt $HOMETEST/BPELOWGTRIMAD/
+cp $HOMETEST/BPELOWGTRIMAD.ingp $HOMETEST/BPELOWGTRIMAD/specs.ingp
+
+#echo "É Animated Gif Potential"
+#gnuplot Makeplot.AGifPotential.rungp
+#echo "É É Done"
+
+#echo "É Animated Gif Density"
+#gnuplot Makeplot.AGifDensity.rungp
+#echo "É É Done"
+
+#echo "É Animated Gif All"
+#gnuplot Makeplot.AGifCommon.rungp
+#echo "É É Done"
+
+#echo "É Animated Gif All Contour"
+#gnuplot Makeplot.AGifCommon2panels.rungp
+#echo "É É Done"
+
+#echo "É Post Script -1000 Potential"
+#gnuplot Makeplot.PSPotential-1000.rungp
+#echo "É É Done"
+
+#echo "É Post Script -500 Potential"
+#gnuplot Makeplot.PSPotential-500.rungp
+#echo "É É Done"
+
+#echo "É Post Script 500 Potential"
+#gnuplot Makeplot.PSPotential500.rungp
+#echo "É É Done"
+
+#echo "É Post Script 1000 Potential"
+#gnuplot Makeplot.PSPotential1000.rungp
+#echo "É É Done"
+
+#echo "É Post Script -1000 Density"
+#gnuplot Makeplot.PSDensity-1000.rungp
+#echo "É É Done"
+
+#echo "É Post Script -500 Density"
+#gnuplot Makeplot.PSDensity-500.rungp
+#echo "É É Done"
+
+#echo "É Post Script 500 Density"
+#gnuplot Makeplot.PSDensity500.rungp
+#echo "É É Done"
+
+#echo "É Post Script 1000 Density"
+#gnuplot Makeplot.PSDensity1000.rungp
+#echo "É É Done"
+
+
+
+#echo "É Post Script -1000 Common"
+#gnuplot Makeplot.PSCommon-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Common"
+#gnuplot Makeplot.PSCommon-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Common"
+#gnuplot Makeplot.PSCommon500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Common"
+#gnuplot Makeplot.PSCommon1000.rungp
+#echo "É É Done"
+
+#echo "É Post Script -1000 Common 2 panels"
+#gnuplot Makeplot.PSCommon2panels-1000.rungp
+#echo "É É Done"
+
+#echo "É Post Script -500 Common 2 panels"
+#gnuplot Makeplot.PSCommon2panels-500.rungp
+#echo "É É Done"
+
+#echo "É Post Script 500 Common 2 panels"
+#gnuplot Makeplot.PSCommon2panels500.rungp
+#echo "É É Done"
+
+#echo "É Post Script 1000 Common 2 panels"
+#gnuplot Makeplot.PSCommon2panels1000.rungp
+#echo "É É Done"
+
+
+#echo "É Post Script Potential xy averages"
+#gnuplot Makeplot.PSPotentialxyAverage.rungp
+#echo "É É Done"
+
+echo "É Post Script Potential xy averages scale"
+#gnuplot Makeplot.PSPotentialxyAveragescale.rungp
+echo "É É Done"
+
+cp  $HOMETEST/BPELOWGTRIMAD/*.ps $HOMETEST/BPELOWGTRIMAD/*.gif $HOMETEST/Plots/
+cd $HOMETEST/temp/
+
+
+cd $HOMETEST/BPELOWGTRIMTRIM
+echo "BPELOWGTRIMTRIM"
+rm $HOMETEST/BPELOWGTRIMTRIM/*.setgp
+rm $HOMETEST/BPELOWGTRIMTRIM/*.rungp
+rm $HOMETEST/BPELOWGTRIMTRIM/*.plt 
+ln -s $HOMETEST/*.setgp $HOMETEST/BPELOWGTRIMTRIM/
+ln -s $HOMETEST/*.rungp $HOMETEST/BPELOWGTRIMTRIM/
+ln -s $HOMETEST/*.plt $HOMETEST/BPELOWGTRIMTRIM/
+cp $HOMETEST/BPELOWGTRIMTRIM.ingp $HOMETEST/BPELOWGTRIMTRIM/specs.ingp
+
+#echo "É Animated Gif Potential"
+#gnuplot Makeplot.AGifPotential.rungp
+#echo "É É Done"
+
+#echo "É Animated Gif Density"
+#gnuplot Makeplot.AGifDensity.rungp
+#echo "É É Done"
+
+#echo "É Animated Gif All"
+#gnuplot Makeplot.AGifCommon.rungp
+#echo "É É Done"
+
+#echo "É Animated Gif All Contour"
+#gnuplot Makeplot.AGifCommon2panels.rungp
+#echo "É É Done"
+
+#echo "É Post Script -1000 Potential"
+#gnuplot Makeplot.PSPotential-1000.rungp
+#echo "É É Done"
+
+#echo "É Post Script -500 Potential"
+#gnuplot Makeplot.PSPotential-500.rungp
+#echo "É É Done"
+
+#echo "É Post Script 500 Potential"
+#gnuplot Makeplot.PSPotential500.rungp
+#echo "É É Done"
+
+#echo "É Post Script 1000 Potential"
+#gnuplot Makeplot.PSPotential1000.rungp
+#echo "É É Done"
+
+#echo "É Post Script -1000 Density"
+#gnuplot Makeplot.PSDensity-1000.rungp
+#echo "É É Done"
+
+#echo "É Post Script -500 Density"
+#gnuplot Makeplot.PSDensity-500.rungp
+#echo "É É Done"
+
+#echo "É Post Script 500 Density"
+#gnuplot Makeplot.PSDensity500.rungp
+#echo "É É Done"
+
+#echo "É Post Script 1000 Density"
+#gnuplot Makeplot.PSDensity1000.rungp
+#echo "É É Done"
+
+
+
+#echo "É Post Script -1000 Common"
+#gnuplot Makeplot.PSCommon-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Common"
+#gnuplot Makeplot.PSCommon-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Common"
+#gnuplot Makeplot.PSCommon500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Common"
+#gnuplot Makeplot.PSCommon1000.rungp
+#echo "É É Done"
+
+#echo "É Post Script -1000 Common 2 panels"
+#gnuplot Makeplot.PSCommon2panels-1000.rungp
+#echo "É É Done"
+
+#echo "É Post Script -500 Common 2 panels"
+#gnuplot Makeplot.PSCommon2panels-500.rungp
+#echo "É É Done"
+
+#echo "É Post Script 500 Common 2 panels"
+#gnuplot Makeplot.PSCommon2panels500.rungp
+#echo "É É Done"
+
+#echo "É Post Script 1000 Common 2 panels"
+#gnuplot Makeplot.PSCommon2panels1000.rungp
+#echo "É É Done"
+
+
+echo "É Post Script Potential xy averages"
+#gnuplot Makeplot.PSPotentialxyAverage.rungp
+echo "É É Done"
+
+echo "É Post Script Potential xy averages scale"
+#gnuplot Makeplot.PSPotentialxyAveragescale.rungp
+echo "É É Done"
+
+cp  $HOMETEST/BPELOWGTRIMTRIM/*.ps $HOMETEST/BPELOWGTRIMTRIM/*.gif $HOMETEST/Plots/
+cd $HOMETEST/temp/
+
+cd $HOMETEST/BPELOWGADAD
+echo "BPELOWGADAD"
+rm $HOMETEST/BPELOWGADAD/*.setgp
+rm  $HOMETEST/BPELOWGADAD/*.rungp
+rm $HOMETEST/BPELOWGADAD/*.plt 
+ln -s $HOMETEST/*.setgp $HOMETEST/BPELOWGADAD/
+ln -s $HOMETEST/*.rungp $HOMETEST/BPELOWGADAD/
+ln -s $HOMETEST/*.plt $HOMETEST/BPELOWGADAD/
+cp $HOMETEST/BPELOWGADAD.ingp $HOMETEST/BPELOWGADAD/specs.ingp
+
+#echo "É Animated Gif Potential"
+#gnuplot Makeplot.AGifPotential.rungp
+#echo "É É Done"
+
+#echo "É Animated Gif Density"
+#gnuplot Makeplot.AGifDensity.rungp
+#echo "É É Done"
+
+#echo "É Animated Gif All"
+#gnuplot Makeplot.AGifCommon.rungp
+#echo "É É Done"
+
+#echo "É Animated Gif All Contour"
+#gnuplot Makeplot.AGifCommon2panels.rungp
+#echo "É É Done"
+
+#echo "É Post Script -1000 Potential"
+#gnuplot Makeplot.PSPotential-1000.rungp
+#echo "É É Done"
+
+#echo "É Post Script -500 Potential"
+#gnuplot Makeplot.PSPotential-500.rungp
+#echo "É É Done"
+
+#echo "É Post Script 500 Potential"
+#gnuplot Makeplot.PSPotential500.rungp
+#echo "É É Done"
+
+#echo "É Post Script 1000 Potential"
+#gnuplot Makeplot.PSPotential1000.rungp
+#echo "É É Done"
+
+#echo "É Post Script -1000 Density"
+#gnuplot Makeplot.PSDensity-1000.rungp
+#echo "É É Done"
+
+#echo "É Post Script -500 Density"
+#gnuplot Makeplot.PSDensity-500.rungp
+#echo "É É Done"
+
+#echo "É Post Script 500 Density"
+#gnuplot Makeplot.PSDensity500.rungp
+#echo "É É Done"
+
+#echo "É Post Script 1000 Density"
+#gnuplot Makeplot.PSDensity1000.rungp
+#echo "É É Done"
+
+
+#echo "É Post Script -1000 Common"
+#gnuplot Makeplot.PSCommon-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Common"
+#gnuplot Makeplot.PSCommon-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Common"
+#gnuplot Makeplot.PSCommon500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Common"
+#gnuplot Makeplot.PSCommon1000.rungp
+#echo "É É Done"
+
+
+#echo "É Post Script -1000 Common 2 panels"
+#gnuplot Makeplot.PSCommon2panels-1000.rungp
+#echo "É É Done"
+
+#echo "É Post Script -500 Common 2 panels"
+#gnuplot Makeplot.PSCommon2panels-500.rungp
+#echo "É É Done"
+
+#echo "É Post Script 500 Common 2 panels"
+#gnuplot Makeplot.PSCommon2panels500.rungp
+#echo "É É Done"
+
+#echo "É Post Script 1000 Common 2 panels"
+#gnuplot Makeplot.PSCommon2panels1000.rungp
+#echo "É É Done"
+
+
+echo "É Post Script Potential xy averages"
+#gnuplot Makeplot.PSPotentialxyAverage.rungp
+echo "É É Done"
+
+echo "É Post Script Potential xy averages scale"
+#gnuplot Makeplot.PSPotentialxyAveragescale.rungp
+echo "É É Done"
+
+cp   $HOMETEST/BPELOWGADAD/*.ps  $HOMETEST/BPELOWGADAD/*.gif $HOMETEST/Plots/
+cd $HOMETEST/temp/
+
+######################################################
+
+
+
+cd $HOMETEST/temp
+cd $HOMETEST/DMPPTRIMAD
+
+
+echo "DMPPTRIMAD"
+rm $HOMETEST/DMPPTRIMAD/*.setgp
+rm  $HOMETEST/DMPPTRIMAD/*.rungp
+rm $HOMETEST/DMPPTRIMAD/*.plt 
+ln -s $HOMETEST/*.setgp $HOMETEST/DMPPTRIMAD/
+ln -s $HOMETEST/*.rungp $HOMETEST/DMPPTRIMAD/
+ln -s $HOMETEST/*.plt $HOMETEST/DMPPTRIMAD/
+
+cp $HOMETEST/DMPPTRIMAD.ingp $HOMETEST/DMPPTRIMAD/specs.ingp
+
+#echo "É Animated Gif Potential"
+#gnuplot Makeplot.AGifPotential.rungp
+#echo "É É Done"
+
+#echo "É Animated Gif Density"
+#gnuplot Makeplot.AGifDensity.rungp
+#echo "É É Done"
+
+#echo "É Animated Gif All"
+#gnuplot Makeplot.AGifCommon.rungp
+#echo "É É Done"
+
+#echo "É Animated Gif All Contour"
+#gnuplot Makeplot.AGifCommon2panels.rungp
+#echo "É É Done"
+
+#echo "É Post Script -1000 Potential"
+#gnuplot Makeplot.PSPotential-1000.rungp
+#echo "É É Done"
+
+#echo "É Post Script -500 Potential"
+#gnuplot Makeplot.PSPotential-500.rungp
+#echo "É É Done"
+
+#echo "É Post Script 500 Potential"
+#gnuplot Makeplot.PSPotential500.rungp
+#echo "É É Done"
+
+#echo "É Post Script 1000 Potential"
+#gnuplot Makeplot.PSPotential1000.rungp
+#echo "É É Done"
+
+#echo "É Post Script -1000 Density"
+#gnuplot Makeplot.PSDensity-1000.rungp
+#echo "É É Done"
+
+#echo "É Post Script -500 Density"
+#gnuplot Makeplot.PSDensity-500.rungp
+#echo "É É Done"
+
+#echo "É Post Script 500 Density"
+#gnuplot Makeplot.PSDensity500.rungp
+#echo "É É Done"
+
+#echo "É Post Script 1000 Density"
+#gnuplot Makeplot.PSDensity1000.rungp
+#echo "É É Done"
+
+
+#echo "É Post Script -1000 Common"
+#gnuplot Makeplot.PSCommon-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Common"
+#gnuplot Makeplot.PSCommon-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Common"
+#gnuplot Makeplot.PSCommon500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Common"
+#gnuplot Makeplot.PSCommon1000.rungp
+#echo "É É Done"
+
+
+#echo "É Post Script -1000 Common 2 panels"
+#gnuplot Makeplot.PSCommon2panels-1000.rungp
+#echo "É É Done"
+
+#echo "É Post Script -500 Common 2 panels"
+#gnuplot Makeplot.PSCommon2panels-500.rungp
+#echo "É É Done"
+
+#echo "É Post Script 500 Common 2 panels"
+#gnuplot Makeplot.PSCommon2panels500.rungp
+#echo "É É Done"
+
+#echo "É Post Script 1000 Common 2 panels"
+#gnuplot Makeplot.PSCommon2panels1000.rungp
+#echo "É É Done"
+
+
+#echo "É Post Script Potential xy averages"
+##gnuplot Makeplot.PSPotentialxyAverage.rungp
+#echo "É É Done"
+
+#echo "É Post Script Potential xy averages scale"
+##gnuplot Makeplot.PSPotentialxyAveragescale.rungp
+#echo "É É Done"
+
+cp  $HOMETEST/DMPPTRIMAD/*.ps $HOMETEST/DMPPTRIMAD/*.gif $HOMETEST/Plots/
+
+cd $HOMETEST/temp/
+
+
+
+cd $HOMETEST/DMPPADAD
+echo "DMPPADAD"
+rm $HOMETEST/DMPPADAD/*.setgp
+rm  $HOMETEST/DMPPADAD/*.rungp
+rm $HOMETEST/DMPPADAD/*.plt 
+ln -s $HOMETEST/*.setgp $HOMETEST/DMPPADAD/
+ln -s $HOMETEST/*.rungp $HOMETEST/DMPPADAD/
+ln -s $HOMETEST/*.plt $HOMETEST/DMPPADAD/
+cp $HOMETEST/DMPPADAD.ingp $HOMETEST/DMPPADAD/specs.ingp
+
+echo "É Animated Gif Potential"
+gnuplot Makeplot.AGifPotential.rungp
+echo "É É Done"
+
+#echo "É Animated Gif Density"
+#gnuplot Makeplot.AGifDensity.rungp
+#echo "É É Done"
+
+#echo "É Animated Gif All"
+#gnuplot Makeplot.AGifCommon.rungp
+#echo "É É Done"
+
+#echo "É Animated Gif All Contour"
+#gnuplot Makeplot.AGifCommon2panels.rungp
+#echo "É É Done"
+
+
+#echo "É Post Script -1000 Potential"
+#gnuplot Makeplot.PSPotential-1000.rungp
+#echo "É É Done"
+
+#echo "É Post Script -500 Potential"
+#gnuplot Makeplot.PSPotential-500.rungp
+#echo "É É Done"
+
+#echo "É Post Script 500 Potential"
+#gnuplot Makeplot.PSPotential500.rungp
+#echo "É É Done"
+
+#echo "É Post Script 1000 Potential"
+#gnuplot Makeplot.PSPotential1000.rungp
+#echo "É É Done"
+
+#echo "É Post Script -1000 Density"
+#gnuplot Makeplot.PSDensity-1000.rungp
+#echo "É É Done"
+
+#echo "É Post Script -500 Density"
+#gnuplot Makeplot.PSDensity-500.rungp
+#echo "É É Done"
+
+#echo "É Post Script 500 Density"
+#gnuplot Makeplot.PSDensity500.rungp
+#echo "É É Done"
+
+#echo "É Post Script 1000 Density"
+#gnuplot Makeplot.PSDensity1000.rungp
+#echo "É É Done"
+
+
+
+#echo "É Post Script -1000 Common"
+#gnuplot Makeplot.PSCommon-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Common"
+#gnuplot Makeplot.PSCommon-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Common"
+#gnuplot Makeplot.PSCommon500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Common"
+#gnuplot Makeplot.PSCommon1000.rungp
+#echo "É É Done"
+
+
+#echo "É Post Script -1000 Common 2 panels"
+#gnuplot Makeplot.PSCommon2panels-1000.rungp
+#echo "É É Done"
+
+#echo "É Post Script -500 Common 2 panels"
+#gnuplot Makeplot.PSCommon2panels-500.rungp
+#echo "É É Done"
+
+#echo "É Post Script 500 Common 2 panels"
+#gnuplot Makeplot.PSCommon2panels500.rungp
+#echo "É É Done"
+
+#echo "É Post Script 1000 Common 2 panels"
+#gnuplot Makeplot.PSCommon2panels1000.rungp
+#echo "É É Done"
+
+
+echo "É Post Script Potential xy averages"
+#gnuplot Makeplot.PSPotentialxyAverage.rungp
+echo "É É Done"
+
+echo "É Post Script Potential xy averages scale"
+#gnuplot Makeplot.PSPotentialxyAveragescale.rungp
+echo "É É Done"
+
+cp  $HOMETEST/DMPPADAD/*.ps $HOMETEST/DMPPADAD/*.gif $HOMETEST/Plots/
+
+
+cd $HOMETEST/temp/
+
+
+
+cd $HOMETEST/DMPPTRIMTRIM
+echo "DMPPTRIMTRIM"
+rm $HOMETEST/DMPPTRIMTRIM/*.setgp
+rm  $HOMETEST/DMPPTRIMTRIM/*.rungp
+rm $HOMETEST/DMPPTRIMTRIM/*.plt 
+ln -s $HOMETEST/*.setgp $HOMETEST/DMPPTRIMTRIM/
+ln -s $HOMETEST/*.rungp $HOMETEST/DMPPTRIMTRIM/
+ln -s $HOMETEST/*.plt $HOMETEST/DMPPTRIMTRIM/
+cp $HOMETEST/DMPPTRIMTRIM.ingp $HOMETEST/DMPPTRIMTRIM/specs.ingp
+
+echo "É Animated Gif Potential"
+gnuplot Makeplot.AGifPotential.rungp
+echo "É É Done"
+
+#echo "É Animated Gif Density"
+#gnuplot Makeplot.AGifDensity.rungp
+#echo "É É Done"
+
+#echo "É Animated Gif All"
+#gnuplot Makeplot.AGifCommon.rungp
+#echo "É É Done"
+
+echo "É Animated Gif All Contour"
+gnuplot Makeplot.AGifCommon2panels.rungp
+echo "É É Done"
+
+
+#echo "É Post Script -1000 Potential"
+#gnuplot Makeplot.PSPotential-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Potential"
+#gnuplot Makeplot.PSPotential-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Potential"
+#gnuplot Makeplot.PSPotential500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Potential"
+#gnuplot Makeplot.PSPotential1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -1000 Density"
+#gnuplot Makeplot.PSDensity-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Density"
+#gnuplot Makeplot.PSDensity-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Density"
+#gnuplot Makeplot.PSDensity500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Density"
+#gnuplot Makeplot.PSDensity1000.rungp
+#echo "É É Done"
+#
+
+
+#echo "É Post Script -1000 Common"
+#gnuplot Makeplot.PSCommon-1000.rungp
+#echo "É É Done"
+#
+#echo "É Post Script -500 Common"
+#gnuplot Makeplot.PSCommon-500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 500 Common"
+#gnuplot Makeplot.PSCommon500.rungp
+#echo "É É Done"
+#
+#echo "É Post Script 1000 Common"
+#gnuplot Makeplot.PSCommon1000.rungp
+#echo "É É Done"
+
+
+echo "É Post Script -1000 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels-1000.rungp
+echo "É É Done"
+
+echo "É Post Script -500 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels-500.rungp
+echo "É É Done"
+
+echo "É Post Script 500 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels500.rungp
+echo "É É Done"
+
+echo "É Post Script 1000 Common 2 panels"
+gnuplot Makeplot.PSCommon2panels1000.rungp
+echo "É É Done"
+
+
+echo "É Post Script Potential xy averages"
+#gnuplot Makeplot.PSPotentialxyAverage.rungp
+echo "É É Done"
+
+echo "É Post Script Potential xy averages scale"
+#gnuplot Makeplot.PSPotentialxyAveragescale.rungp
+echo "É É Done"
+
+cp  $HOMETEST/DMPPTRIMTRIM/*.ps $HOMETEST/DMPPTRIMTRIM/*.gif $HOMETEST/Plots/
+
+
+
+
+

@@ -1,0 +1,24 @@
+nprint 1
+calculate_RR T
+print_RR T
+print_Photocurrent T.
+print_current T
+print_Photocurrentmax T
+debug_level 0
+nphotonfrequency 1
+photonmax 2.00000
+photonmin 0.00000
+photoncouplingconstant 0.00001
+emin -10.00000
+emax 10.00000
+nemax 10000
+biasmin -3.00000
+biasmax 3.00000
+nbias 20
+alphamin 0.00000
+alphamax 1.00000
+nalpha 5
+dimC 6
+dimL 1
+dimR 1
+

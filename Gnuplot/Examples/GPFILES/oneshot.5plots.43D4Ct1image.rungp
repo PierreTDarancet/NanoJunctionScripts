@@ -1,0 +1,263 @@
+print(it);
+
+LMARGIN = LMARGIN_1
+RMARGIN = RMARGIN_1 
+TMARGIN = TMARGIN_1 
+BMARGIN = BMARGIN_1
+SETXLABEL = SETXLABEL_1
+SETYLABEL = SETYLABEL_1
+SETCBLABEL = SETCBLABEL_1
+SETTITLE = SETTITLE_1
+XOFFSET = XOFFSET_1
+YOFFSET = YOFFSET_1
+CBOFFSET = CBOFFSET_1
+
+it=-1000
+
+INPUT_FILE=sprintf("%d.%s.gp", it,Filename_Dens2Dx);
+Scaling_factor_X = Scaling_factor_X_Dens2Dx
+XMAX   = XMAX_Dens2Dx
+XMIN   =  XMIN_Dens2Dx
+XTICS  = XTICS_Dens2Dx 
+XLABEL = XLABEL_Dens2Dx 
+Scaling_factor_Y = Scaling_factor_Y_Dens2Dx
+YMAX    = YMAX_Dens2Dx
+YMIN    = YMIN_Dens2Dx
+YTICS   = YTICS_Dens2Dx
+YLABEL  = YLABEL_Dens2Dx
+Scaling_factor_Z = Scaling_factor_Z_Dens2Dx
+CBMIN   =  CBMIN_Dens2Dx
+CBMAX   =  CBMAX_Dens2Dx
+CBTICS  =  CBTICS_Dens2Dx 
+CBLABEL =  CBLABEL_Dens2Dx
+CONTOURINCREMENT = CONTOURINCREMENT_Dens2Dx
+load "plotdensityFig.plt"
+
+
+INPUT_FILE=sprintf("%d.%s.gp", it,Filename_Pot2Dx);
+Scaling_factor_X = Scaling_factor_X_Pot2Dx
+XMAX   = XMAX_Pot2Dx
+XMIN   =  XMIN_Pot2Dx
+XTICS  = XTICS_Pot2Dx 
+XLABEL = XLABEL_Pot2Dx 
+Scaling_factor_Y = Scaling_factor_Y_Pot2Dx
+YMAX    = YMAX_Pot2Dx
+YMIN    = YMIN_Pot2Dx
+YTICS   = YTICS_Pot2Dx
+YLABEL  = YLABEL_Pot2Dx
+Scaling_factor_Z = Scaling_factor_Z_Pot2Dx
+CBMIN   =  CBMIN_Pot2Dx
+CBMAX   =  CBMAX_Pot2Dx
+CBTICS  =  CBTICS_Pot2Dx 
+CBLABEL =  CBLABEL_Pot2Dx
+CONTOURINCREMENT = CONTOURINCREMENT_Pot2Dx
+
+load "plotpotentialcontourscale.plt"
+
+
+
+LMARGIN = LMARGIN_2
+RMARGIN = RMARGIN_2 
+TMARGIN = TMARGIN_2 
+BMARGIN = BMARGIN_2
+SETXLABEL = SETXLABEL_2
+SETYLABEL = SETYLABEL_2
+SETCBLABEL = SETCBLABEL_2
+SETTITLE = SETTITLE_2
+XOFFSET = XOFFSET_2
+YOFFSET = YOFFSET_2
+CBOFFSET = CBOFFSET_2
+
+it=-500
+
+
+INPUT_FILE=sprintf("%d.%s.gp", it,Filename_Dens2Dx);
+Scaling_factor_X = Scaling_factor_X_Dens2Dx
+XMAX   = XMAX_Dens2Dx
+XMIN   =  XMIN_Dens2Dx
+XTICS  = XTICS_Dens2Dx 
+XLABEL = XLABEL_Dens2Dx 
+Scaling_factor_Y = Scaling_factor_Y_Dens2Dx
+YMAX    = YMAX_Dens2Dx
+YMIN    = YMIN_Dens2Dx
+YTICS   = YTICS_Dens2Dx
+YLABEL  = YLABEL_Dens2Dx
+Scaling_factor_Z = Scaling_factor_Z_Dens2Dx
+CBMIN   =  CBMIN_Dens2Dx
+CBMAX   =  CBMAX_Dens2Dx
+CBTICS  =  CBTICS_Dens2Dx 
+CBLABEL =  CBLABEL_Dens2Dx
+CONTOURINCREMENT = CONTOURINCREMENT_Dens2Dx
+load "plotdensityFig.plt"
+
+INPUT_FILE=sprintf("%d.%s.gp", it,Filename_Pot2Dx);
+Scaling_factor_X = Scaling_factor_X_Pot2Dx
+XMAX   = XMAX_Pot2Dx
+XMIN   =  XMIN_Pot2Dx
+XTICS  = XTICS_Pot2Dx 
+XLABEL = XLABEL_Pot2Dx 
+Scaling_factor_Y = Scaling_factor_Y_Pot2Dx
+YMAX    = YMAX_Pot2Dx
+YMIN    = YMIN_Pot2Dx
+YTICS   = YTICS_Pot2Dx
+YLABEL  = YLABEL_Pot2Dx
+Scaling_factor_Z = Scaling_factor_Z_Pot2Dx
+CBMIN   =  CBMIN_Pot2Dx
+CBMAX   =  CBMAX_Pot2Dx
+CBTICS  =  CBTICS_Pot2Dx 
+CBLABEL =  CBLABEL_Pot2Dx
+CONTOURINCREMENT = CONTOURINCREMENT_Pot2Dx
+
+load "plotpotentialcontourscale.plt"
+unset border
+unset key
+unset colorbox
+unset surface
+unset title
+unset contour
+unset xlabel
+unset ylabel
+unset y2label
+unset cblabel
+unset xtics
+unset ytics
+unset y2tics
+unset cbtics
+LMARGIN = LMARGIN_3+0.07
+RMARGIN = RMARGIN_3+0.07
+TMARGIN = TMARGIN_3
+BMARGIN = BMARGIN_3
+set lmargin at screen LMARGIN
+set rmargin at screen RMARGIN
+set tmargin at screen TMARGIN
+set bmargin at screen BMARGIN
+SETXLABEL = SETXLABEL_3
+SETYLABEL = SETYLABEL_3
+SETCBLABEL = SETCBLABEL_3
+SETTITLE = SETTITLE_3
+XOFFSET = XOFFSET_3
+YOFFSET = YOFFSET_3
+CBOFFSET = CBOFFSET_3
+it=0
+set xrange [0:xpixels]
+set yrange [0:ypixels]
+set zrange [0:255]
+set cbrange [0:255]
+INPUT_FILE=sprintf("%s.x.avs", GENERIC_NAME);
+plot INPUT_FILE binary filetype=auto with rgbimage
+set border
+set zrange [-100000:1000000]
+
+LMARGIN = LMARGIN_4
+RMARGIN = RMARGIN_4 
+TMARGIN = TMARGIN_4 
+BMARGIN = BMARGIN_4
+SETXLABEL = SETXLABEL_4
+SETYLABEL = SETYLABEL_4
+SETCBLABEL = SETCBLABEL_4
+SETTITLE = SETTITLE_4
+XOFFSET = XOFFSET_4
+YOFFSET = YOFFSET_4
+CBOFFSET = CBOFFSET_4
+
+it=500
+
+
+INPUT_FILE=sprintf("%d.%s.gp", it,Filename_Dens2Dx);
+Scaling_factor_X = Scaling_factor_X_Dens2Dx
+XMAX   = XMAX_Dens2Dx
+XMIN   =  XMIN_Dens2Dx
+XTICS  = XTICS_Dens2Dx 
+XLABEL = XLABEL_Dens2Dx 
+Scaling_factor_Y = Scaling_factor_Y_Dens2Dx
+YMAX    = YMAX_Dens2Dx
+YMIN    = YMIN_Dens2Dx
+YTICS   = YTICS_Dens2Dx
+YLABEL  = YLABEL_Dens2Dx
+Scaling_factor_Z = Scaling_factor_Z_Dens2Dx
+CBMIN   =  CBMIN_Dens2Dx
+CBMAX   =  CBMAX_Dens2Dx
+CBTICS  =  CBTICS_Dens2Dx 
+CBLABEL =  CBLABEL_Dens2Dx
+CONTOURINCREMENT = CONTOURINCREMENT_Dens2Dx
+load "plotdensityFig.plt"
+
+INPUT_FILE=sprintf("%d.%s.gp", it,Filename_Pot2Dx);
+Scaling_factor_X = Scaling_factor_X_Pot2Dx
+XMAX   = XMAX_Pot2Dx
+XMIN   =  XMIN_Pot2Dx
+XTICS  = XTICS_Pot2Dx 
+XLABEL = XLABEL_Pot2Dx 
+Scaling_factor_Y = Scaling_factor_Y_Pot2Dx
+YMAX    = YMAX_Pot2Dx
+YMIN    = YMIN_Pot2Dx
+YTICS   = YTICS_Pot2Dx
+YLABEL  = YLABEL_Pot2Dx
+Scaling_factor_Z = Scaling_factor_Z_Pot2Dx
+CBMIN   =  CBMIN_Pot2Dx
+CBMAX   =  CBMAX_Pot2Dx
+CBTICS  =  CBTICS_Pot2Dx 
+CBLABEL =  CBLABEL_Pot2Dx
+CONTOURINCREMENT = CONTOURINCREMENT_Pot2Dx
+
+load "plotpotentialcontourscale.plt"
+
+LMARGIN = LMARGIN_5
+RMARGIN = RMARGIN_5 
+TMARGIN = TMARGIN_5 
+BMARGIN = BMARGIN_5
+SETXLABEL = SETXLABEL_5
+SETYLABEL = SETYLABEL_5
+SETCBLABEL = SETCBLABEL_5
+SETTITLE = SETTITLE_5
+XOFFSET = XOFFSET_5
+YOFFSET = YOFFSET_5
+CBOFFSET = CBOFFSET_5
+it=1000
+
+
+INPUT_FILE=sprintf("%d.%s.gp", it,Filename_Dens2Dx);
+Scaling_factor_X = Scaling_factor_X_Dens2Dx
+XMAX   = XMAX_Dens2Dx
+XMIN   =  XMIN_Dens2Dx
+XTICS  = XTICS_Dens2Dx 
+XLABEL = XLABEL_Dens2Dx 
+Scaling_factor_Y = Scaling_factor_Y_Dens2Dx
+YMAX    = YMAX_Dens2Dx
+YMIN    = YMIN_Dens2Dx
+YTICS   = YTICS_Dens2Dx
+YLABEL  = YLABEL_Dens2Dx
+Scaling_factor_Z = Scaling_factor_Z_Dens2Dx
+CBMIN   =  CBMIN_Dens2Dx
+CBMAX   =  CBMAX_Dens2Dx
+CBTICS  =  CBTICS_Dens2Dx 
+CBLABEL =  CBLABEL_Dens2Dx
+CONTOURINCREMENT = CONTOURINCREMENT_Dens2Dx
+load "plotdensityFig.plt"
+
+INPUT_FILE=sprintf("%d.%s.gp", it,Filename_Pot2Dx);
+Scaling_factor_X = Scaling_factor_X_Pot2Dx
+XMAX   = XMAX_Pot2Dx
+XMIN   =  XMIN_Pot2Dx
+XTICS  = XTICS_Pot2Dx 
+XLABEL = XLABEL_Pot2Dx 
+Scaling_factor_Y = Scaling_factor_Y_Pot2Dx
+YMAX    = YMAX_Pot2Dx
+YMIN    = YMIN_Pot2Dx
+YTICS   = YTICS_Pot2Dx
+YLABEL  = YLABEL_Pot2Dx
+Scaling_factor_Z = Scaling_factor_Z_Pot2Dx
+CBMIN   =  CBMIN_Pot2Dx
+CBMAX   =  CBMAX_Pot2Dx
+CBTICS  =  CBTICS_Pot2Dx 
+CBLABEL =  CBLABEL_Pot2Dx
+CONTOURINCREMENT = CONTOURINCREMENT_Pot2Dx
+
+load "plotpotentialcontourscale.plt"
+
+
+
+
+
+
+

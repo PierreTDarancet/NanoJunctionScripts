@@ -1,0 +1,94 @@
+#!/bin/bash
+
+REFDIR=`pwd`
+
+REFCOORDINATES="$REFDIR/refcoord.xyz"
+MODE='static'
+#MODE='relax'
+
+DIELECTRICCONSTANT=2.0
+
+
+REFDIR=`pwd`
+
+BIASLIST="-1000 -900 -800 -700 -600 -500 -400 -300 -200 -100 -3 -2 -1 0 1 2 3 100 200 300 400 500 600 700 800 900 1000"
+
+
+LOWBIASFITLIST="-3 -2 -1 0 1 2 3"
+
+for Bias in $BIASLIST
+do 
+DIRNAME=`echo "$REFDIR/$Bias.$MODE.$DIELECTRICCONSTANT" | tr -d ' '`
+mkdir $DIRNAME 
+cd $DIRNAME
+pwd
+
+echo '$molecule' > $DIRNAME/Anion_tmp.in
+echo '-1 2'>>  $DIRNAME/Anion_tmp.in
+echo '$molecule' > $DIRNAME/Cation_tmp.in
+echo '1 2'>>  $DIRNAME/Cation_tmp.in
+echo '$molecule' > $DIRNAME/Neutral_tmp.in
+echo '0 1'>>  $DIRNAME/Neutral_tmp.in
+
+cat $REFCOORDINATES >> $DIRNAME/Anion_tmp.in
+cat $REFCOORDINATES >> $DIRNAME/Cation_tmp.in
+cat $REFCOORDINATES >>  $DIRNAME/Neutral_tmp.in
+
+############################ DIELECTRIC CONSTANT
+echo "DIELST = $DIELECTRICCONSTANT"  >>  $DIRNAME/Anion_tmp.in
+echo "DIELST = $DIELECTRICCONSTANT"  >>  $DIRNAME/Cation_tmp.in
+echo "DIELST = $DIELECTRICCONSTANT"  >>  $DIRNAME/Neutral_tmp.in
+############################ \DIELECTRIC CONSTANT
+echo '$end' >> $DIRNAME/Anion_tmp.in
+echo '$end' >> $DIRNAME/Cation_tmp.in
+echo '$end' >> $DIRNAME/Neutral_tmp.in
+
+
+# RUN
+rm $DIRNAME/run
+echo '# -- PBS script for nano --' > $DIRNAME/run
+echo '#!/bin/bash' >> $DIRNAME/run
+echo '#PBS -q nano2' >> $DIRNAME/run
+echo '#PBS -l walltime=20:00:00' >> $DIRNAME/run
+echo '#PBS -l nodes=4:ppn=2:nano2' >> $DIRNAME/run
+echo '#PBS -e job.err' >> $DIRNAME/run
+echo '#PBS -o job.out' >> $DIRNAME/run
+echo "#PBS -N BPS$Bias$DIELECTRICCONSTANT" >> $DIRNAME/run
+echo '#PBS -m e -M pdarancet@lbl.gov' >> $DIRNAME/run
+echo '#executable commands...' >> $DIRNAME/run
+echo 'cd $PBS_O_WORKDIR' >> $DIRNAME/run
+echo 'module load  qchem/4.0.0.1' >> $DIRNAME/run
+echo 'export QCSCRATCH=$PBS_O_WORKDIR' >> $DIRNAME/run
+
+
+cp $DIRNAME/Anion_tmp.in $DIRNAME/Anion_$Bias\.in
+cp $DIRNAME/Cation_tmp.in $DIRNAME/Cation_$Bias\.in
+cp $DIRNAME/Neutral_tmp.in $DIRNAME/Neutral_$Bias\.in
+
+
+if [ ! "$Bias" == "0" ]; then
+Scaledbias=$(echo "scale=13;$Bias*0.000001409196" | bc)
+echo $Scaledbias
+echo '$multipole_field' >>$DIRNAME/Anion_$Bias\.in
+echo "  Z $Scaledbias" >>$DIRNAME/Anion_$Bias\.in
+echo '$end' >>$DIRNAME/Anion_$Bias\.in
+echo "\$QC/bin/qchem -pbs -save -np 8 Anion_$Bias.in  Anion.out scratch_anion" >> $DIRNAME/run
+echo '$multipole_field' >>$DIRNAME/Cation_$Bias\.in
+echo "  Z $Scaledbias" >>$DIRNAME/Cation_$Bias\.in
+echo '$end' >>$DIRNAME/Cation_$Bias\.in
+echo "\$QC/bin/qchem -pbs -save -np 8 Cation_$Bias.in  Cation.out scratch_cation" >> $DIRNAME/run
+echo '$multipole_field' >>$DIRNAME/Neutral_$Bias\.in
+echo "  Z $Scaledbias" >>$DIRNAME/Neutral_$Bias\.in
+echo '$end' >>$DIRNAME/Neutral_$Bias\.in
+echo "\$QC/bin/qchem -pbs -save -np 8 Neutral_$Bias.in  Neutral.out scratch_neutral" >> $DIRNAME/run
+fi
+
+cd $DIRNAME
+qsub run
+done
+
+
+
+
+
+

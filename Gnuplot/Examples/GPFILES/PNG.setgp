@@ -1,0 +1,18 @@
+############ PNG ############# 
+DELAYTIME = 40 
+SIZE_X =2400
+SIZE_Y =800
+SIZE_RATIO = SIZE_Y/SIZE_X
+OUTPUT_NAME=sprintf("%s%s%d.png",GENERIC_NAME,PLOT_TYPE,it);
+#############################
+
+set termoption enhanced
+set term  png 
+#size SIZE_X,SIZE_Y
+set pm3d map
+set output OUTPUT_NAME
+set size ratio SIZE_RATIO
+
+
+
+

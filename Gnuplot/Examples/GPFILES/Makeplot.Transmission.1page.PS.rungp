@@ -1,0 +1,27 @@
+PLOT_TYPE="Transmission_4panels"
+load "specs.ingp"
+
+
+set terminal  postscript color enhanced font 'Helvetica,20'
+
+
+
+
+
+
+
+load "4plots.2columns.setgp"
+
+
+OUTPUT_NAME=sprintf("%s%s.ps", GENERIC_NAME,PLOT_TYPE);
+set output OUTPUT_NAME
+
+
+
+set multiplot
+load "oneshot.4plots.Transmission.rungp"
+unset multiplot
+
+load "close.rungp"
+
+

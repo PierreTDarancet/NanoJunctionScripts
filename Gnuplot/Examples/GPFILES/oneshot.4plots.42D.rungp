@@ -1,0 +1,190 @@
+print(it);
+set multiplot
+
+LMARGIN = LMARGIN_1
+RMARGIN = RMARGIN_1 
+TMARGIN = TMARGIN_1 
+BMARGIN = BMARGIN_1
+SETXLABEL = SETXLABEL_1
+SETYLABEL = SETYLABEL_1
+SETCBLABEL = SETCBLABEL_1
+SETTITLE = SETTITLE_1
+XOFFSET = XOFFSET_1
+YOFFSET = YOFFSET_1
+CBOFFSET = CBOFFSET_1
+
+INPUT_FILE=sprintf("%d.%s.gp", it,Filename_TransmissionSSmallDFT);
+Scaling_factor_X = Scaling_factor_X_TransmissionSSmallDFT
+XMAX   = XMAX_TransmissionSSmallDFT
+XMIN   =  XMIN_TransmissionSSmallDFT
+XTICS  = XTICS_TransmissionSSmallDFT 
+XLABEL = XLABEL_TransmissionSSmallDFT 
+Scaling_factor_Y = Scaling_factor_Y_TransmissionSSmallDFT
+YMAX    = YMAX_TransmissionSSmallDFT
+YMIN    = YMIN_TransmissionSSmallDFT
+YTICS   = YTICS_TransmissionSSmallDFT
+YLABEL  = YLABEL_TransmissionSSmallDFT
+Scaling_factor_Z = Scaling_factor_Z_TransmissionSSmallDFT
+CBMIN   =  CBMIN_TransmissionSSmallDFT
+CBMAX   =  CBMAX_TransmissionSSmallDFT
+CBTICS  =  CBTICS_TransmissionSSmallDFT 
+#CBLABEL =  CBLABEL_TransmissionSSmallDFT
+#CONTOURINCREMENT = CONTOURINCREMENT_TransmissionSSmallDFT
+set yrange [*:*]
+load "plottransmission.plt"
+
+fitlambda=fitlambda_GuessDFT
+fitgamma=fitgamma_GuessDFT
+fitenergy=fitenergy_GuessDFT
+XMAX   = XMAX_SeebeckDFT
+XMIN   = XMIN_SeebeckDFT
+XTICS  = XTICS_SeebeckDFT  
+
+load "fitlorentzian.plt"
+YMAX    = YMAX_TransmissionSSmallDFT
+YMIN    = YMIN_TransmissionSSmallDFT
+YTICS   = YTICS_TransmissionSSmallDFT
+
+#load "seebeckfromlorentzian.plt"
+XMAX   = XMAX_TransmissionSSmallDFT
+XMIN   =  XMIN_TransmissionSSmallDFT
+XTICS  = XTICS_TransmissionSSmallDFT 
+load "plotfittedcurve.plt"
+
+
+LMARGIN = LMARGIN_2
+RMARGIN = RMARGIN_2 
+TMARGIN = TMARGIN_2 
+BMARGIN = BMARGIN_2
+SETXLABEL = SETXLABEL_2
+SETYLABEL = SETYLABEL_2
+SETCBLABEL = SETCBLABEL_2
+SETTITLE = SETTITLE_2
+XOFFSET = XOFFSET_2
+YOFFSET = YOFFSET_2
+CBOFFSET = CBOFFSET_2
+
+
+INPUT_FILE=sprintf("%d.%s.gp", it, Filename_SeebeckDFT);
+Scaling_factor_X = Scaling_factor_X_SeebeckDFT
+XMAX   = XMAX_SeebeckDFT
+XMIN   =  XMIN_SeebeckDFT
+XTICS  = XTICS_SeebeckDFT
+XLABEL = XLABEL_SeebeckDFT
+Scaling_factor_Y = Scaling_factor_Y_SeebeckDFT
+YMAX    = YMAX_SeebeckDFT
+YMIN    = YMIN_SeebeckDFT
+YTICS   = YTICS_SeebeckDFT
+YLABEL  = YLABEL_SeebeckDFT
+Scaling_factor_Z = Scaling_factor_Z_SeebeckDFT
+CBMIN   =  CBMIN_SeebeckDFT
+CBMAX   =  CBMAX_SeebeckDFT
+CBTICS  =  CBTICS_SeebeckDFT
+#CBLABEL =  CBLABEL_SeebeckDFT
+#CONTOURINCREMENT = CONTOURINCREMENT_SeebeckDFT
+set yrange [*:*]
+
+load "plotseebeck.plt"
+
+set yrange [*:*]
+
+load "savefunctionsDFT.plt"
+
+
+
+LMARGIN = LMARGIN_3
+RMARGIN = RMARGIN_3 
+TMARGIN = TMARGIN_3 
+BMARGIN = BMARGIN_3
+SETXLABEL = SETXLABEL_3
+SETYLABEL = SETYLABEL_3
+SETCBLABEL = SETCBLABEL_3
+SETTITLE = SETTITLE_3
+XOFFSET = XOFFSET_3
+YOFFSET = YOFFSET_3
+CBOFFSET = CBOFFSET_3
+
+INPUT_FILE=sprintf("%d.%s.gp", it,Filename_TransmissionSSmallDFTS);
+Scaling_factor_X = Scaling_factor_X_TransmissionSSmallDFTS
+XMAX   = XMAX_TransmissionSSmallDFTS
+XMIN   =  XMIN_TransmissionSSmallDFTS
+XTICS  = XTICS_TransmissionSSmallDFTS 
+XLABEL = XLABEL_TransmissionSSmallDFTS 
+Scaling_factor_Y = Scaling_factor_Y_TransmissionSSmallDFTS
+YMAX    = YMAX_TransmissionSSmallDFTS
+YMIN    = YMIN_TransmissionSSmallDFTS
+YTICS   = YTICS_TransmissionSSmallDFTS
+YLABEL  = YLABEL_TransmissionSSmallDFTS
+Scaling_factor_Z = Scaling_factor_Z_TransmissionSSmallDFTS
+CBMIN   =  CBMIN_TransmissionSSmallDFTS
+CBMAX   =  CBMAX_TransmissionSSmallDFTS
+CBTICS  =  CBTICS_TransmissionSSmallDFTS 
+#CBLABEL =  CBLABEL_TransmissionSSmallDFTS
+#CONTOURINCREMENT = CONTOURINCREMENT_TransmissionSSmallDFTS
+set yrange [*:*]
+
+load "plottransmission.plt"
+
+fitlambda=fitlambda_GuessDFTS
+fitgamma=fitgamma_GuessDFTS
+fitenergy=fitenergy_GuessDFTS
+XMAX   = XMAX_SeebeckDFTS
+XMIN   = XMIN_SeebeckDFTS
+XTICS  = XTICS_SeebeckDFTS  
+load "fitlorentzian.plt"
+YMAX    = YMAX_TransmissionSSmallDFTS
+YMIN    = YMIN_TransmissionSSmallDFTS
+YTICS   = YTICS_TransmissionSSmallDFTS
+set yrange [*:*]
+
+#load "seebeckfromlorentzian.plt"
+XMAX   = XMAX_TransmissionSSmallDFTS
+XMIN   =  XMIN_TransmissionSSmallDFTS
+XTICS  = XTICS_TransmissionSSmallDFTS 
+load "plotfittedcurve.plt"
+
+
+LMARGIN = LMARGIN_4
+RMARGIN = RMARGIN_4 
+TMARGIN = TMARGIN_4 
+BMARGIN = BMARGIN_4
+SETXLABEL = SETXLABEL_4
+SETYLABEL = SETYLABEL_4
+SETCBLABEL = SETCBLABEL_4
+SETTITLE = SETTITLE_4
+XOFFSET = XOFFSET_4
+YOFFSET = YOFFSET_4
+CBOFFSET = CBOFFSET_4
+
+
+INPUT_FILE=sprintf("%d.%s.gp", it, Filename_SeebeckDFTS);
+Scaling_factor_X = Scaling_factor_X_SeebeckDFTS
+XMAX   = XMAX_SeebeckDFTS
+XMIN   =  XMIN_SeebeckDFTS
+XTICS  = XTICS_SeebeckDFTS
+XLABEL = XLABEL_SeebeckDFTS
+Scaling_factor_Y = Scaling_factor_Y_SeebeckDFTS
+YMAX    = YMAX_SeebeckDFTS
+YMIN    = YMIN_SeebeckDFTS
+YTICS   = YTICS_SeebeckDFTS
+YLABEL  = YLABEL_SeebeckDFTS
+Scaling_factor_Z = Scaling_factor_Z_SeebeckDFTS
+CBMIN   =  CBMIN_SeebeckDFTS
+CBMAX   =  CBMAX_SeebeckDFTS
+CBTICS  =  CBTICS_SeebeckDFTS
+#CBLABEL =  CBLABEL_SeebeckDFTS
+#CONTOURINCREMENT = CONTOURINCREMENT_SeebeckDFTS
+set yrange [*:*]
+
+load "plotseebeck.plt"
+set yrange [*:*]
+
+load "savefunctionsDFTS.plt"
+
+
+unset multiplot
+
+
+
+
+

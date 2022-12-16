@@ -1,0 +1,312 @@
+#!/bin/bash
+WORKDIR=`pwd`
+DIRLIST="$1"
+BIASLIST="$2"
+NATOMS=20
+NSPECIES=3
+POSITIONIMAGECHARGE="1.47"
+if [ -z "$3" ]; then
+	AuPerLayer="16"
+	echo "NUMBER OF Au ATOMS per LAYER (USING DEFAULT): $AuPerLayer"
+else
+	AuPerLayer="$3"	
+	echo "NUMBER OF Au ATOMS per LAYER (USING USER-PROVIDED VALUE): $AuPerLayer"
+
+fi
+if [ -z "$4" ]; then
+	NumberofLayer="6"
+	echo "NUMBER OF LAYERS (USING DEFAULT): $NumberofLayer"
+else
+	NumberofLayer="$4"
+	echo "NUMBER OF LAYERS (USING USER-PROVIDED VALUE): $NumberofLayer"
+
+fi
+
+
+
+echo "DIRLIST=${DIRLIST}"
+echo "BIASLIST=${BIASLIST}"
+cd $WORKDIR
+for bias in ${BIASLIST}
+do
+	for gendir in ${DIRLIST}
+	do 
+		echo $gendir
+		cd $WORKDIR/$gendir
+		echo "TARGET=$WORKDIR/$gendir"
+		pwd
+		if [ "$WORKDIR/$gendir" = `pwd` ]; then 
+
+			pbedir=`echo "${gendir}_MOL_PBE"`
+			mkdir $WORKDIR/$pbedir ; cd $WORKDIR/$pbedir
+			echo "TARGET: PBE dir:" $WORKDIR/$pbedir
+			pwd
+			if [ "$WORKDIR/$pbedir"  = `pwd` ] ; then 
+				ln -s ../*.psf ./
+				if [ "$bias" = "0" ] ; then
+					INPUTFILE_SIESTA="$WORKDIR/$pbedir/input.fdf"
+					INPUTFILE_SIESTA_app="input.fdf"
+					OUTPUTFILE="PDOS.out"
+					RUNFILE_app="run"
+					RUNFILE=`echo "$WORKDIR/$pbedir/$RUNFILE_app"`
+
+				else
+					INPUTFILE_SIESTA="$WORKDIR/$pbedir/input_${bias}.fdf"
+					INPUTFILE_SIESTA_app="input_${bias}.fdf"
+					OUTPUTFILE="PDOS_${bias}.out"
+					RUNFILE_app=`echo "run_${bias}" | sed 's/-/m/g'`
+					RUNFILE=`echo "$WORKDIR/$pbedir/$RUNFILE_app"`
+				fi
+				echo '#General System Descriptors' >$INPUTFILE_SIESTA
+				if [ "$bias" = "0" ] ; then
+					echo 'SystemName MOL_PBE' >>$INPUTFILE_SIESTA
+					echo 'SystemLabel MOL_PBE' >>$INPUTFILE_SIESTA
+				else
+					echo "SystemName MOL_PBE_${bias}" >>$INPUTFILE_SIESTA
+					echo "SystemLabel MOL_PBE_${bias}" >>$INPUTFILE_SIESTA
+					#sourcedir=`echo ${pbedir%_MOL_PBE}`
+					sourcedir="$WORKDIR/$gendir"
+					sourcefile=`ls $sourcedir | grep "_2x2cold.xyz"`
+					tmp="$(echo "scale=0; 2 * $NumberofLayer * $AuPerLayer " | bc)"
+					AULeft=`cat $sourcedir/$sourcefile | sed 's/^ *//; s/ *$//; /^$/d' | tail -n $tmp | sed -n 1~2p | head -$AuPerLayer |  awk '{sum=sum+$4} END {print sum/NR}'`
+					AULeftCORR="$(echo "scale=10; $AULeft + $POSITIONIMAGECHARGE " | bc)"
+					echo "Left Au Plane [Ang] ${AULeft} ; Corrected Left: ${AULeftCORR}"
+					AURight=`cat $sourcedir/$sourcefile | sed 's/^ *//; s/ *$//; /^$/d' | tail -n $tmp | sed -n 2~2p |  head -$AuPerLayer | awk '{sum=sum+$4} END {print sum/NR}'`
+					AURightCORR="$(echo "scale=10; $AURight - $POSITIONIMAGECHARGE " | bc)"
+					echo "Right Au Plane [Ang] ${AURight} ; Corrected Right: ${AURightCORR}"
+					DISTANCE_ANG="$(echo "scale=10; $AURightCORR - $AULeftCORR " | bc)"
+					echo "Distance Potential Drop [Ang] ${DISTANCE_ANG}"
+					FIELD_V_ANG="$(echo "scale=10; $bias / ( 1000.0 * $DISTANCE_ANG ) " | bc)"
+					echo " Electric Field in V/Ang: $FIELD_V_ANG"
+					echo '%block ExternalElectricField' >>$INPUTFILE_SIESTA
+					echo " 0.0 0.0 $FIELD_V_ANG V/Ang " >>$INPUTFILE_SIESTA
+					echo '%endblock ExternalElectricField' >>$INPUTFILE_SIESTA
+
+				fi
+				echo 'LatticeConstant       1.0 Ang' >>$INPUTFILE_SIESTA
+				echo '%block LatticeVectors' >>$INPUTFILE_SIESTA
+				echo ' 40.0 0 0' >>$INPUTFILE_SIESTA
+				echo ' 0 40.0 0' >>$INPUTFILE_SIESTA
+				echo ' 0 0 87.7111' >>$INPUTFILE_SIESTA
+				echo '%endblock LatticeVectors' >>$INPUTFILE_SIESTA
+				echo "NumberOfAtoms $NATOMS" >>$INPUTFILE_SIESTA
+				echo "NumberOfSpecies $NSPECIES" >>$INPUTFILE_SIESTA
+				echo '%block Chemical_Species_Label' >>$INPUTFILE_SIESTA
+				echo ' 1   1   H' >>$INPUTFILE_SIESTA
+				echo ' 2   6   C' >>$INPUTFILE_SIESTA
+				echo '#  3   16  S' >>$INPUTFILE_SIESTA
+				echo '3   7   N' >>$INPUTFILE_SIESTA
+				echo '%endblock Chemical_Species_Label' >>$INPUTFILE_SIESTA
+				echo 'AtomicCoordinatesFormat NotScaledCartesianAng' >>$INPUTFILE_SIESTA
+				echo '%block AtomicCoordinatesAndAtomicSpecies' >>$INPUTFILE_SIESTA
+				#SOURCEDIR=`echo ${pbedir%_MOL_PBE}`
+				SOURCEDIR="$gendir"
+				#TMP="$(echo "scale=10; $NATOMS + 1.0" | bc)" 
+				grep -A $NATOMS 'outcoor: Relaxed atomic coordinates (Ang):'  $WORKDIR/$SOURCEDIR/Md_ElecTemperature_0.05_2x2_10-5.out | tail -n $NATOMS >>$INPUTFILE_SIESTA
+				echo '%endblock AtomicCoordinatesAndAtomicSpecies' >>$INPUTFILE_SIESTA
+				echo '%block kgrid_Monkhorst_Pack' >>$INPUTFILE_SIESTA
+				echo ' 1 0 0  0.0' >>$INPUTFILE_SIESTA
+				echo ' 0 1 0  0.0' >>$INPUTFILE_SIESTA
+				echo ' 0 0 1  0.0' >>$INPUTFILE_SIESTA
+				echo '%endblock kgrid_Monkhorst_Pack' >>$INPUTFILE_SIESTA
+				echo '%block ProjectedDensityOfStates' >>$INPUTFILE_SIESTA
+				echo '-15.00 5.00 0.01 6000 eV' >>$INPUTFILE_SIESTA
+				echo '%endblock ProjectedDensityOfStates' >>$INPUTFILE_SIESTA
+				echo '#Basis Definition' >>$INPUTFILE_SIESTA
+				echo 'PAO.BasisType split' >>$INPUTFILE_SIESTA
+				echo '#PAO.BasisSize DZP' >>$INPUTFILE_SIESTA
+				echo '#PAO.EnergyShift         0.005 Ry' >>$INPUTFILE_SIESTA
+				echo '#PAO.SplitNorm           0.15' >>$INPUTFILE_SIESTA
+				echo '%block PAO.Basis' >>$INPUTFILE_SIESTA
+				echo 'H           1  # Species label, number of l-shells' >>$INPUTFILE_SIESTA
+				echo ' n=1   0   2 P   1  # n, l, Nzeta, Polarization, NzetaPol' >>$INPUTFILE_SIESTA
+				echo '   5.752      4.002' >>$INPUTFILE_SIESTA
+				echo '   1.000      1.000' >>$INPUTFILE_SIESTA
+				echo 'C           2 # Species label, number of l-shells' >>$INPUTFILE_SIESTA
+				echo ' n=2   0   2 # n, l, Nzeta ' >>$INPUTFILE_SIESTA
+				echo '   4.870      3.475' >>$INPUTFILE_SIESTA
+				echo '   1.000      1.000' >>$INPUTFILE_SIESTA
+				echo ' n=2   1   2 P   1 # n, l, Nzeta, Polarization, NzetaPol' >>$INPUTFILE_SIESTA
+				echo '   6.099      3.699' >>$INPUTFILE_SIESTA
+				echo '   1.000      1.000' >>$INPUTFILE_SIESTA
+				echo 'N           2 # Species label, number of l-shells' >>$INPUTFILE_SIESTA
+				echo ' n=2   0   2 # n, l, Nzeta ' >>$INPUTFILE_SIESTA
+				echo '   4.280      2.905' >>$INPUTFILE_SIESTA
+				echo '   1.000      1.000' >>$INPUTFILE_SIESTA
+				echo ' n=2   1   2 P   1  # n, l, Nzeta, Polarization, NzetaPol' >>$INPUTFILE_SIESTA
+				echo '   5.360      3.092' >>$INPUTFILE_SIESTA
+				echo '   1.000      1.000' >>$INPUTFILE_SIESTA
+				echo '#S           2 # Species label, number of l-shells' >>$INPUTFILE_SIESTA
+				echo '# n=3   0   2 # n, l, Nzeta' >>$INPUTFILE_SIESTA
+				echo '#   4.842      3.543' >>$INPUTFILE_SIESTA
+				echo '#   1.000      1.000' >>$INPUTFILE_SIESTA
+				echo '# n=3   1   2 P   1 # n, l, Nzeta, Polarization, NzetaPol' >>$INPUTFILE_SIESTA
+				echo '#   6.064      3.964' >>$INPUTFILE_SIESTA
+				echo '#   1.000      1.000' >>$INPUTFILE_SIESTA
+				echo '%endblock PAO.Basis' >>$INPUTFILE_SIESTA
+				echo '#DFT, Grid, SCF' >>$INPUTFILE_SIESTA
+				echo 'XC.functional           GGA' >>$INPUTFILE_SIESTA
+				echo 'XC.authors              PBE' >>$INPUTFILE_SIESTA
+				echo 'SpinPolarized           F' >>$INPUTFILE_SIESTA
+				echo 'MeshCutoff              300.0 Ry' >>$INPUTFILE_SIESTA
+				echo 'MaxSCFIterations        400' >>$INPUTFILE_SIESTA
+				echo 'DM.MixingWeight         0.01' >>$INPUTFILE_SIESTA
+				echo 'DM.NumberPulay          8' >>$INPUTFILE_SIESTA
+				echo 'DM.NumberKick           40' >>$INPUTFILE_SIESTA
+				echo 'DM.KickMixingWeight     0.10' >>$INPUTFILE_SIESTA
+				echo 'DM.Tolerance            0.00001' >>$INPUTFILE_SIESTA
+				echo '#Eigenvalue problem: order-N or diagonalization' >>$INPUTFILE_SIESTA
+				echo 'SolutionMethod          diagon' >>$INPUTFILE_SIESTA
+				echo 'ElectronicTemperature   0.01 eV' >>$INPUTFILE_SIESTA
+				echo '#Output options' >>$INPUTFILE_SIESTA
+				echo 'WriteMullikenPop        0' >>$INPUTFILE_SIESTA
+				echo 'LongOutput              T' >>$INPUTFILE_SIESTA
+				echo 'WriteCoorInitial        T' >>$INPUTFILE_SIESTA
+				echo 'WriteDM                 T' >>$INPUTFILE_SIESTA
+				echo 'WriteCoorXmol           T' >>$INPUTFILE_SIESTA
+				echo 'WriteMDXmol		T' >>$INPUTFILE_SIESTA
+				echo 'UseSaveData             T' >>$INPUTFILE_SIESTA
+				echo 'SaveRho                 T' >>$INPUTFILE_SIESTA
+				echo 'SaveDeltaRho            T' >>$INPUTFILE_SIESTA
+				echo 'SaveElectrostaticPotential T' >>$INPUTFILE_SIESTA
+				echo 'SaveTotalPotential         T' >>$INPUTFILE_SIESTA
+
+
+				echo '#!/bin/bash' > $RUNFILE
+				echo "#PBS -N ${pbedir}"  >> $RUNFILE
+				echo '#PBS -q nano2'  >> $RUNFILE
+				echo '#PBS -l nodes=4:ppn=2:nano'  >> $RUNFILE
+				echo '#PBS -e scf.err'  >> $RUNFILE
+				echo '#PBS -o scf.out'  >> $RUNFILE
+				echo '#PBS -m e -M pdarancet@lbl.gov'  >> $RUNFILE
+				echo '#PBS -l walltime=20:00:00'  >> $RUNFILE
+				echo 'cd $PBS_O_WORKDIR'  >> $RUNFILE
+				echo 'EXE=/global/home/users/pdarancet/Siesta_Latest/Bin/siesta'  >> $RUNFILE
+				echo "NPROCS=\`wc -l \$PBS_NODEFILE | awk '{print \$1}'\`"  >> $RUNFILE
+				echo 'module unload icc/'  >> $RUNFILE
+				echo 'module unload ifort/'  >> $RUNFILE
+				echo 'module unload mkl/'  >> $RUNFILE
+				echo 'module unload netcdf/ '  >> $RUNFILE
+				echo 'module unload openmpi/'  >> $RUNFILE
+				echo 'module unload scalapack/'  >> $RUNFILE
+				echo 'module load intel/2011.11.339'  >> $RUNFILE
+				echo 'module load ipp/2011.11.339'  >> $RUNFILE
+				echo 'module load lapack/3.4.0-intel'  >> $RUNFILE
+				echo 'module load mkl/2011.11.339'  >> $RUNFILE
+				echo 'module load openmpi/1.6-intel'  >> $RUNFILE
+				echo 'module load hdf5/1.8.9-intel-p'  >> $RUNFILE
+				echo 'module load netcdf/4.2-intel-p'  >> $RUNFILE
+				echo 'module load scalapack/2.0.2-intel'  >> $RUNFILE
+
+				echo "mpirun \${EXE} < ${INPUTFILE_SIESTA_app} >> ${OUTPUTFILE}"  >> $RUNFILE
+				qsub $RUNFILE_app
+			fi
+
+			deltascfdir=`echo "${gendir}_MOL_DELTASCF"`
+			mkdir $WORKDIR/$deltascfdir ; cd $WORKDIR/$deltascfdir
+			echo "TARGET: deltascfdir:" $WORKDIR/$deltascfdir
+			pwd
+			if [ "$WORKDIR/$deltascfdir"  = `pwd` ] ; then 
+				#FILES
+				INPUTFILE_DELTASCF_C_app="cation_${bias}.in"
+				OUTPUTFILE_DELTASCF_C_app="Cation_${bias}.out"
+				INPUTFILE_DELTASCF_N_app="neutral_${bias}.in"
+				OUTPUTFILE_DELTASCF_N_app="Neutral_${bias}.out"
+				INPUTFILE_DELTASCF_A_app="anion_${bias}.in"
+				OUTPUTFILE_DELTASCF_A_app="Anion_${bias}.out"
+
+				INPUTFILE_DELTASCF_C="$WORKDIR/$deltascfdir/cation_${bias}.in"
+				OUTPUTFILE_DELTASCF_C="$WORKDIR/$deltascfdir/Cation_${bias}.out"
+				INPUTFILE_DELTASCF_N="$WORKDIR/$deltascfdir/neutral_${bias}.in"
+				OUTPUTFILE_DELTASCF_N="$WORKDIR/$deltascfdir/Neutral_${bias}.out"
+				INPUTFILE_DELTASCF_A="$WORKDIR/$deltascfdir/anion_${bias}.in"
+				OUTPUTFILE_DELTASCF_A="$WORKDIR/$deltascfdir/Anion_${bias}.out"
+
+
+				RUNFILE_app=`echo "run_${bias}" | sed 's/-/m/g'`
+				RUNFILE=`echo "$WORKDIR/$deltascfdir/$RUNFILE_app"`
+
+				
+				echo "Runfile $RUNFILE"
+				#RUN
+				echo '# -- PBS script for nano --' >$RUNFILE
+				echo '#!/bin/bash' >>$RUNFILE
+				echo '# specify the queue: nano or debug-nano' >>$RUNFILE
+				echo '#PBS -q nano2' >>$RUNFILE
+				echo '# specify number of nodes and processors per node' >>$RUNFILE
+				echo '#PBS -l walltime=20:00:00' >>$RUNFILE
+				echo '#PBS -l nodes=4:ppn=2:nano' >>$RUNFILE
+				echo '# specify output for STDERR and STDOUT' >>$RUNFILE
+				echo '#PBS -e job.err' >>$RUNFILE
+				echo '#PBS -o job.out' >>$RUNFILE
+				echo "#PBS -N $deltascfdir" >>$RUNFILE
+				echo '#PBS -m e -M pdarancet@lbl.gov' >>$RUNFILE
+				echo '#executable commands...' >>$RUNFILE
+				echo 'cd $PBS_O_WORKDIR' >>$RUNFILE
+				echo 'module load  qchem/4.0.0.1' >>$RUNFILE
+				echo 'export QCSCRATCH=$PBS_O_WORKDIR' >>$RUNFILE
+				echo "/global/software/sl-6.x86_64/modules/tools/qchem/4.0.0.1/bin/qchem -pbs -save -np 8 ${INPUTFILE_DELTASCF_C_app} ${OUTPUTFILE_DELTASCF_C_app} scratch_${OUTPUTFILE_DELTASCF_C_app}" >>$RUNFILE
+				echo "/global/software/sl-6.x86_64/modules/tools/qchem/4.0.0.1/bin/qchem -pbs -save -np 8 ${INPUTFILE_DELTASCF_A_app}  ${OUTPUTFILE_DELTASCF_A_app} scratch_${OUTPUTFILE_DELTASCF_A_app}" >>$RUNFILE
+				echo "/global/software/sl-6.x86_64/modules/tools/qchem/4.0.0.1/bin/qchem -pbs -save -np 8 ${INPUTFILE_DELTASCF_N_app} ${OUTPUTFILE_DELTASCF_N_app}  scratch_${OUTPUTFILE_DELTASCF_N_app}" >>$RUNFILE
+				echo "rm -fr scratch_${OUTPUTFILE_DELTASCF_C_app}" >>$RUNFILE
+				echo "rm -fr scratch_${OUTPUTFILE_DELTASCF_A_app}" >>$RUNFILE
+				echo "rm -fr scratch_${OUTPUTFILE_DELTASCF_N_app}" >>$RUNFILE
+
+
+				#DONE RUN
+				#INPUT FILES
+				echo '$molecule'> $INPUTFILE_DELTASCF_A
+				echo '-1 2'>> $INPUTFILE_DELTASCF_A
+				echo '$molecule'> $INPUTFILE_DELTASCF_C
+				echo '1 2'>> $INPUTFILE_DELTASCF_C
+				echo '$molecule'> $INPUTFILE_DELTASCF_N
+				echo '0 1'>> $INPUTFILE_DELTASCF_N
+				#SOURCEDIR=`echo ${dir%_MOL_DELTASCF}`
+				SOURCEDIR="$gendir"
+				SOURCEFILE=`ls $WORKDIR/$SOURCEDIR/ | grep '_2x2cold.xyz'`
+				for file in $INPUTFILE_DELTASCF_A $INPUTFILE_DELTASCF_N $INPUTFILE_DELTASCF_C
+				do
+					TMP="$(echo "scale=10; $NATOMS + 2" | bc)" 
+					head -$TMP  $WORKDIR/$SOURCEDIR/$SOURCEFILE | tail -n $NATOMS >> ${file}
+					echo '$end' >> ${file}
+					echo '$rem' >> ${file}
+					echo ' jobtype                sp' >> ${file}
+					echo ' EXCHANGE		b3lyp' >> ${file}
+					echo ' XC_GRID		1' >> ${file}
+					echo ' MAX_SCF_CYCLES		300' >> ${file}
+					echo ' SCF_ALGORITHM          RCA_DIIS' >> ${file}
+					echo ' INCDFT			FALSE' >> ${file}
+					echo ' SYMMETRY               FALSE' >> ${file}
+					echo ' SYM_IGNORE             TRUE' >> ${file}
+					echo ' MOLDEN_FORMAT		TRUE' >> ${file}
+					echo ' basis                  6-311++G**' >> ${file}
+					echo ' SCF_FINAL_PRINT        1' >> ${file}
+					#echo ' THRESH                 14' >> ${file}
+					echo '$end' >> ${file}
+					if [ ! "$bias" = "0" ] ; then
+						#sourcedir=`echo ${pbedir%_MOL_DELTASCF}`
+						sourcedir="$WORKDIR/$gendir"
+						sourcefile=`ls $sourcedir | grep "_2x2cold.xyz"`
+						tmp="$(echo "scale=0; 2 * $NumberofLayer * $AuPerLayer " | bc)"
+						AULeft=`cat $sourcedir/$sourcefile | sed 's/^ *//; s/ *$//; /^$/d' | tail -n $tmp | sed -n 1~2p | head -$AuPerLayer |  awk '{sum=sum+$4} END {print sum/NR}'`
+						AULeftCORR="$(echo "scale=10; $AULeft + $POSITIONIMAGECHARGE " | bc)"
+						echo "Left Au Plane [Ang] ${AULeft} ; Corrected Left: ${AULeftCORR}"
+						AURight=`cat $sourcedir/$sourcefile | sed 's/^ *//; s/ *$//; /^$/d' | tail -n $tmp | sed -n 2~2p | head -$AuPerLayer | awk '{sum=sum+$4} END {print sum/NR}'`
+						AURightCORR="$(echo "scale=10; $AURight - $POSITIONIMAGECHARGE " | bc)"
+						echo "Right Au Plane [Ang] ${AURight} ; Corrected Right: ${AURightCORR}"
+						DISTANCE_ANG="$(echo "scale=10; $AURightCORR - $AULeftCORR " | bc)"
+						FIELD_V_ANG="$(echo "scale=10; $bias / ( 1000.0 * $DISTANCE_ANG ) " | bc)"
+						FIELD_HA_BOHR="$(echo "scale=14; $FIELD_V_ANG * 0.036749309 * 0.529177249 " | bc)"
+						echo "Bias: ${bias} mV ; Distance: ${DISTANCE_ANG} Ang"
+						echo "Field: ${FIELD_V_ANG} V/Ang ; ${FIELD_HA_BOHR} Ha/Bohr"
+						echo '$multipole_field' >> ${file}
+						echo "  Z $FIELD_HA_BOHR" >> ${file}
+						echo '$end' >> ${file}
+					fi
+				done
+				qsub $RUNFILE_app
+			fi
+		fi
+		cd $WORKDIR
+	done
+done

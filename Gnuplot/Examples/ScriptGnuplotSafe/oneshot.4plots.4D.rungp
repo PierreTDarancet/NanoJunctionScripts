@@ -1,0 +1,139 @@
+print(it);
+set multiplot
+
+LMARGIN = LMARGIN_1
+RMARGIN = RMARGIN_1 
+TMARGIN = TMARGIN_1 
+BMARGIN = BMARGIN_1
+SETXLABEL = SETXLABEL_1
+SETYLABEL = SETYLABEL_1
+SETCBLABEL = SETCBLABEL_1
+SETTITLE = SETTITLE_1
+XOFFSET = XOFFSET_1
+YOFFSET = YOFFSET_1
+CBOFFSET = CBOFFSET_1
+
+INPUT_FILE=sprintf("%d.%s.gp", it,Filename_Dens2Dx);
+Scaling_factor_X = Scaling_factor_X_Dens2Dx
+XMAX   = XMAX_Dens2Dx
+XMIN   =  XMIN_Dens2Dx
+XTICS  = XTICS_Dens2Dx 
+XLABEL = XLABEL_Dens2Dx 
+Scaling_factor_Y = Scaling_factor_Y_Dens2Dx
+YMAX    = YMAX_Dens2Dx
+YMIN    = YMIN_Dens2Dx
+YTICS   = YTICS_Dens2Dx
+YLABEL  = YLABEL_Dens2Dx
+Scaling_factor_Z = Scaling_factor_Z_Dens2Dx
+CBMIN   =  CBMIN_Dens2Dx
+CBMAX   =  CBMAX_Dens2Dx
+CBTICS  =  CBTICS_Dens2Dx 
+CBLABEL =  CBLABEL_Dens2Dx
+
+load "plotdensity.plt"
+
+LMARGIN = LMARGIN_2
+RMARGIN = RMARGIN_2 
+TMARGIN = TMARGIN_2 
+BMARGIN = BMARGIN_2
+SETXLABEL = SETXLABEL_2
+SETYLABEL = SETYLABEL_2
+SETCBLABEL = SETCBLABEL_2
+SETTITLE = SETTITLE_2
+XOFFSET = XOFFSET_2
+YOFFSET = YOFFSET_2
+CBOFFSET = CBOFFSET_2
+
+
+INPUT_FILE=sprintf("%d.%s.gp", it, Filename_Dens2Dy);
+Scaling_factor_X = Scaling_factor_X_Dens2Dy
+XMAX   = XMAX_Dens2Dy
+XMIN   =  XMIN_Dens2Dy
+XTICS  = XTICS_Dens2Dy
+XLABEL = XLABEL_Dens2Dy
+Scaling_factor_Y = Scaling_factor_Y_Dens2Dy
+YMAX    = YMAX_Dens2Dy
+YMIN    = YMIN_Dens2Dy
+YTICS   = YTICS_Dens2Dy
+YLABEL  = YLABEL_Dens2Dy
+Scaling_factor_Z = Scaling_factor_Z_Dens2Dy
+CBMIN   =  CBMIN_Dens2Dy
+CBMAX   =  CBMAX_Dens2Dy
+CBTICS  =  CBTICS_Dens2Dy
+CBLABEL =  CBLABEL_Dens2Dy
+
+load "plotdensity.plt"
+
+LMARGIN = LMARGIN_3
+RMARGIN = RMARGIN_3 
+TMARGIN = TMARGIN_3 
+BMARGIN = BMARGIN_3
+SETXLABEL = SETXLABEL_3
+SETYLABEL = SETYLABEL_3
+SETCBLABEL = SETCBLABEL_3
+SETTITLE = SETTITLE_3
+XOFFSET = XOFFSET_3
+YOFFSET = YOFFSET_3
+CBOFFSET = CBOFFSET_3
+
+
+INPUT_FILE=sprintf("%d.%s.dat", it, Filename_Diff1D);
+Scaling_factor_X = Scaling_factor_X_Diff1D
+XMAX   = XMAX_Diff1D
+XMIN   =  XMIN_Diff1D
+XTICS  = XTICS_Diff1D
+XLABEL = XLABEL_Diff1D 
+Scaling_factor_Y = Scaling_factor_Y_Diff1D
+YMAX    = YMAX_Diff1D
+YMIN    = YMIN_Diff1D
+YTICS   = YTICS_Diff1D
+YLABEL  = YLABEL_Diff1D
+Scaling_factor_Z = Scaling_factor_Z_Diff1D
+CBMIN   =  CBMIN_Diff1D
+CBMAX   =  CBMAX_Diff1D
+CBTICS  =  CBTICS_Diff1D
+CBLABEL =  CBLABEL_Diff1D
+
+
+load "plotpotential1D.plt"
+
+LMARGIN = LMARGIN_4
+RMARGIN = RMARGIN_4 
+TMARGIN = TMARGIN_4 
+BMARGIN = BMARGIN_4
+SETXLABEL = SETXLABEL_4
+SETYLABEL = SETYLABEL_4
+SETCBLABEL = SETCBLABEL_4
+SETTITLE = SETTITLE_4
+XOFFSET = XOFFSET_4
+YOFFSET = YOFFSET_4
+CBOFFSET = CBOFFSET_4
+
+
+INPUT_FILE=sprintf("%d.%s.dat", it,Filename_DensDiff1D);
+Scaling_factor_X = Scaling_factor_X_DensDiff1D
+XMAX   = XMAX_DensDiff1D
+XMIN   =  XMIN_DensDiff1D
+XTICS  = XTICS_DensDiff1D
+XLABEL = XLABEL_DensDiff1D
+Scaling_factor_Y = Scaling_factor_Y_DensDiff1D
+YMAX    = YMAX_DensDiff1D
+YMIN    = YMIN_DensDiff1D
+YTICS   = YTICS_DensDiff1D
+YLABEL  = YLABEL_DensDiff1D
+Scaling_factor_Z = Scaling_factor_Z_DensDiff1D
+CBMIN   =  CBMIN_DensDiff1D
+CBMAX   =  CBMAX_DensDiff1D
+CBTICS  =  CBTICS_DensDiff1D
+CBLABEL =  CBLABEL_DensDiff1D
+
+
+load "plotdensity1D.plt"
+unset multiplot
+
+
+
+
+
+
+

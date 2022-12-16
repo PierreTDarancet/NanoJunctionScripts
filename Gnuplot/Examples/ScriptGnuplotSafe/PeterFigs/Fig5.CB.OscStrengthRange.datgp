@@ -1,0 +1,5 @@
+#in a u 
+CBMIN=0.0
+CBMAX=0.5
+CBTICS=0.05
+CBLABEL =  "Matrix Element[a.u.]"

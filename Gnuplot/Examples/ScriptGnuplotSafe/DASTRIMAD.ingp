@@ -1,0 +1,274 @@
+##### Title ########
+GENERIC_NAME="DASTRIMAD"
+Nb_Electrons = 1
+dV  = 0.000815446478973  #[A^3]
+dAX =0.00874475780335  #[A^2]
+dAY =0.008519830626278  #[A^2]
+dAZ =0.008925081217937  #[A^2]
+dX =0.09324975 #[A]
+dY =0.095711583333333 #[A]
+dZ =0.091365720833333 #[A]
+####################
+
+##### A GIF ########
+Gif_nbinput=5
+Gif_Mininput=-1000
+Gif_Maxinput=1000
+Gif_Diffinput=500
+####################
+#####Geometry TransmissionSmallDFT ########
+Filename_TransmissionSmallDFT ="0.DFT.Small.gp" 
+Scaling_factor_X_TransmissionSmallDFT = 1.0
+XMAX_TransmissionSmallDFT = -0.5
+XMIN_TransmissionSmallDFT = 0.5
+XTICS_TransmissionSmallDFT =  (XMAX_TransmissionSmallDFT-XMIN_TransmissionSmallDFT)
+XLABEL_TransmissionSmallDFT = "Energy [eV]"
+Scaling_factor_Y_TransmissionSmallDFT = 1.0
+YMAX_TransmissionSmallDFT =0.1
+YMIN_TransmissionSmallDFT = 0.0
+YTICS_TransmissionSmallDFT = (YMAX_TransmissionSmallDFT-YMIN_TransmissionSmallDFT)/5
+YLABEL_TransmissionSmallDFT = "Transmission Function"
+Scaling_factor_Z_TransmissionSmallDFT =1 
+CBMIN_TransmissionSmallDFT = 0
+CBMAX_TransmissionSmallDFT = 0
+CBTICS_TransmissionSmallDFT = 0.0 
+#CBLABEL_Pot2Dx="{/Symbol D}Hartree Potential [eV]\"
+#CBLABEL_Pot2Dx="Difference in Hartree Potential [eV]"
+
+#####Geometry TransmissionBigDFT ########
+Filename_TransmissionLargeDFT ="0.DFT.Large.gp" 
+Scaling_factor_X_TransmissionLargeDFT = 1.0
+XMAX_TransmissionLargeDFT = -5.0
+XMIN_TransmissionLargeDFT = 5.0
+XTICS_TransmissionLargeDFT =  (XMAX_TransmissionLargeDFT-XMIN_TransmissionLargeDFT)
+XLABEL_TransmissionLargeDFT = "Energy [eV]"
+Scaling_factor_Y_TransmissionLargeDFT = 1.0
+YMAX_TransmissionLargeDFT =1
+YMIN_TransmissionLargeDFT = 0.0
+YTICS_TransmissionLargeDFT = (YMAX_TransmissionLargeDFT-YMIN_TransmissionLargeDFT)/5
+YLABEL_TransmissionLargeDFT = "Transmission Function"
+Scaling_factor_Z_TransmissionLargeDFT =1 
+CBMIN_TransmissionLargeDFT = 0
+CBMAX_TransmissionLargeDFT = 0
+CBTICS_TransmissionLargeDFT = 0.0 
+#CBLABEL_Pot2Dx="{/Symbol D}Hartree Potential [eV]\"
+#CBLABEL_Pot2Dx="Difference in Hartree Potential [eV]"
+
+
+#####Geometry TransmissionSmallDFTS ########
+Filename_TransmissionSmallDFTS ="0.DFT+S.Small.gp" 
+Scaling_factor_X_TransmissionSmallDFTS = 1.0
+XMAX_TransmissionSmallDFTS = -0.5
+XMIN_TransmissionSmallDFTS = 0.5
+XTICS_TransmissionSmallDFTS =  (XMAX_TransmissionSmallDFTS-XMIN_TransmissionSmallDFTS)
+XLABEL_TransmissionSmallDFTS = "Energy [eV]"
+Scaling_factor_Y_TransmissionSmallDFTS = 1.0
+YMAX_TransmissionSmallDFTS =0.01
+YMIN_TransmissionSmallDFTS = 0.0
+YTICS_TransmissionSmallDFTS = (YMAX_TransmissionSmallDFTS-YMIN_TransmissionSmallDFTS)/5
+YLABEL_TransmissionSmallDFTS = "Transmission Function"
+Scaling_factor_Z_TransmissionSmallDFTS =1 
+CBMIN_TransmissionSmallDFTS = 0
+CBMAX_TransmissionSmallDFTS = 0
+CBTICS_TransmissionSmallDFTS = 0.0 
+#CBLABEL_Pot2Dx="{/Symbol D}Hartree Potential [eV]\"
+#CBLABEL_Pot2Dx="Difference in Hartree Potential [eV]"
+
+#####Geometry TransmissionBigDFTS ########
+Filename_TransmissionLargeDFTS ="0.DFT+S.Large.gp" 
+Scaling_factor_X_TransmissionLargeDFTS = 1.0
+XMAX_TransmissionLargeDFTS = -5.0
+XMIN_TransmissionLargeDFTS = 5.0
+XTICS_TransmissionLargeDFTS =  (XMAX_TransmissionLargeDFTS-XMIN_TransmissionLargeDFTS)
+XLABEL_TransmissionLargeDFTS = "Energy [eV]"
+Scaling_factor_Y_TransmissionLargeDFTS = 1.0
+YMAX_TransmissionLargeDFTS =1.0
+YMIN_TransmissionLargeDFTS = 0.0
+YTICS_TransmissionLargeDFTS = (YMAX_TransmissionLargeDFTS-YMIN_TransmissionLargeDFTS)/5
+YLABEL_TransmissionLargeDFTS = "Transmission Function"
+Scaling_factor_Z_TransmissionLargeDFTS =1 
+CBMIN_TransmissionLargeDFTS = 0
+CBMAX_TransmissionLargeDFTS = 0
+CBTICS_TransmissionLargeDFTS = 0.0 
+#CBLABEL_Pot2Dx="{/Symbol D}Hartree Potential [eV]\"
+#CBLABEL_Pot2Dx="Difference in Hartree Potential [eV]"
+
+#####Geometry Potential 2Dx########
+Filename_Pot2Dx ="deltavh.x" 
+Scaling_factor_X_Pot2Dx = 1.0
+XMAX_Pot2Dx = 52.0 
+XMIN_Pot2Dx = 13.3
+XTICS_Pot2Dx =  5.0
+XLABEL_Pot2Dx = "Coordinates [Ang]"
+Scaling_factor_Y_Pot2Dx = 1.0
+YMAX_Pot2Dx =10.336851
+YMIN_Pot2Dx = 0.0
+YTICS_Pot2Dx = XTICS_Pot2Dx
+YLABEL_Pot2Dx = "Coordinates [Ang]"
+Scaling_factor_Z_Pot2Dx =1 # 13.605698066
+CBMIN_Pot2Dx = -0.55
+CBMAX_Pot2Dx = 0.55
+CBTICS_Pot2Dx = 0.2 
+#CBLABEL_Pot2Dx="{/Symbol D}Hartree Potential [eV]\"
+CBLABEL_Pot2Dx="Difference in Hartree Potential [eV]"
+CONTOURINCREMENT_Pot2Dx=0.1
+
+#####Geometry Potential 2Dy########
+Filename_Pot2Dy ="deltavh.y" 
+Scaling_factor_X_Pot2Dy = 1.0
+XMAX_Pot2Dy = XMAX_Pot2Dx
+XMIN_Pot2Dy = XMIN_Pot2Dx
+XTICS_Pot2Dy = XTICS_Pot2Dx
+XLABEL_Pot2Dy = XLABEL_Pot2Dx
+Scaling_factor_Y_Pot2Dy = 1.0
+YMAX_Pot2Dy = 11.935968 
+YMIN_Pot2Dy = 0.0
+YTICS_Pot2Dy = XTICS_Pot2Dy
+YLABEL_Pot2Dy ="Coordinates [Ang]"
+Scaling_factor_Z_Pot2Dy =1 # 13.605698066
+CBMIN_Pot2Dy = CBMIN_Pot2Dx
+CBMAX_Pot2Dy = CBMAX_Pot2Dx
+CBTICS_Pot2Dy = CBTICS_Pot2Dx
+CBLABEL_Pot2Dy = CBLABEL_Pot2Dx
+CONTOURINCREMENT_Pot2Dy =  CONTOURINCREMENT_Pot2Dx
+
+
+#####Geometry Potential Diff 1D########
+Filename_Diff1D ="deltavh.xy" 
+Scaling_factor_X_Diff1D = 1.0
+XMAX_Diff1D = XMAX_Pot2Dx
+XMIN_Diff1D = XMIN_Pot2Dx
+XTICS_Diff1D = XTICS_Pot2Dx 
+XLABEL_Diff1D = XLABEL_Pot2Dx
+Scaling_factor_Y_Diff1D = 1 #13.605698066
+YMAX_Diff1D = CBMAX_Pot2Dx
+YMIN_Diff1D =  CBMIN_Pot2Dx 
+YTICS_Diff1D = CBTICS_Pot2Dx
+YLABEL_Diff1D =CBLABEL_Pot2Dx
+Scaling_factor_Z_Diff1D = 1.0
+CBMIN_Diff1D = 0
+CBMAX_Diff1D =0
+CBTICS_Diff1D =1 
+CBLABEL_Diff1D=""
+CONTOURINCREMENT_Diff1D = 0 
+
+
+#####Geometry Potential Pot1D########
+Filename_Pot1D ="vh.xy" 
+Scaling_factor_X_Pot1D = 1.0
+XMAX_Pot1D = XMAX_Pot2Dx
+XMIN_Pot1D = XMIN_Pot2Dx
+XTICS_Pot1D = XTICS_Pot2Dx 
+XLABEL_Pot1D = XLABEL_Pot2Dx
+Scaling_factor_Y_Pot1D = 1 #13.605698066
+YMAX_Pot1D = 4
+YMIN_Pot1D = -1
+YTICS_Pot1D = 1
+YLABEL_Pot1D ="Hartree Potential [eV]"
+Scaling_factor_Z_Pot1D = 1.0
+CBMIN_Pot1D = 0
+CBMAX_Pot1D =0
+CBTICS_Pot1D =1 
+CBLABEL_Pot1D=""
+CONTOURINCREMENT_Pot1D =0 
+
+
+
+
+#####Geometry Density 2Dx########
+Filename_Dens2Dx ="deltad.x" 
+Scaling_factor_X_Dens2Dx = 1.0
+XMAX_Dens2Dx = XMAX_Pot2Dx
+XMIN_Dens2Dx = XMIN_Pot2Dx
+XTICS_Dens2Dx =  XTICS_Pot2Dx
+XLABEL_Dens2Dx = XLABEL_Pot2Dx
+Scaling_factor_Y_Dens2Dx = 1.0
+YMAX_Dens2Dx = YMAX_Pot2Dx
+YMIN_Dens2Dx = YMIN_Pot2Dx
+YTICS_Dens2Dx = YTICS_Pot2Dx
+YLABEL_Dens2Dx = YLABEL_Pot2Dx
+Scaling_factor_Z_Dens2Dx =1 # nb_electron
+CBMIN_Dens2Dx = -0.0000005
+CBMAX_Dens2Dx =  0.0000005
+CBTICS_Dens2Dx = 0.0000002 
+#CBLABEL_Dens2Dx="{/Symbol Dr} [eV]\"
+CBLABEL_Dens2Dx="Difference in Density [%]"
+CONTOURINCREMENT_Dens2Dx= 0
+
+#####Geometry Density 2Dy########
+Filename_Dens2Dy ="deltad.y" 
+Scaling_factor_X_Dens2Dy = 1.0
+XMAX_Dens2Dy = XMAX_Dens2Dx
+XMIN_Dens2Dy = XMIN_Dens2Dx
+XTICS_Dens2Dy = XTICS_Dens2Dx
+XLABEL_Dens2Dy = XLABEL_Dens2Dx
+Scaling_factor_Y_Dens2Dy = 1.0
+YMAX_Dens2Dy = 11.935968 
+YMIN_Dens2Dy = 0.0
+YTICS_Dens2Dy = 2.0
+YLABEL_Dens2Dy ="Coordinates [Ang]"
+Scaling_factor_Z_Dens2Dy =1 # 13.605698066
+CBMIN_Dens2Dy = CBMIN_Dens2Dx
+CBMAX_Dens2Dy = CBMAX_Dens2Dx
+CBTICS_Dens2Dy = CBTICS_Dens2Dx
+CBLABEL_Dens2Dy = CBLABEL_Dens2Dx
+CONTOURINCREMENT_Dens2Dy = 0
+
+
+#####Geometry Density Diff 1D########
+Filename_DensDiff1D ="deltad.xy" 
+Scaling_factor_X_DensDiff1D = 1.0
+XMAX_DensDiff1D = XMAX_Dens2Dx
+XMIN_DensDiff1D = XMIN_Dens2Dx
+XTICS_DensDiff1D = XTICS_Dens2Dx 
+XLABEL_DensDiff1D = XLABEL_Dens2Dx
+Scaling_factor_Y_DensDiff1D = 1 #13.605698066
+YMAX_DensDiff1D = CBMAX_Dens2Dx
+YMIN_DensDiff1D =  CBMIN_Dens2Dx 
+YTICS_DensDiff1D = CBTICS_Dens2Dx
+YLABEL_DensDiff1D =CBLABEL_Dens2Dx
+Scaling_factor_Z_DensDiff1D = 1.0
+CBMIN_DensDiff1D = 0
+CBMAX_DensDiff1D =0
+CBTICS_DensDiff1D =1 
+CBLABEL_DensDiff1D=""
+CONTOURINCREMENT_DensDiff1D =0
+
+
+#####Geometry Density Profile 1D########
+Filename_Dens1D ="deltad.xy" 
+Scaling_factor_X_Dens1D = 1.0
+XMAX_Dens1D = XMAX_Dens2Dx
+XMIN_Dens1D = XMIN_Dens2Dx
+XTICS_Dens1D = XTICS_Dens2Dx 
+XLABEL_Dens1D = XLABEL_Dens2Dx
+
+Scaling_factor_Y_Dens1D = 1 #13.605698066
+YMAX_Dens1D = CBMAX_Dens2Dx
+YMIN_Dens1D =  CBMIN_Dens2Dx 
+YTICS_Dens1D = CBTICS_Dens2Dx
+YLABEL_Dens1D =CBLABEL_Dens2Dx
+Scaling_factor_Z_Dens1D = 1.0
+CBMIN_Dens1D = 0
+CBMAX_Dens1D =0
+CBTICS_Dens1D =1 
+CBLABEL_Dens1D=""
+CONTOURINCREMENT_Dens1D =0
+#####Geometry Density########
+#####Geometry Density########
+####################
+SIZE_RATIO_Pot2Dx = (YMAX_Pot2Dx - YMIN_Pot2Dx) / (XMAX_Pot2Dx - XMIN_Pot2Dx)
+SIZE_RATIO_Pot2Dy = (YMAX_Pot2Dy - YMIN_Pot2Dy) / (XMAX_Pot2Dy - XMIN_Pot2Dy)
+SIZE_RATIO_Dens2Dx = SIZE_RATIO_Pot2Dx
+SIZE_RATIO_Dens2Dy = SIZE_RATIO_Pot2Dy
+SIZE_RATIO_Diff1D = SIZE_RATIO_Pot2Dx
+SIZE_RATIO_Pot1D = SIZE_RATIO_Pot2Dy
+SIZE_RATIO_DensDiff1D = SIZE_RATIO_Pot2Dx
+SIZE_RATIO_Dens1D = SIZE_RATIO_Pot2Dx
+#####Geometry Potential########
+####################
+
+#####Geometry Potential########
+
+####################
+

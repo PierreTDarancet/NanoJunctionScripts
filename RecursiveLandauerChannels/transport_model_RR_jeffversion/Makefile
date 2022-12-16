@@ -1,0 +1,39 @@
+#
+#===============================
+# package
+#===============================
+#
+include ../make.sys
+
+
+OBJS= \
+control_m.o \
+egrid.o \
+gapgrid.o \
+gammagrid.o  \
+green_functions.o \
+green_workspace_m.o \
+hamiltonian_construction_m.o \
+hamiltonian_m.o \
+input.o \
+occupation.o \
+transport_formula.o 
+
+EXTERNAL_LIBS=  ../libs/libwant.a
+BIN_DEPS=      $(OBJS)  $(EXTERNAL_LIBS)
+
+#
+# main targets
+#
+all: conductor_model_jeff.x 
+
+
+conductor_model_jeff.x: conductor.o $(BIN_DEPS)
+	$(LD) -o $@ conductor.o $(OBJS)  $(LDFLAGS)
+	
+clean:
+	rm -rf *.o *.a *core *.F90 work.pc work.pcl *.mod *.x
+
+# dependencies
+include make.depend
+

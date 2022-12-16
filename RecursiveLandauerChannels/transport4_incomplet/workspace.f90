@@ -1,0 +1,137 @@
+!
+! Copyright (C) 2005 WanT Group
+!
+! This file is distributed under the terms of the
+! GNU General Public License. See the file `License\'
+! in the root directory of the present distribution,
+! or http://www.gnu.org/copyleft/gpl.txt .
+!
+!*********************************************
+   MODULE T_workspace_module
+!*********************************************
+   USE kinds,                          ONLY : dbl
+   USE T_hamiltonian_module,           ONLY : dimL, dimC, dimR
+   USE T_control_module,      ONLY : dim_subspace
+
+   IMPLICIT NONE
+   PRIVATE 
+   SAVE
+!
+! Contains workspace used through transport calcs
+! 
+   ! 
+   !
+   COMPLEX(dbl), ALLOCATABLE :: aux00_C(:,:)
+   COMPLEX(dbl), ALLOCATABLE :: aux_LC(:,:), aux_CL(:,:)
+   COMPLEX(dbl), ALLOCATABLE :: aux_CR(:,:), aux_RC(:,:)
+   !
+   COMPLEX(dbl), ALLOCATABLE :: gamma_R(:,:)
+   COMPLEX(dbl), ALLOCATABLE :: gamma_L(:,:)
+   COMPLEX(dbl), ALLOCATABLE :: sgm_L(:,:)
+   COMPLEX(dbl), ALLOCATABLE :: sgm_R(:,:)
+   COMPLEX(dbl), ALLOCATABLE :: gL(:,:)
+   COMPLEX(dbl), ALLOCATABLE :: gR(:,:)
+   COMPLEX(dbl), ALLOCATABLE :: gC(:,:)
+   !
+   LOGICAL :: alloc = .FALSE.
+
+
+!
+! end delcarations
+!
+
+   PUBLIC :: dimL, dimR, dimC     
+   !
+   PUBLIC :: aux00_C
+   PUBLIC :: aux_LC, aux_CL
+   PUBLIC :: aux_CR, aux_RC
+   !
+   !
+   PUBLIC :: gR, gL, gC
+   PUBLIC :: gamma_R, gamma_L
+   PUBLIC :: sgm_L, sgm_R
+   !
+   PUBLIC :: workspace_allocate
+   PUBLIC :: workspace_deallocate
+   PUBLIC :: alloc
+
+CONTAINS
+
+!
+! subroutines
+!
+
+!**********************************************************
+   SUBROUTINE workspace_allocate()
+   !**********************************************************
+   IMPLICIT NONE
+      CHARACTER(18)      :: subname="workspace_allocate"
+      INTEGER  :: ierr
+
+      IF ( alloc )       CALL errore(subname,'already allocated', 1 )
+      IF ( dimL <= 0 )   CALL errore(subname,'invalid dimL', 1 )
+      IF ( dimR <= 0 )   CALL errore(subname,'invalid dimR', 1 )
+      IF ( dimC <= 0 )   CALL errore(subname,'invalid dimC', 1 )
+
+      ALLOCATE ( aux00_C(dimC,dimC), STAT=ierr )
+         IF( ierr /=0 ) CALL errore(subname,'allocating aux00_C', ABS(ierr) )
+      ALLOCATE ( aux_LC(dim_subspace,dimC), STAT=ierr )
+         IF( ierr /=0 ) CALL errore(subname,'allocating aux_LC', ABS(ierr) )
+      ALLOCATE ( aux_CR(dimC,dim_subspace), STAT=ierr )
+         IF( ierr /=0 ) CALL errore(subname,'allocating aux_CR', ABS(ierr) )
+      ALLOCATE ( aux_CL(dimC,dim_subspace), STAT=ierr )
+         IF( ierr /=0 ) CALL errore(subname,'allocating aux_CL', ABS(ierr) )
+      ALLOCATE ( aux_RC(dim_subspace,dimC), STAT=ierr )
+         IF( ierr /=0 ) CALL errore(subname,'allocating aux_RC', ABS(ierr) )
+   
+   
+      ALLOCATE ( sgm_L(dimC,dimC), STAT=ierr )
+         IF( ierr /=0 ) CALL errore(subname,'allocating sgm_L', ABS(ierr) )
+      ALLOCATE ( sgm_R(dimC,dimC), STAT=ierr )
+         IF( ierr /=0 ) CALL errore(subname,'allocating sgm_R', ABS(ierr) )
+      ALLOCATE ( gamma_R(dimC,dimC), STAT=ierr )
+         IF( ierr /=0 ) CALL errore(subname,'allocating gamma_R', ABS(ierr) )
+      ALLOCATE ( gamma_L(dimC,dimC), STAT=ierr )
+         IF( ierr /=0 ) CALL errore(subname,'allocating gamma_L', ABS(ierr) )
+
+      ALLOCATE ( gL(dim_subspace,dim_subspace), STAT=ierr )
+         IF( ierr /=0 ) CALL errore(subname,'allocating gL', ABS(ierr) )
+      ALLOCATE ( gR(dim_subspace,dim_subspace), STAT=ierr )
+         IF( ierr /=0 ) CALL errore(subname,'allocating gR', ABS(ierr) )
+      ALLOCATE ( gC(dimC,dimC), STAT=ierr )
+         IF( ierr /=0 ) CALL errore(subname,'allocating gC', ABS(ierr) )
+
+      alloc = .TRUE.
+   END SUBROUTINE workspace_allocate
+
+
+!**********************************************************
+   SUBROUTINE workspace_deallocate()
+   !**********************************************************
+   IMPLICIT NONE
+      CHARACTER(20)      :: subname="workspace_deallocate"
+      INTEGER :: ierr
+
+      IF ( .NOT. alloc ) RETURN
+
+      DEALLOCATE ( aux00_C, STAT=ierr )
+         IF( ierr /=0 ) CALL errore(subname,'deallocating aux00_C', ABS(ierr) )
+      DEALLOCATE ( aux_LC, aux_CL, STAT=ierr )
+         IF( ierr /=0 ) CALL errore(subname,'deallocating aux_LC, aux_CL', ABS(ierr) )
+      DEALLOCATE ( aux_CR, aux_RC, STAT=ierr)
+         IF( ierr /=0 ) CALL errore(subname,'deallocating aux_CR, aux_RC', ABS(ierr) )
+   
+      DEALLOCATE ( sgm_L, sgm_R, STAT=ierr )
+         IF( ierr /=0 ) CALL errore(subname,'deallocating sgm_L, sgm_R ', ABS(ierr) )
+      DEALLOCATE ( gamma_R, gamma_L, STAT=ierr )
+         IF( ierr /=0 ) CALL errore(subname,'deallocating gamma_R, gamma_L ', ABS(ierr) )
+      DEALLOCATE ( gR, gL, STAT=ierr )
+         IF( ierr /=0 ) CALL errore(subname,'deallocating gR, gL ', ABS(ierr) )
+      DEALLOCATE ( gC, STAT=ierr )
+         IF( ierr /=0 ) CALL errore(subname,'deallocating gC ', ABS(ierr) )
+
+      alloc = .FALSE.   
+   END SUBROUTINE workspace_deallocate
+
+END MODULE T_workspace_module
+

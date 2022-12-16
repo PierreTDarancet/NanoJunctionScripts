@@ -1,0 +1,30 @@
+nprint 2
+nprint_PDOS
+nprint_transmission 
+calculate_RR T
+print_RR T
+print_Photocurrent T
+print_current T
+print_Photocurrentmax T
+debug_level 5
+nphotonfrequency 20
+photonmax 10.00000
+photonmin 0.00000
+photoncouplingconstant 0.00001
+FGR_broadening
+emin -10.00000
+emax 10.00000
+nemax 10001
+biasmin -4.00000
+biasmax 4.00000
+nbias 40
+alphamin 0.00000
+alphamax 1.00000
+nalpha 5
+dimC 4
+dimL 1
+dimR 1
+HC_file HC_4level.dat
+HL_file HL.dat
+HR_file HR.dat
+

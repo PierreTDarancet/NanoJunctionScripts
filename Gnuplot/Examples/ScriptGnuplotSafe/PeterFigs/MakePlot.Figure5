@@ -1,0 +1,1201 @@
+reset
+PLOT_TYPE="Fig5Abs_stacked"
+PLOTNAME="Fig5_Abs_stacked"
+set terminal  postscript enhanced font 'Arial, 8'
+unset pm3d
+OUTPUT_NAME=sprintf("%s.ps",PLOTNAME);
+RydtoeV=13.605
+eVtoRyd=1.0/13.605
+
+set output OUTPUT_NAME
+
+load "PS.setgp"
+set size ratio 1
+
+
+
+#######################21 Panels####################################
+#1_1#1_2#1_3#1_4#1_5#1_6#1_7#
+#2_1#2_2#2_3#2_4#2_5#2_6#2_7#  Legend
+#3_1#3_2#3_3#3_4#3_5#3_6#3_7# 
+#####################################################################
+
+
+set multiplot
+
+#########################################
+#COLUMN START
+load  "Fig5.21plots.setgp"
+load  "Fig5.INPUTFILES.datgp"
+LABELPOSV=TMARGIN_1_1+VLABEL
+LABELPOSH=LMARGIN_1_1+HLABEL
+
+set label LABEL_1 at screen LABELPOSH, screen LABELPOSV font 'Helvetica,8'
+##########################################
+
+
+load  "Fig5.21plots.setgp"
+set size ratio SIZE_RATIO
+LMARGIN = LMARGIN_1_1
+RMARGIN = RMARGIN_1_1
+TMARGIN = TMARGIN_1_1
+BMARGIN = BMARGIN_1_1
+SETXLABEL = SETXLABEL_1_1
+SETYLABEL = SETYLABEL_1_1
+set border
+unset colorbox
+unset key
+unset title
+unset contour
+unset xlabel
+unset ylabel
+unset cblabel
+unset xtics
+unset ytics
+unset cbtics
+set lmargin at screen LMARGIN
+set rmargin at screen RMARGIN
+set tmargin at screen TMARGIN
+set bmargin at screen BMARGIN
+load "Fig5.X.EnergyRange.datgp"
+load "Fig5.Y.AbsorptionRange.datgp"
+set xrange [XMIN:XMAX]
+set yrange [YMIN:YMAX]
+if (SETXLABEL) set xlabel XLABEL font 'Helvetica,8'
+set xtics  XTICS   font 'Helvetica,0.1'
+if (SETXLABEL) set xtics  XTICS   font 'Helvetica,8'
+if (SETYLABEL) set ylabel YLABEL font 'Helvetica,8' 
+set ytics  YTICS   font 'Helvetica,0.1'
+if (SETYLABEL) set ytics  YTICS font 'Helvetica,8'
+
+
+load  "Fig5.INPUTFILES.datgp"
+INPUT_FILE_A=INPUT_FILE_1_1_A
+INPUT_FILE_B=INPUT_FILE_1_1_B
+
+
+#load "Fig5.Styles.ColorBar.setgp"
+load "Fig5.Styles.Lines.setgp"
+
+plot INPUT_FILE_A using 1:($2*SCALEABS) w l ls 1, INPUT_FILE_B using 1:2 w l  ls 3
+
+##############################################
+reset 
+load  "Fig5.21plots.setgp"
+set size ratio SIZE_RATIO
+LMARGIN = LMARGIN_2_1
+RMARGIN = RMARGIN_2_1
+TMARGIN = TMARGIN_2_1
+BMARGIN = BMARGIN_2_1
+SETXLABEL = SETXLABEL_2_1
+SETYLABEL = SETYLABEL_2_1
+set border
+unset colorbox
+unset key
+unset title
+unset contour
+unset xlabel
+unset ylabel
+unset cblabel
+unset xtics
+unset ytics
+unset cbtics
+set lmargin at screen LMARGIN
+set rmargin at screen RMARGIN
+set tmargin at screen TMARGIN
+set bmargin at screen BMARGIN
+load "Fig5.X.EnergyRange.datgp"
+load "Fig5.Y.EHIntRange.datgp"
+set xrange [XMIN:XMAX]
+set yrange [YMIN:YMAX]
+if (SETXLABEL) set xlabel XLABEL font 'Helvetica,8'
+set xtics  XTICS   font 'Helvetica,0.1'
+if (SETXLABEL) set xtics  XTICS   font 'Helvetica,8'
+if (SETYLABEL) set ylabel YLABEL font 'Helvetica,8' 
+set ytics  YTICS   font 'Helvetica,0.1'
+if (SETYLABEL) set ytics  YTICS font 'Helvetica,8'
+
+
+load  "Fig5.INPUTFILES.datgp"
+INPUT_FILE=INPUT_FILE_2_1
+
+
+load "Fig5.Styles.ColorBar.setgp"
+load "Fig5.Styles.Lines.setgp"
+
+
+plot INPUT_FILE using 2:5:3 with impulses lc palette lw 2
+
+##############################################
+reset 
+load  "Fig5.21plots.setgp"
+set size ratio SIZE_RATIO
+LMARGIN = LMARGIN_3_1
+RMARGIN = RMARGIN_3_1
+TMARGIN = TMARGIN_3_1
+BMARGIN = BMARGIN_3_1
+SETXLABEL = SETXLABEL_3_1
+SETYLABEL = SETYLABEL_3_1
+set border
+unset colorbox
+unset key
+unset title
+unset contour
+unset xlabel
+unset ylabel
+unset cblabel
+unset xtics
+unset ytics
+unset cbtics
+set lmargin at screen LMARGIN
+set rmargin at screen RMARGIN
+set tmargin at screen TMARGIN
+set bmargin at screen BMARGIN
+load "Fig5.X.EnergyRange.datgp"
+load "Fig5.Y.DipoleRange.datgp"
+set xrange [XMIN:XMAX]
+set yrange [YMIN:YMAX]
+if (SETXLABEL) set xlabel XLABEL font 'Helvetica,8'
+set xtics  XTICS   font 'Helvetica,0.1'
+if (SETXLABEL) set xtics  XTICS   font 'Helvetica,8'
+if (SETYLABEL) set ylabel YLABEL font 'Helvetica,8' 
+set ytics  YTICS   font 'Helvetica,0.1'
+if (SETYLABEL) set ytics  YTICS font 'Helvetica,8'
+
+
+load  "Fig5.INPUTFILES.datgp"
+INPUT_FILE=INPUT_FILE_3_1
+
+
+load "Fig5.Styles.ColorBar.setgp"
+load "Fig5.Styles.Lines.setgp"
+
+
+plot INPUT_FILE using  2:4:3 with impulses lc palette lw 2
+
+#######################End Column####################################
+
+#########################################
+#COLUMN START
+load  "Fig5.21plots.setgp"
+load  "Fig5.INPUTFILES.datgp"
+LABELPOSV=TMARGIN_1_2+VLABEL
+LABELPOSH=LMARGIN_1_2+HLABEL
+
+set label LABEL_2 at screen LABELPOSH, screen LABELPOSV font 'Helvetica,8'
+##########################################
+
+load  "Fig5.21plots.setgp"
+set size ratio SIZE_RATIO
+LMARGIN = LMARGIN_1_2
+RMARGIN = RMARGIN_1_2
+TMARGIN = TMARGIN_1_2
+BMARGIN = BMARGIN_1_2
+SETXLABEL = SETXLABEL_1_2
+SETYLABEL = SETYLABEL_1_2
+set border
+unset colorbox
+unset key
+unset title
+unset contour
+unset xlabel
+unset ylabel
+unset cblabel
+unset xtics
+unset ytics
+unset cbtics
+set lmargin at screen LMARGIN
+set rmargin at screen RMARGIN
+set tmargin at screen TMARGIN
+set bmargin at screen BMARGIN
+load "Fig5.X.EnergyRange.datgp"
+load "Fig5.Y.AbsorptionRange.datgp"
+set xrange [XMIN:XMAX]
+set yrange [YMIN:YMAX]
+if (SETXLABEL) set xlabel XLABEL font 'Helvetica,8'
+set xtics  XTICS   font 'Helvetica,0.1'
+if (SETXLABEL) set xtics  XTICS   font 'Helvetica,8'
+if (SETYLABEL) set ylabel YLABEL font 'Helvetica,8' 
+set ytics  YTICS   font 'Helvetica,0.1'
+if (SETYLABEL) set ytics  YTICS font 'Helvetica,8'
+
+
+load  "Fig5.INPUTFILES.datgp"
+INPUT_FILE_A=INPUT_FILE_1_2_A
+INPUT_FILE_B=INPUT_FILE_1_2_B
+
+
+#load "Fig5.Styles.ColorBar.setgp"
+load "Fig5.Styles.Lines.setgp"
+
+
+plot INPUT_FILE_A using 1:($2*SCALEABS) w l ls 1, INPUT_FILE_B using 1:2 w l  ls 3
+
+##############################################
+reset 
+load  "Fig5.21plots.setgp"
+set size ratio SIZE_RATIO
+LMARGIN = LMARGIN_2_2
+RMARGIN = RMARGIN_2_2
+TMARGIN = TMARGIN_2_2
+BMARGIN = BMARGIN_2_2
+SETXLABEL = SETXLABEL_2_2
+SETYLABEL = SETYLABEL_2_2
+set border
+unset colorbox
+unset key
+unset title
+unset contour
+unset xlabel
+unset ylabel
+unset cblabel
+unset xtics
+unset ytics
+unset cbtics
+set lmargin at screen LMARGIN
+set rmargin at screen RMARGIN
+set tmargin at screen TMARGIN
+set bmargin at screen BMARGIN
+load "Fig5.X.EnergyRange.datgp"
+load "Fig5.Y.EHIntRange.datgp"
+set xrange [XMIN:XMAX]
+set yrange [YMIN:YMAX]
+if (SETXLABEL) set xlabel XLABEL font 'Helvetica,8'
+set xtics  XTICS   font 'Helvetica,0.1'
+if (SETXLABEL) set xtics  XTICS   font 'Helvetica,8'
+if (SETYLABEL) set ylabel YLABEL font 'Helvetica,8' 
+set ytics  YTICS   font 'Helvetica,0.1'
+if (SETYLABEL) set ytics  YTICS font 'Helvetica,8'
+
+
+load  "Fig5.INPUTFILES.datgp"
+INPUT_FILE=INPUT_FILE_2_2
+
+
+load "Fig5.Styles.ColorBar.setgp"
+load "Fig5.Styles.Lines.setgp"
+
+
+plot INPUT_FILE using 2:5:3 with impulses lc palette lw 2
+
+##############################################
+reset 
+load  "Fig5.21plots.setgp"
+set size ratio SIZE_RATIO
+LMARGIN = LMARGIN_3_2
+RMARGIN = RMARGIN_3_2
+TMARGIN = TMARGIN_3_2
+BMARGIN = BMARGIN_3_2
+SETXLABEL = SETXLABEL_3_2
+SETYLABEL = SETYLABEL_3_2
+set border
+unset colorbox
+unset key
+unset title
+unset contour
+unset xlabel
+unset ylabel
+unset cblabel
+unset xtics
+unset ytics
+unset cbtics
+set lmargin at screen LMARGIN
+set rmargin at screen RMARGIN
+set tmargin at screen TMARGIN
+set bmargin at screen BMARGIN
+load "Fig5.X.EnergyRange.datgp"
+load "Fig5.Y.DipoleRange.datgp"
+set xrange [XMIN:XMAX]
+set yrange [YMIN:YMAX]
+if (SETXLABEL) set xlabel XLABEL font 'Helvetica,8'
+set xtics  XTICS   font 'Helvetica,0.1'
+if (SETXLABEL) set xtics  XTICS   font 'Helvetica,8'
+if (SETYLABEL) set ylabel YLABEL font 'Helvetica,8' 
+set ytics  YTICS   font 'Helvetica,0.1'
+if (SETYLABEL) set ytics  YTICS font 'Helvetica,8'
+
+
+load  "Fig5.INPUTFILES.datgp"
+INPUT_FILE=INPUT_FILE_3_2
+
+
+load "Fig5.Styles.ColorBar.setgp"
+load "Fig5.Styles.Lines.setgp"
+
+
+plot INPUT_FILE using  2:4:3 with impulses lc palette lw 2
+
+#######################End Column####################################
+#######################End Column####################################
+
+
+#########################################
+#COLUMN START
+load  "Fig5.21plots.setgp"
+load  "Fig5.INPUTFILES.datgp"
+LABELPOSV=TMARGIN_1_3+VLABEL
+LABELPOSH=LMARGIN_1_3+HLABEL
+
+set label LABEL_3 at screen LABELPOSH, screen LABELPOSV font 'Helvetica,8'
+##########################################
+
+
+load  "Fig5.21plots.setgp"
+set size ratio SIZE_RATIO
+LMARGIN = LMARGIN_1_3
+RMARGIN = RMARGIN_1_3
+TMARGIN = TMARGIN_1_3
+BMARGIN = BMARGIN_1_3
+SETXLABEL = SETXLABEL_1_3
+SETYLABEL = SETYLABEL_1_3
+set border
+unset colorbox
+unset key
+unset title
+unset contour
+unset xlabel
+unset ylabel
+unset cblabel
+unset xtics
+unset ytics
+unset cbtics
+set lmargin at screen LMARGIN
+set rmargin at screen RMARGIN
+set tmargin at screen TMARGIN
+set bmargin at screen BMARGIN
+load "Fig5.X.EnergyRange.datgp"
+load "Fig5.Y.AbsorptionRange.datgp"
+set xrange [XMIN:XMAX]
+set yrange [YMIN:YMAX]
+if (SETXLABEL) set xlabel XLABEL font 'Helvetica,8'
+set xtics  XTICS   font 'Helvetica,0.1'
+if (SETXLABEL) set xtics  XTICS   font 'Helvetica,8'
+if (SETYLABEL) set ylabel YLABEL font 'Helvetica,8' 
+set ytics  YTICS   font 'Helvetica,0.1'
+if (SETYLABEL) set ytics  YTICS font 'Helvetica,8'
+
+
+load  "Fig5.INPUTFILES.datgp"
+INPUT_FILE_A=INPUT_FILE_1_3_A
+INPUT_FILE_B=INPUT_FILE_1_3_B
+
+
+#load "Fig5.Styles.ColorBar.setgp"
+load "Fig5.Styles.Lines.setgp"
+
+
+plot INPUT_FILE_A using 1:($2*SCALEABS) w l ls 1, INPUT_FILE_B using 1:2 w l  ls 3
+
+##############################################
+reset 
+load  "Fig5.21plots.setgp"
+set size ratio SIZE_RATIO
+LMARGIN = LMARGIN_2_3
+RMARGIN = RMARGIN_2_3
+TMARGIN = TMARGIN_2_3
+BMARGIN = BMARGIN_2_3
+SETXLABEL = SETXLABEL_2_3
+SETYLABEL = SETYLABEL_2_3
+set border
+unset colorbox
+unset key
+unset title
+unset contour
+unset xlabel
+unset ylabel
+unset cblabel
+unset xtics
+unset ytics
+unset cbtics
+set lmargin at screen LMARGIN
+set rmargin at screen RMARGIN
+set tmargin at screen TMARGIN
+set bmargin at screen BMARGIN
+load "Fig5.X.EnergyRange.datgp"
+load "Fig5.Y.EHIntRange.datgp"
+set xrange [XMIN:XMAX]
+set yrange [YMIN:YMAX]
+if (SETXLABEL) set xlabel XLABEL font 'Helvetica,8'
+set xtics  XTICS   font 'Helvetica,0.1'
+if (SETXLABEL) set xtics  XTICS   font 'Helvetica,8'
+if (SETYLABEL) set ylabel YLABEL font 'Helvetica,8' 
+set ytics  YTICS   font 'Helvetica,0.1'
+if (SETYLABEL) set ytics  YTICS font 'Helvetica,8'
+
+
+load  "Fig5.INPUTFILES.datgp"
+INPUT_FILE=INPUT_FILE_2_3
+
+
+load "Fig5.Styles.ColorBar.setgp"
+load "Fig5.Styles.Lines.setgp"
+
+
+plot INPUT_FILE using 2:5:3 with impulses lc palette lw 2
+
+##############################################
+reset 
+load  "Fig5.21plots.setgp"
+set size ratio SIZE_RATIO
+LMARGIN = LMARGIN_3_3
+RMARGIN = RMARGIN_3_3
+TMARGIN = TMARGIN_3_3
+BMARGIN = BMARGIN_3_3
+SETXLABEL = SETXLABEL_3_3
+SETYLABEL = SETYLABEL_3_3
+set border
+unset colorbox
+unset key
+unset title
+unset contour
+unset xlabel
+unset ylabel
+unset cblabel
+unset xtics
+unset ytics
+unset cbtics
+set lmargin at screen LMARGIN
+set rmargin at screen RMARGIN
+set tmargin at screen TMARGIN
+set bmargin at screen BMARGIN
+load "Fig5.X.EnergyRange.datgp"
+load "Fig5.Y.DipoleRange.datgp"
+set xrange [XMIN:XMAX]
+set yrange [YMIN:YMAX]
+if (SETXLABEL) set xlabel XLABEL font 'Helvetica,8'
+set xtics  XTICS   font 'Helvetica,0.1'
+if (SETXLABEL) set xtics  XTICS   font 'Helvetica,8'
+if (SETYLABEL) set ylabel YLABEL font 'Helvetica,8' 
+set ytics  YTICS   font 'Helvetica,0.1'
+if (SETYLABEL) set ytics  YTICS font 'Helvetica,8'
+
+
+load  "Fig5.INPUTFILES.datgp"
+INPUT_FILE=INPUT_FILE_3_3
+
+
+load "Fig5.Styles.ColorBar.setgp"
+load "Fig5.Styles.Lines.setgp"
+
+
+plot INPUT_FILE using  2:4:3 with impulses lc palette lw 2
+
+#######################End Column####################################
+
+#######################End Column####################################
+
+
+#########################################
+#COLUMN START
+load  "Fig5.21plots.setgp"
+load  "Fig5.INPUTFILES.datgp"
+LABELPOSV=TMARGIN_1_4+VLABEL
+LABELPOSH=LMARGIN_1_4+HLABEL
+
+set label LABEL_4 at screen LABELPOSH, screen LABELPOSV font 'Helvetica,8'
+##########################################
+
+load  "Fig5.21plots.setgp"
+set size ratio SIZE_RATIO
+LMARGIN = LMARGIN_1_4
+RMARGIN = RMARGIN_1_4
+TMARGIN = TMARGIN_1_4
+BMARGIN = BMARGIN_1_4
+SETXLABEL = SETXLABEL_1_4
+SETYLABEL = SETYLABEL_1_4
+set border
+unset colorbox
+unset key
+unset title
+unset contour
+unset xlabel
+unset ylabel
+unset cblabel
+unset xtics
+unset ytics
+unset cbtics
+set lmargin at screen LMARGIN
+set rmargin at screen RMARGIN
+set tmargin at screen TMARGIN
+set bmargin at screen BMARGIN
+load "Fig5.X.EnergyRange.datgp"
+load "Fig5.Y.AbsorptionRange.datgp"
+set xrange [XMIN:XMAX]
+set yrange [YMIN:YMAX]
+if (SETXLABEL) set xlabel XLABEL font 'Helvetica,8'
+set xtics  XTICS   font 'Helvetica,0.1'
+if (SETXLABEL) set xtics  XTICS   font 'Helvetica,8'
+if (SETYLABEL) set ylabel YLABEL font 'Helvetica,8' 
+set ytics  YTICS   font 'Helvetica,0.1'
+if (SETYLABEL) set ytics  YTICS font 'Helvetica,8'
+
+
+load  "Fig5.INPUTFILES.datgp"
+INPUT_FILE_A=INPUT_FILE_1_4_A
+INPUT_FILE_B=INPUT_FILE_1_4_B
+
+
+#load "Fig5.Styles.ColorBar.setgp"
+load "Fig5.Styles.Lines.setgp"
+
+
+plot INPUT_FILE_A using 1:($2*SCALEABS) w l ls 1, INPUT_FILE_B using 1:2 w l  ls 3
+
+##############################################
+reset 
+load  "Fig5.21plots.setgp"
+set size ratio SIZE_RATIO
+LMARGIN = LMARGIN_2_4
+RMARGIN = RMARGIN_2_4
+TMARGIN = TMARGIN_2_4
+BMARGIN = BMARGIN_2_4
+SETXLABEL = SETXLABEL_2_4
+SETYLABEL = SETYLABEL_2_4
+set border
+unset colorbox
+unset key
+unset title
+unset contour
+unset xlabel
+unset ylabel
+unset cblabel
+unset xtics
+unset ytics
+unset cbtics
+set lmargin at screen LMARGIN
+set rmargin at screen RMARGIN
+set tmargin at screen TMARGIN
+set bmargin at screen BMARGIN
+load "Fig5.X.EnergyRange.datgp"
+load "Fig5.Y.EHIntRange.datgp"
+set xrange [XMIN:XMAX]
+set yrange [YMIN:YMAX]
+if (SETXLABEL) set xlabel XLABEL font 'Helvetica,8'
+set xtics  XTICS   font 'Helvetica,0.1'
+if (SETXLABEL) set xtics  XTICS   font 'Helvetica,8'
+if (SETYLABEL) set ylabel YLABEL font 'Helvetica,8' 
+set ytics  YTICS   font 'Helvetica,0.1'
+if (SETYLABEL) set ytics  YTICS font 'Helvetica,8'
+
+
+load  "Fig5.INPUTFILES.datgp"
+INPUT_FILE=INPUT_FILE_2_4
+
+
+load "Fig5.Styles.ColorBar.setgp"
+load "Fig5.Styles.Lines.setgp"
+
+
+plot INPUT_FILE using 2:5:3 with impulses lc palette lw 2
+
+##############################################
+reset 
+load  "Fig5.21plots.setgp"
+set size ratio SIZE_RATIO
+LMARGIN = LMARGIN_3_4
+RMARGIN = RMARGIN_3_4
+TMARGIN = TMARGIN_3_4
+BMARGIN = BMARGIN_3_4
+SETXLABEL = SETXLABEL_3_4
+SETYLABEL = SETYLABEL_3_4
+set border
+unset colorbox
+unset key
+unset title
+unset contour
+unset xlabel
+unset ylabel
+unset cblabel
+unset xtics
+unset ytics
+unset cbtics
+set lmargin at screen LMARGIN
+set rmargin at screen RMARGIN
+set tmargin at screen TMARGIN
+set bmargin at screen BMARGIN
+load "Fig5.X.EnergyRange.datgp"
+load "Fig5.Y.DipoleRange.datgp"
+set xrange [XMIN:XMAX]
+set yrange [YMIN:YMAX]
+if (SETXLABEL) set xlabel XLABEL font 'Helvetica,8'
+set xtics  XTICS   font 'Helvetica,0.1'
+if (SETXLABEL) set xtics  XTICS   font 'Helvetica,8'
+if (SETYLABEL) set ylabel YLABEL font 'Helvetica,8' 
+set ytics  YTICS   font 'Helvetica,0.1'
+if (SETYLABEL) set ytics  YTICS font 'Helvetica,8'
+
+
+load  "Fig5.INPUTFILES.datgp"
+INPUT_FILE=INPUT_FILE_3_4
+
+
+load "Fig5.Styles.ColorBar.setgp"
+load "Fig5.Styles.Lines.setgp"
+
+
+plot INPUT_FILE using  2:4:3 with impulses lc palette lw 2
+
+#######################End Column####################################
+
+#######################End Column####################################
+
+#########################################
+#COLUMN START
+load  "Fig5.21plots.setgp"
+load  "Fig5.INPUTFILES.datgp"
+LABELPOSV=TMARGIN_1_5+VLABEL
+LABELPOSH=LMARGIN_1_5+HLABEL
+
+set label LABEL_5 at screen LABELPOSH, screen LABELPOSV font 'Helvetica,8'
+##########################################
+
+
+load  "Fig5.21plots.setgp"
+set size ratio SIZE_RATIO
+LMARGIN = LMARGIN_1_5
+RMARGIN = RMARGIN_1_5
+TMARGIN = TMARGIN_1_5
+BMARGIN = BMARGIN_1_5
+SETXLABEL = SETXLABEL_1_5
+SETYLABEL = SETYLABEL_1_5
+set border
+unset colorbox
+unset key
+unset title
+unset contour
+unset xlabel
+unset ylabel
+unset cblabel
+unset xtics
+unset ytics
+unset cbtics
+set lmargin at screen LMARGIN
+set rmargin at screen RMARGIN
+set tmargin at screen TMARGIN
+set bmargin at screen BMARGIN
+load "Fig5.X.EnergyRange.datgp"
+load "Fig5.Y.AbsorptionRange.datgp"
+set xrange [XMIN:XMAX]
+set yrange [YMIN:YMAX]
+if (SETXLABEL) set xlabel XLABEL font 'Helvetica,8'
+set xtics  XTICS   font 'Helvetica,0.1'
+if (SETXLABEL) set xtics  XTICS   font 'Helvetica,8'
+if (SETYLABEL) set ylabel YLABEL font 'Helvetica,8' 
+set ytics  YTICS   font 'Helvetica,0.1'
+if (SETYLABEL) set ytics  YTICS font 'Helvetica,8'
+
+
+load  "Fig5.INPUTFILES.datgp"
+INPUT_FILE_A=INPUT_FILE_1_5_A
+INPUT_FILE_B=INPUT_FILE_1_5_B
+
+
+#load "Fig5.Styles.ColorBar.setgp"
+load "Fig5.Styles.Lines.setgp"
+
+
+plot INPUT_FILE_A using 1:($2*SCALEABS) w l ls 1, INPUT_FILE_B using 1:2 w l  ls 3
+
+##############################################
+reset 
+load  "Fig5.21plots.setgp"
+set size ratio SIZE_RATIO
+LMARGIN = LMARGIN_2_5
+RMARGIN = RMARGIN_2_5
+TMARGIN = TMARGIN_2_5
+BMARGIN = BMARGIN_2_5
+SETXLABEL = SETXLABEL_2_5
+SETYLABEL = SETYLABEL_2_5
+set border
+unset colorbox
+unset key
+unset title
+unset contour
+unset xlabel
+unset ylabel
+unset cblabel
+unset xtics
+unset ytics
+unset cbtics
+set lmargin at screen LMARGIN
+set rmargin at screen RMARGIN
+set tmargin at screen TMARGIN
+set bmargin at screen BMARGIN
+load "Fig5.X.EnergyRange.datgp"
+load "Fig5.Y.EHIntRange.datgp"
+set xrange [XMIN:XMAX]
+set yrange [YMIN:YMAX]
+if (SETXLABEL) set xlabel XLABEL font 'Helvetica,8'
+set xtics  XTICS   font 'Helvetica,0.1'
+if (SETXLABEL) set xtics  XTICS   font 'Helvetica,8'
+if (SETYLABEL) set ylabel YLABEL font 'Helvetica,8' 
+set ytics  YTICS   font 'Helvetica,0.1'
+if (SETYLABEL) set ytics  YTICS font 'Helvetica,8'
+
+
+load  "Fig5.INPUTFILES.datgp"
+INPUT_FILE=INPUT_FILE_2_5
+
+
+load "Fig5.Styles.ColorBar.setgp"
+load "Fig5.Styles.Lines.setgp"
+
+
+plot INPUT_FILE using 2:5:3 with impulses lc palette lw 2
+
+##############################################
+reset 
+load  "Fig5.21plots.setgp"
+set size ratio SIZE_RATIO
+LMARGIN = LMARGIN_3_5
+RMARGIN = RMARGIN_3_5
+TMARGIN = TMARGIN_3_5
+BMARGIN = BMARGIN_3_5
+SETXLABEL = SETXLABEL_3_5
+SETYLABEL = SETYLABEL_3_5
+set border
+unset colorbox
+unset key
+unset title
+unset contour
+unset xlabel
+unset ylabel
+unset cblabel
+unset xtics
+unset ytics
+unset cbtics
+set lmargin at screen LMARGIN
+set rmargin at screen RMARGIN
+set tmargin at screen TMARGIN
+set bmargin at screen BMARGIN
+load "Fig5.X.EnergyRange.datgp"
+load "Fig5.Y.DipoleRange.datgp"
+set xrange [XMIN:XMAX]
+set yrange [YMIN:YMAX]
+if (SETXLABEL) set xlabel XLABEL font 'Helvetica,8'
+set xtics  XTICS   font 'Helvetica,0.1'
+if (SETXLABEL) set xtics  XTICS   font 'Helvetica,8'
+if (SETYLABEL) set ylabel YLABEL font 'Helvetica,8' 
+set ytics  YTICS   font 'Helvetica,0.1'
+if (SETYLABEL) set ytics  YTICS font 'Helvetica,8'
+
+
+load  "Fig5.INPUTFILES.datgp"
+INPUT_FILE=INPUT_FILE_3_5
+
+
+load "Fig5.Styles.ColorBar.setgp"
+load "Fig5.Styles.Lines.setgp"
+
+
+plot INPUT_FILE using  2:4:3 with impulses lc palette lw 2
+
+#######################End Column####################################
+
+#######################End Column####################################
+
+
+#########################################
+#COLUMN START
+load  "Fig5.21plots.setgp"
+load  "Fig5.INPUTFILES.datgp"
+LABELPOSV=TMARGIN_1_6+VLABEL
+LABELPOSH=(LMARGIN_1_6+LMARGIN_1_7)/2+HLABEL
+
+set label LABEL_67 at screen LABELPOSH, screen LABELPOSV font 'Helvetica,8'
+##########################################
+
+
+load  "Fig5.21plots.setgp"
+set size ratio SIZE_RATIO
+LMARGIN = LMARGIN_1_6
+RMARGIN = RMARGIN_1_6
+TMARGIN = TMARGIN_1_6
+BMARGIN = BMARGIN_1_6
+SETXLABEL = SETXLABEL_1_6
+SETYLABEL = SETYLABEL_1_6
+set border
+unset colorbox
+unset key
+unset title
+unset contour
+unset xlabel
+unset ylabel
+unset cblabel
+unset xtics
+unset ytics
+unset cbtics
+set lmargin at screen LMARGIN
+set rmargin at screen RMARGIN
+set tmargin at screen TMARGIN
+set bmargin at screen BMARGIN
+load "Fig5.X.EnergyRange.datgp"
+load "Fig5.Y.AbsorptionRange.datgp"
+set xrange [XMIN:XMAX]
+set yrange [YMIN:YMAX]
+if (SETXLABEL) set xlabel XLABEL font 'Helvetica,8'
+set xtics  XTICS   font 'Helvetica,0.1'
+if (SETXLABEL) set xtics  XTICS   font 'Helvetica,8'
+if (SETYLABEL) set ylabel YLABEL font 'Helvetica,8' 
+set ytics  YTICS   font 'Helvetica,0.1'
+if (SETYLABEL) set ytics  YTICS font 'Helvetica,8'
+
+
+load  "Fig5.INPUTFILES.datgp"
+INPUT_FILE_A=INPUT_FILE_1_6_A
+INPUT_FILE_B=INPUT_FILE_1_6_B
+
+
+#load "Fig5.Styles.ColorBar.setgp"
+load "Fig5.Styles.Lines.setgp"
+
+
+plot INPUT_FILE_A using 1:($2*SCALEABS) w l ls 1, INPUT_FILE_B using 1:2 w l  ls 3
+
+##############################################
+reset 
+load  "Fig5.21plots.setgp"
+set size ratio SIZE_RATIO
+LMARGIN = LMARGIN_2_6
+RMARGIN = RMARGIN_2_6
+TMARGIN = TMARGIN_2_6
+BMARGIN = BMARGIN_2_6
+SETXLABEL = SETXLABEL_2_6
+SETYLABEL = SETYLABEL_2_6
+set border
+unset colorbox
+unset key
+unset title
+unset contour
+unset xlabel
+unset ylabel
+unset cblabel
+unset xtics
+unset ytics
+unset cbtics
+set lmargin at screen LMARGIN
+set rmargin at screen RMARGIN
+set tmargin at screen TMARGIN
+set bmargin at screen BMARGIN
+load "Fig5.X.EnergyRange.datgp"
+load "Fig5.Y.EHIntRange.datgp"
+set xrange [XMIN:XMAX]
+set yrange [YMIN:YMAX]
+if (SETXLABEL) set xlabel XLABEL font 'Helvetica,8'
+set xtics  XTICS   font 'Helvetica,0.1'
+if (SETXLABEL) set xtics  XTICS   font 'Helvetica,8'
+if (SETYLABEL) set ylabel YLABEL font 'Helvetica,8' 
+set ytics  YTICS   font 'Helvetica,0.1'
+if (SETYLABEL) set ytics  YTICS font 'Helvetica,8'
+
+
+load  "Fig5.INPUTFILES.datgp"
+INPUT_FILE=INPUT_FILE_2_6
+
+
+load "Fig5.Styles.ColorBar.setgp"
+load "Fig5.Styles.Lines.setgp"
+
+
+plot INPUT_FILE using 2:5:3 with impulses lc palette lw 2
+
+##############################################
+reset 
+load  "Fig5.21plots.setgp"
+set size ratio SIZE_RATIO
+LMARGIN = LMARGIN_3_6
+RMARGIN = RMARGIN_3_6
+TMARGIN = TMARGIN_3_6
+BMARGIN = BMARGIN_3_6
+SETXLABEL = SETXLABEL_3_6
+SETYLABEL = SETYLABEL_3_6
+set border
+unset colorbox
+unset key
+unset title
+unset contour
+unset xlabel
+unset ylabel
+unset cblabel
+unset xtics
+unset ytics
+unset cbtics
+set lmargin at screen LMARGIN
+set rmargin at screen RMARGIN
+set tmargin at screen TMARGIN
+set bmargin at screen BMARGIN
+load "Fig5.X.EnergyRange.datgp"
+load "Fig5.Y.DipoleRange.datgp"
+set xrange [XMIN:XMAX]
+set yrange [YMIN:YMAX]
+if (SETXLABEL) set xlabel XLABEL font 'Helvetica,8'
+set xtics  XTICS   font 'Helvetica,0.1'
+if (SETXLABEL) set xtics  XTICS   font 'Helvetica,8'
+if (SETYLABEL) set ylabel YLABEL font 'Helvetica,8' 
+set ytics  YTICS   font 'Helvetica,0.1'
+if (SETYLABEL) set ytics  YTICS font 'Helvetica,8'
+
+
+load  "Fig5.INPUTFILES.datgp"
+INPUT_FILE=INPUT_FILE_3_6
+
+
+load "Fig5.Styles.ColorBar.setgp"
+load "Fig5.Styles.Lines.setgp"
+
+
+plot INPUT_FILE using  2:4:3 with impulses lc palette lw 2
+
+#######################End Column####################################
+
+#######################End Column####################################
+
+
+load  "Fig5.21plots.setgp"
+set size ratio SIZE_RATIO
+LMARGIN = LMARGIN_1_7
+RMARGIN = RMARGIN_1_7
+TMARGIN = TMARGIN_1_7
+BMARGIN = BMARGIN_1_7
+SETXLABEL = SETXLABEL_1_7
+SETYLABEL = SETYLABEL_1_7
+set border
+unset colorbox
+unset key
+unset title
+unset contour
+unset xlabel
+unset ylabel
+unset cblabel
+unset xtics
+unset ytics
+unset cbtics
+set lmargin at screen LMARGIN
+set rmargin at screen RMARGIN
+set tmargin at screen TMARGIN
+set bmargin at screen BMARGIN
+load "Fig5.X.EnergyRange.datgp"
+load "Fig5.Y.AbsorptionRange.datgp"
+set xrange [XMIN:XMAX]
+set yrange [YMIN:YMAX]
+if (SETXLABEL) set xlabel XLABEL font 'Helvetica,8'
+set xtics  XTICS   font 'Helvetica,0.1'
+if (SETXLABEL) set xtics  XTICS   font 'Helvetica,8'
+if (SETYLABEL) set ylabel YLABEL font 'Helvetica,8' 
+set ytics  YTICS   font 'Helvetica,0.1'
+if (SETYLABEL) set ytics  YTICS font 'Helvetica,8'
+
+
+load  "Fig5.INPUTFILES.datgp"
+INPUT_FILE_A=INPUT_FILE_1_7_A
+INPUT_FILE_B=INPUT_FILE_1_7_B
+
+
+#load "Fig5.Styles.ColorBar.setgp"
+load "Fig5.Styles.Lines.setgp"
+
+
+plot INPUT_FILE_A w l ls 1, INPUT_FILE_B using 1:2 w l  ls 3
+
+##############################################
+reset 
+load  "Fig5.21plots.setgp"
+set size ratio SIZE_RATIO
+LMARGIN = LMARGIN_2_7
+RMARGIN = RMARGIN_2_7
+TMARGIN = TMARGIN_2_7
+BMARGIN = BMARGIN_2_7
+SETXLABEL = SETXLABEL_2_7
+SETYLABEL = SETYLABEL_2_7
+set border
+unset colorbox
+unset key
+unset title
+unset contour
+unset xlabel
+unset ylabel
+unset cblabel
+unset xtics
+unset ytics
+unset cbtics
+set lmargin at screen LMARGIN
+set rmargin at screen RMARGIN
+set tmargin at screen TMARGIN
+set bmargin at screen BMARGIN
+load "Fig5.X.EnergyRange.datgp"
+load "Fig5.Y.EHIntRange.datgp"
+set xrange [XMIN:XMAX]
+set yrange [YMIN:YMAX]
+if (SETXLABEL) set xlabel XLABEL font 'Helvetica,8'
+set xtics  XTICS   font 'Helvetica,0.1'
+if (SETXLABEL) set xtics  XTICS   font 'Helvetica,8'
+if (SETYLABEL) set ylabel YLABEL font 'Helvetica,8' 
+set ytics  YTICS   font 'Helvetica,0.1'
+if (SETYLABEL) set ytics  YTICS font 'Helvetica,8'
+
+
+load  "Fig5.INPUTFILES.datgp"
+INPUT_FILE=INPUT_FILE_2_7
+
+
+load "Fig5.Styles.ColorBar.setgp"
+load "Fig5.Styles.Lines.setgp"
+
+
+plot INPUT_FILE using 2:5:3 with impulses lc palette lw 2
+
+##############################################
+reset 
+load  "Fig5.21plots.setgp"
+set size ratio SIZE_RATIO
+LMARGIN = LMARGIN_3_7
+RMARGIN = RMARGIN_3_7
+TMARGIN = TMARGIN_3_7
+BMARGIN = BMARGIN_3_7
+SETXLABEL = SETXLABEL_3_7
+SETYLABEL = SETYLABEL_3_7
+set border
+unset colorbox
+unset key
+unset title
+unset contour
+unset xlabel
+unset ylabel
+unset cblabel
+unset xtics
+unset ytics
+unset cbtics
+set lmargin at screen LMARGIN
+set rmargin at screen RMARGIN
+set tmargin at screen TMARGIN
+set bmargin at screen BMARGIN
+load "Fig5.X.EnergyRange.datgp"
+load "Fig5.Y.DipoleRange.datgp"
+set xrange [XMIN:XMAX]
+set yrange [YMIN:YMAX]
+if (SETXLABEL) set xlabel XLABEL font 'Helvetica,8'
+set xtics  XTICS   font 'Helvetica,0.1'
+if (SETXLABEL) set xtics  XTICS   font 'Helvetica,8'
+if (SETYLABEL) set ylabel YLABEL font 'Helvetica,8' 
+set ytics  YTICS   font 'Helvetica,0.1'
+if (SETYLABEL) set ytics  YTICS font 'Helvetica,8'
+
+
+load  "Fig5.INPUTFILES.datgp"
+INPUT_FILE=INPUT_FILE_3_7
+
+
+load "Fig5.Styles.ColorBar.setgp"
+load "Fig5.Styles.Lines.setgp"
+
+
+plot INPUT_FILE using  2:4:3 with impulses lc palette lw 2
+
+#######################End Column####################################
+
+
+#######################LEGEND PART1###############################
+reset
+load  "Fig5.21plots.setgp"
+set size ratio HSize/WidthColorbox
+LMARGIN = LMARGIN_Legend
+RMARGIN = RMARGIN_Legend
+TMARGIN = TMARGIN_Legend
+BMARGIN = BMARGIN_Legend
+SETXLABEL = SETXLABEL_Legend
+SETYLABEL = SETYLABEL_Legend
+SETCBLABEL = SETCBLABEL_Legend
+
+set lmargin at screen LMARGIN
+set rmargin at screen RMARGIN
+set tmargin at screen TMARGIN
+set bmargin at screen BMARGIN
+print "Legend 1", LMARGIN, RMARGIN, TMARGIN, BMARGIN
+
+
+#########################################
+########       Theory/Exp         ########
+#########################################
+unset border
+unset colorbox
+unset key
+unset title
+unset contour
+unset xlabel
+unset ylabel
+unset cblabel
+unset xtics
+unset ytics
+unset cbtics
+load "Fig5.Styles.Lines.setgp"
+set xrange [*:*]
+set yrange [0:3]
+set ytics ("Theory" 1, "Exp" 2)  font 'Helvetica,8' 
+set tics scale 0
+
+Theory(x)=1
+Experiment(x)=2
+unset xtics
+plot Theory(x) w l ls 1, Experiment(x) w l  ls 3
+
+#######################LEGEND PART2###############################
+reset
+load  "Fig5.21plots.setgp"
+set size ratio HeightColorbox/WidthColorbox
+LMARGIN = LMARGIN_CB
+RMARGIN = RMARGIN_CB 
+TMARGIN = TMARGIN_CB
+BMARGIN = BMARGIN_CB
+SETXLABEL = SETXLABEL_CB
+SETYLABEL = SETYLABEL_CB
+SETCBLABEL = SETCBLABEL_CB
+set lmargin at screen LMARGIN
+set rmargin at screen RMARGIN
+set tmargin at screen TMARGIN
+set bmargin at screen BMARGIN
+print "Legend 2", LMARGIN, RMARGIN, TMARGIN, BMARGIN
+
+#########################################
+########       Color Box         ########
+#########################################
+
+set border
+set pm3d map
+unset colorbox
+unset key
+unset title
+unset contour
+unset xlabel
+unset ylabel
+unset cblabel
+unset xtics
+unset ytics
+unset cbtics
+load "Fig5.CB.OscStrengthRange.datgp"
+set xrange [*:*]
+
+set yrange [CBMIN:CBMAX]
+
+f(y)=y
+
+if (SETYLABEL) set ylabel CBLABEL font 'Helvetica,8' 
+set ytics  CBTICS   font 'Helvetica,0.1'
+set ytics mirror
+if (SETYLABEL) set ytics  CBTICS font 'Helvetica,8'
+
+load "Fig5.Styles.ColorBar.setgp"
+
+set isosamples 101, 101
+splot f(y) 
+
+
+#######################21 Panels####################################
+#1_1#1_2#1_3#1_4#1_5#1_6#1_7#
+#2_1#2_2#2_3#2_4#2_5#2_6#2_7#  Legend
+#3_1#3_2#3_3#3_4#3_5#3_6#3_7# 
+#####################################################################
+
+unset multiplot
+load "close.rungp"
+
+

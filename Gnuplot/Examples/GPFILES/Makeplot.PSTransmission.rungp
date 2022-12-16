@@ -1,0 +1,52 @@
+PLOT_TYPE="ThermopowerPaper"
+G0=.000077480917346 #7.7480917346(25)×10−5 Ω−1
+S0=.000007257580194 #7.257580194 eV * 10-6V /K
+FermiEnergy = -4.5545
+it=0
+
+load "specs.ingp"
+
+load "PS_Thermopower.setgp"
+
+HeigthSize=0.25
+WidthSize=0.8
+SIZE_RATIO=HeigthSize/WidthSize
+set size ratio SIZE_RATIO
+it=0
+
+LMARGIN_1=.10
+RMARGIN_1=LMARGIN_1+WidthSize
+TMARGIN_1=.9
+BMARGIN_1=TMARGIN_1-HeigthSize
+LMARGIN_2=LMARGIN_1
+RMARGIN_2=RMARGIN_1
+TMARGIN_2=.45
+BMARGIN_2=TMARGIN_2-HeigthSize
+SETXLABEL_1=1
+SETYLABEL_1=1
+SETCBLABEL_1=1
+SETXLABEL_2=1
+SETYLABEL_2=1
+SETCBLABEL_2=1
+SETTITLE_1= 1
+SETTITLE_2=0
+XOFFSET_1="0,0"
+YOFFSET_1="0,0"
+CBOFFSET_1="+1,0"
+XOFFSET_2="0,0"
+YOFFSET_2="0,0"
+CBOFFSET_2="+1,0"
+
+set multiplot
+
+load "oneshot.2plots.2x2D_FigThermopower.rungp"
+
+unset multiplot
+
+load "close.rungp"
+
+
+
+
+
+

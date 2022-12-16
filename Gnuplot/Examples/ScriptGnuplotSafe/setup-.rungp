@@ -1,0 +1,3 @@
+it = Gif_Maxinput 
+itend=Gif_Mininput
+Gif_Diffinput= -1* Gif_Diffinput

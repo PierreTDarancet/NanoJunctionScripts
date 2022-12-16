@@ -1,0 +1,62 @@
+set size ratio 0.18
+set xtics 50 mirror
+set mxtics 5 
+set terminal aqua title 'SiOSi Molecule'  font "Helvetica,20" enhanced
+set title "SiOSi Molecule"offset 0,-1.1
+set multiplot
+set xrange [0:*]
+set xtics format " "
+
+set tmargin at screen 0.95 
+set bmargin at screen 0.75
+set lmargin at screen 0.12
+
+unset xlabel
+set ylabel 'DoS(meV^{-1})' offset 2,0
+set yrange [0:6]
+set ytics 2.5 ; 
+
+plot '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/SiOSi/Phonons/phononsDos.Smeared.dat' u ($1*0.12398):($2/0.12398) w l  lc rgb 'grey20' lw 4 t "DoS" ,  '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/SiOSi/Phonons/phononsDos.dat' u ($1*0.12398):($2*0.8) w impulses lc rgb 'red' t "States"
+
+unset title
+set tmargin at screen 0.75
+set bmargin at screen 0.55
+set lmargin at screen 0.12
+
+set ylabel 'Rel.Disp. (A)' offset 3,0
+set yrange [0:0.6]
+set ytics 0.25 
+set mytics 5
+plot  '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/SiOSi/Phonons/SiOSi.Si1OStretch.Total.dat' u 3:7 w impulses lc rgb "orange" lw 2 t "Si1-O Stretch", '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/SiOSi/Phonons/SiOSi.Si2OStretch.Total.dat' u 3:7:(0.6) w circles  lc rgb "blue" lw 2 t "Si2-O Stretch", '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/SiOSi/Phonons/SiOSi.SiStretch.Total.dat' u 3:7:(0.6) w circles  lc rgb "red" lw 2 t "Si-Si Stretch"
+
+
+
+unset title
+set tmargin at screen 0.55
+set bmargin at screen 0.35
+set lmargin at screen 0.12
+
+set ylabel 'Disp. (A)' offset 3,0
+set yrange [0:0.6]
+set ytics 0.25 
+set mytics 5
+plot '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/SiOSi/Phonons/SiOSi.Cmotion.Total.dat' u 3:7 w impulses lc rgb "green" lw 3 t "C motion", '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/SiOSi/Phonons/SiOSi.Smotion.Total.dat' u 3:7 w impulses lc rgb 'blue' lw 2 t "S motion", '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/SiOSi/Phonons/SiOSi.Omotion.Total.dat' u 3:7 w impulses lc rgb 'red' lw 2 t "O motion"
+
+
+unset title
+set tmargin at screen 0.35
+set bmargin at screen 0.15
+set lmargin at screen 0.12
+set xlabel 'Energy (meV)' offset 0,1
+set xtics format "%g" offset 0,0.5
+set ylabel 'Disp. (A)' offset 3,0
+set yrange [0:0.6]
+set ytics 0.25 
+set mytics 5
+plot  '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/SiOSi/Phonons/SiOSi.Hmotion.Total.dat' u 3:7 w impulses lc rgb "cyan" lw 3 t "H motion", '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/SiOSi/Phonons/SiOSi.Simotion.Total.dat' u 3:7 w impulses lc rgb 'orange' lw 2 t "Si motion" 
+
+
+
+
+
+unset multiplot

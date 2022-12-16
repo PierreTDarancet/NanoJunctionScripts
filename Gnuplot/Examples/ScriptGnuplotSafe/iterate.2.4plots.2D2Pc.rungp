@@ -1,0 +1,155 @@
+print(it);
+set multiplot
+
+LMARGIN = LMARGIN_1
+RMARGIN = RMARGIN_1 
+TMARGIN = TMARGIN_1 
+BMARGIN = BMARGIN_1
+SETXLABEL = SETXLABEL_1
+SETYLABEL = SETYLABEL_1
+SETCBLABEL = SETCBLABEL_1
+SETTITLE = SETTITLE_1
+XOFFSET = XOFFSET_1
+YOFFSET = YOFFSET_1
+CBOFFSET = CBOFFSET_1
+
+INPUT_FILE=sprintf("%d.%s.gp", it,Filename_Dens2Dx);
+Scaling_factor_X = Scaling_factor_X_Dens2Dx
+XMAX   = XMAX_Dens2Dx
+XMIN   =  XMIN_Dens2Dx
+XTICS  = XTICS_Dens2Dx 
+XLABEL = XLABEL_Dens2Dx
+SIZE_RATIO =  SIZE_RATIO_Dens2Dx
+Scaling_factor_Y = Scaling_factor_Y_Dens2Dx
+YMAX    = YMAX_Dens2Dx
+YMIN    = YMIN_Dens2Dx
+YTICS   = YTICS_Dens2Dx
+YLABEL  = YLABEL_Dens2Dx
+Scaling_factor_Z = Scaling_factor_Z_Dens2Dx
+CBMIN   =  CBMIN_Dens2Dx
+CBMAX   =  CBMAX_Dens2Dx
+CBTICS  =  CBTICS_Dens2Dx 
+CBLABEL =  CBLABEL_Dens2Dx
+CONTOURINCREMENT = CONTOURINCREMENT_Dens2Dx
+load "plotdensity.plt"
+
+LMARGIN = LMARGIN_2
+RMARGIN = RMARGIN_2 
+TMARGIN = TMARGIN_2 
+BMARGIN = BMARGIN_2
+SETXLABEL = SETXLABEL_2
+SETYLABEL = SETYLABEL_2
+SETCBLABEL = SETCBLABEL_2
+SETTITLE = SETTITLE_2
+XOFFSET = XOFFSET_2
+YOFFSET = YOFFSET_2
+CBOFFSET = CBOFFSET_2
+
+
+INPUT_FILE=sprintf("%d.%s.gp", it, Filename_Dens2Dy);
+SIZE_RATIO =  SIZE_RATIO_Dens2Dy
+Scaling_factor_X = Scaling_factor_X_Dens2Dy
+XMAX   = XMAX_Dens2Dy
+XMIN   =  XMIN_Dens2Dy
+XTICS  = XTICS_Dens2Dy
+XLABEL = XLABEL_Dens2Dy
+Scaling_factor_Y = Scaling_factor_Y_Dens2Dy
+YMAX    = YMAX_Dens2Dy
+YMIN    = YMIN_Dens2Dy
+YTICS   = YTICS_Dens2Dy
+YLABEL  = YLABEL_Dens2Dy
+Scaling_factor_Z = Scaling_factor_Z_Dens2Dy
+CBMIN   =  CBMIN_Dens2Dy
+CBMAX   =  CBMAX_Dens2Dy
+CBTICS  =  CBTICS_Dens2Dy
+CBLABEL =  CBLABEL_Dens2Dy
+CONTOURINCREMENT = CONTOURINCREMENT_Dens2Dy
+
+load "plotdensity.plt"
+
+
+LMARGIN = LMARGIN_3
+RMARGIN = RMARGIN_3 
+TMARGIN = TMARGIN_3 
+BMARGIN = BMARGIN_3
+SETXLABEL = SETXLABEL_3
+SETYLABEL = SETYLABEL_3
+SETCBLABEL = SETCBLABEL_3
+SETTITLE = SETTITLE_3
+XOFFSET = XOFFSET_3
+YOFFSET = YOFFSET_3
+CBOFFSET = CBOFFSET_3
+
+
+INPUT_FILE=sprintf("%d.%s.gp", it,Filename_Pot2Dx);
+Scaling_factor_X = Scaling_factor_X_Pot2Dx
+SIZE_RATIO =  SIZE_RATIO_Pot2Dx
+XMAX   = XMAX_Pot2Dx
+XMIN   =  XMIN_Pot2Dx
+XTICS  = XTICS_Pot2Dx 
+XLABEL = XLABEL_Pot2Dx 
+Scaling_factor_Y = Scaling_factor_Y_Pot2Dx
+YMAX    = YMAX_Pot2Dx
+YMIN    = YMIN_Pot2Dx
+YTICS   = YTICS_Pot2Dx
+YLABEL  = YLABEL_Pot2Dx
+Scaling_factor_Z = Scaling_factor_Z_Pot2Dx
+CBMIN   =  CBMIN_Pot2Dx
+CBMAX   =  CBMAX_Pot2Dx
+CBTICS  =  CBTICS_Pot2Dx 
+CBLABEL =  CBLABEL_Pot2Dx
+CONTOURINCREMENT = CONTOURINCREMENT_Pot2Dx
+
+load "plotpotentialcontour.plt"
+
+
+
+
+LMARGIN = LMARGIN_4
+RMARGIN = RMARGIN_4 
+TMARGIN = TMARGIN_4 
+BMARGIN = BMARGIN_4
+SETXLABEL = SETXLABEL_4
+SETYLABEL = SETYLABEL_4
+SETCBLABEL = SETCBLABEL_4
+SETTITLE = SETTITLE_4
+XOFFSET = XOFFSET_4
+YOFFSET = YOFFSET_4
+CBOFFSET = CBOFFSET_4
+
+
+INPUT_FILE=sprintf("%d.%s.gp", it, Filename_Pot2Dy);
+Scaling_factor_X = Scaling_factor_X_Pot2Dy
+SIZE_RATIO =  SIZE_RATIO_Pot2Dy
+XMAX   = XMAX_Pot2Dy
+XMIN   =  XMIN_Pot2Dy
+XTICS  = XTICS_Pot2Dy
+XLABEL = XLABEL_Pot2Dy
+Scaling_factor_Y = Scaling_factor_Y_Pot2Dy
+YMAX    = YMAX_Pot2Dy
+YMIN    = YMIN_Pot2Dy
+YTICS   = YTICS_Pot2Dy
+YLABEL  = YLABEL_Pot2Dy
+Scaling_factor_Z = Scaling_factor_Z_Pot2Dy
+CBMIN   =  CBMIN_Pot2Dy
+CBMAX   =  CBMAX_Pot2Dy
+CBTICS  =  CBTICS_Pot2Dy
+CBLABEL =  CBLABEL_Pot2Dy
+CONTOURINCREMENT = CONTOURINCREMENT_Pot2Dy
+
+load "plotpotentialcontour.plt"
+
+
+unset multiplot
+
+
+########################################
+
+it=it+Gif_Diffinput
+if (!(it == itend)) 	reread
+
+
+
+
+
+

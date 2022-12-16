@@ -1,0 +1,22 @@
+splot 'PhotoCurrentmax.dat' with pm3d 
+set pm3d map                                  
+set xrange [0.0:1.0] 
+set yrange [0:1.0]   
+set palette rgbformulae -23,-23,-3 
+set palette rgbformulae -31,-31,-22
+set cbrange [1:12.0]                         
+set xlabel 'Gamma Ratio' font "Times-Roman, 26" 
+set ylabel 'Dipole Transition Matrix [bohr^2]' font "Times-Roman, 26" 
+set title 'Rectification Ratio' font "Times-Roman,40" 
+set xtics font "Times-Roman, 26"                                   
+set ytics font "Times-Roman, 26" 
+set ylabel offset -6 
+set xlabel offset 0,-3 
+set title offset 0,3
+set ytics 0.2                                   
+set mytics 4 
+set cblabel 'Photocurrent [pA]' font "Times-Roman, 26"            
+set cbtics  font "Times-Roman, 26" 
+set cblabel  offset 4,0
+set size ratio 1
+ 

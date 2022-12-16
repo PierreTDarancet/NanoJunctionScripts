@@ -1,0 +1,6 @@
+#in eV
+YMIN=-10.0
+YMAX=2.5
+YTICS=1.0
+YLABEL = 'Energy [eV]'
+

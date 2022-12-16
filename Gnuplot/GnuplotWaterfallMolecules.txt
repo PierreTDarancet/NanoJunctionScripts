@@ -1,0 +1,37 @@
+set terminal aqua font "Helvetica, 20" size 1200,800 enhanced title "All molecules Vibrational Modes"
+set title "Vibrational Modes"
+# color definitions
+set style line 2  lc rgb '#0025ad' lt 1 lw 2
+set style line 3  lc rgb '#09ad00' lt 1 lw 2
+set style line 4  lc rgb '#00ad88' lt 1 lw 2
+set style line 5  lc rgb 'dark-green' lt 1 lw 2
+set style line 6  lc rgb 'dark-red' lt 1 lw 2
+set style line 7  lc rgb 'red' lt 1 lw 2
+set style line 8  lc rgb 'orange' lt 1 lw 2
+set xrange [0:400]
+set yrange [0:0.7]
+set size ratio 0.5
+maxoffset=0.5
+numberofplots=6.-1.0
+set key outside
+set grid
+set xtics 50
+unset ytics
+set ylabel 'Phonons DoS (a.u)'
+set xtics 50
+set mxtics 5
+set xlabel  'Energy (meV)' 
+plot      '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Ge2/Phonons/phononsDos.Smeared.dat' u ($1*0.12398):((maxoffset*(1.0 - 0.0/numberofplots)) +$2) w l ls 2  t 'Ge2', \
+          '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si2/Phonons/phononsDos.Smeared.dat' u ($1*0.12398):(maxoffset*(1.0 - 1.0/numberofplots)   +$2) w l ls 3  t "Si2", \
+     '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/SiSiSi/Phonons/phononsDos.Smeared.dat' u ($1*0.12398):((maxoffset*(1.0 - 2.0/numberofplots)) +$2) w l ls 4  t 'Si3', \
+     '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si4/Phonons/phononsDos.Smeared.dat' u ($1*0.12398):((maxoffset*(1.0 - 3.0/numberofplots)) +$2) w l ls 5  t 'Si4', \
+     '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/SiCSi/Phonons/phononsDos.Smeared.dat' u ($1*0.12398):((maxoffset*(1.0 - 4.0/numberofplots)) +$2) w l ls 7  t 'SiCSi', \
+     '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/SiOSi/Phonons/phononsDos.Smeared.dat' u ($1*0.12398):((maxoffset*(1.0 - 5.0/numberofplots)) +$2) w l ls 8  t 'SiOSi'
+
+#plot '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si2/Phonons/phononsDos.Smeared.dat' u ($1*0.12398):(maxoffset+$2) w l ls 2  t "Si2", \
+#     '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si2Naphtalene/Phonons/phononsDos.Smeared.dat' u ($1*0.12398):((maxoffset*(1.0 - 1.0/numberofplots)) +$2) w l ls 3  t 'Si2-Naph', \
+#     '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Ge2/Phonons/phononsDos.Smeared.dat' u ($1*0.12398):((maxoffset*(1.0 - 2.0/numberofplots)) +$2) w l ls 4  t 'Ge2', \
+#     '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si4/Phonons/phononsDos.Smeared.dat' u ($1*0.12398):((maxoffset*(1.0 - 3.0/numberofplots)) +$2) w l ls 5  t 'Si4', \
+#     '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/SiSiSi/Phonons/phononsDos.Smeared.dat' u ($1*0.12398):((maxoffset*(1.0 - 4.0/numberofplots)) +$2) w l ls 6  t 'Si3', \
+#     '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/SiCSi/Phonons/phononsDos.Smeared.dat' u ($1*0.12398):((maxoffset*(1.0 - 5.0/numberofplots)) +$2) w l ls 7  t 'SiCSi', \
+#     '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/SiOSi/Phonons/phononsDos.Smeared.dat' u ($1*0.12398):((maxoffset*(1.0 - 6.0/numberofplots)) +$2) w l ls 8  t 'SiOSi'

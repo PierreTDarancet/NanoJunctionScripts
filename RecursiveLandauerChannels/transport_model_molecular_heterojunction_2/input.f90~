@@ -1,0 +1,818 @@
+!
+! Copyright (C) 2009 Molecular Foundry Berkeley
+!
+! This file is distributed under the terms of the
+! GNU General Public License. See the file `License'
+! in the root directory of the present distribution,
+! or http://www.gnu.org/copyleft/gpl.txt .
+!
+! Contributors  : Pierre DARANCET
+!***********************************************
+   MODULE T_input_module
+   !***********************************************
+  USE kinds, ONLY : dbl
+  USE constants, ONLY : ZERO, ONE, CZERO, CONE, CI,PI, EPS_m3, EPS_m5
+   IMPLICIT NONE
+   PRIVATE 
+   SAVE
+!
+
+
+   ! Public
+   ! Private
+   ! Default Values
+   INTEGER :: nprint=1
+   INTEGER :: nprint_PDOS=1
+   INTEGER :: nprint_transmission=1   
+   LOGICAL :: calculate_RR=.TRUE.
+   LOGICAL :: print_RR=.TRUE.
+   LOGICAL :: print_Photocurrent=.TRUE.
+   LOGICAL :: print_current=.TRUE.
+   LOGICAL :: print_Photocurrentmax=.TRUE.
+   INTEGER :: debug_level=0
+   INTEGER :: nphotonfrequency=1
+   REAL(dbl) :: photonmax=2.0*ONE
+   REAL(dbl) :: photonmin=ZERO
+   REAL(dbl) :: photoncouplingconstant=EPS_m5
+   REAL(dbl) :: FGR_broadening=EPS_m3
+   REAL(dbl) :: emin=ZERO
+   REAL(dbl) :: emax=ZERO
+   INTEGER :: nemax=0
+   REAL(dbl) :: biasmin=ZERO
+   REAL(dbl) :: biasmax=ZERO
+   INTEGER :: nbias=1
+   REAL(dbl) :: alphamin=ZERO
+   REAL(dbl) :: alphamax=ZERO
+   INTEGER :: nalpha=1
+   INTEGER :: dimC=0
+   INTEGER :: dimL=0
+   INTEGER :: dimR=0
+   CHARACTER(100) :: HC_file="HC.dat"
+   CHARACTER(100) :: HL_file="HL.dat"  
+   CHARACTER(100) :: HR_file="HR.dat"  
+   ! Other Module Variables
+   CHARACTER(14) :: modulename="T_input_module"
+   ! Public variables
+
+   ! Public routines:
+   PUBLIC                 :: input_manager
+   ! private routines
+   ! read_input
+   ! set_control  USE T_control_module,                  ONLY : nprint, nprint_PDOS, nprint_transmission, calculate_RR, debug_level
+   ! set_photon  USE photon_module,                      ONLY : nphotonfrequency, photonmax, photonmin
+   ! set_photon_variables  USE photon_variable_module,   ONLY : FGR_broadening, photoncouplingconstant
+   ! set_egrid   USE T_egrid_module,                     ONLY : emin, emax, nemax
+   ! set bias    USE T_biasgrid_module,                  ONLY :  nbias, biasmax, biasmin
+   ! set_alpha   USE T_alphagrid_module,                 ONLY : nalpha, alphamax, alphamin
+   ! set_hamiltonian_workspace     USE hamiltonian_workspace_module,       ONLY : dimL, dimC, dimR
+   ! set_hamiltonian_reference     USE hamiltonian_construction_module,       ONLY : dimL_ref, dimC_ref, dimR_ref,  HC_file,  HL_file,  HR_file
+   ! input_summarize
+
+  CONTAINS 
+!***********************************************
+   SUBROUTINE read_input
+   !***********************************************
+   ! read the inp file located in the local directory
+  IMPLICIT NONE
+      ! Local
+       CHARACTER(10)      :: subname="read_input"
+       INTEGER :: ierr
+        CHARACTER(100)  :: chr
+       CHARACTER(3)      :: fname_in="inp"
+
+
+   PRINT*, "... READING Input File"
+   OPEN(100, FILE=TRIM(fname_in),FORM='formatted')
+   PRINT*, "     ... READING nprint"
+         READ(100,"(a6,I10)") chr, nprint
+           IF ( TRIM(chr) /= "nprint" ) THEN
+            PRINT*, "Error in Routine ",  TRIM(subname),  " of ", TRIM(modulename)
+            PRINT*, "Waiting for nprint", " Input = ", TRIM(chr)
+            STOP
+         ENDIF 
+   PRINT*, "          nprint=", nprint
+   !
+   PRINT*, "     ... READING nprint_PDOS"
+         READ(100,"(a11,I10)") chr, nprint_PDOS
+           IF ( TRIM(chr) /= "nprint_PDOS" ) THEN
+            PRINT*, "Error in Routine ",  TRIM(subname),  " of ", TRIM(modulename)
+            PRINT*, "Waiting for nprint_PDOS", " Input = ", TRIM(chr)
+            STOP
+         ENDIF 
+   PRINT*, "          nprint_PDOS=", nprint_PDOS
+   !
+   PRINT*, "     ... READING nprint_transmission"
+         READ(100,"(a19,I10)") chr, nprint_transmission
+           IF ( TRIM(chr) /= "nprint_transmission" ) THEN
+            PRINT*, "Error in Routine ",  TRIM(subname),  " of ", TRIM(modulename)
+            PRINT*, "Waiting for nprint_transmission", " Input = ", TRIM(chr)
+            STOP
+         ENDIF 
+   PRINT*, "          nprint_transmission=", nprint_transmission
+   !
+   PRINT*, "     ... READING calculate_RR"
+         READ(100,"(a12,L10)") chr, calculate_RR
+           IF ( TRIM(chr) /= "calculate_RR" ) THEN
+            PRINT*, "Error in Routine ",  TRIM(subname),  " of ", TRIM(modulename)
+            PRINT*, "Waiting for calculate_RR", " Input = ", TRIM(chr)
+            STOP
+         ENDIF 
+   PRINT*, "          calculate_RR=", calculate_RR
+   !
+   PRINT*, "     ... READING print_RR"
+         READ(100,"(a8,L10)") chr, print_RR
+           IF ( TRIM(chr) /= "print_RR" ) THEN
+            PRINT*, "Error in Routine ",  TRIM(subname),  " of ", TRIM(modulename)
+            PRINT*, "Waiting for print_RR", " Input = ", TRIM(chr)
+            STOP
+         ENDIF 
+   PRINT*, "          print_RR=", print_RR
+   !
+   PRINT*, "     ... READING print_Photocurrent"
+         READ(100,"(a18,L10)") chr, print_Photocurrent
+           IF ( TRIM(chr) /= "print_Photocurrent" ) THEN
+            PRINT*, "Error in Routine ",  TRIM(subname),  " of ", TRIM(modulename)
+            PRINT*, "Waiting for print_Photocurrent", " Input = ", TRIM(chr)
+            STOP
+         ENDIF 
+   PRINT*, "          print_Photocurrent=", print_Photocurrent
+   !
+   PRINT*, "     ... READING print_current"
+         READ(100,"(a13,L10)") chr, print_current
+           IF ( TRIM(chr) /= "print_current" ) THEN
+            PRINT*, "Error in Routine ",  TRIM(subname),  " of ", TRIM(modulename)
+            PRINT*, "Waiting for print_current", " Input = ", TRIM(chr)
+            STOP
+         ENDIF 
+   PRINT*, "          print_current=", print_current
+   !
+   PRINT*, "     ... READING print_Photocurrentmax"
+         READ(100,"(a21,L10)") chr, print_Photocurrentmax
+           IF ( TRIM(chr) /= "print_Photocurrentmax" ) THEN
+            PRINT*, "Error in Routine ",  TRIM(subname),  " of ", TRIM(modulename)
+            PRINT*, "Waiting for print_current", " Input = ", TRIM(chr)
+            STOP
+         ENDIF 
+   PRINT*, "          print_Photocurrentmax=", print_Photocurrentmax
+   !
+   PRINT*, "     ... READING debug_level"
+         READ(100,"(a11,I10)") chr, debug_level
+           IF ( TRIM(chr) /= "debug_level" ) THEN
+            PRINT*, "Error in Routine ",  TRIM(subname),  " of ", TRIM(modulename)
+            PRINT*, "Waiting for debug_level", " Input = ", TRIM(chr)
+            STOP
+         ENDIF 
+   PRINT*, "          debug_level=", debug_level
+   !
+   PRINT*, "     ... READING nphotonfrequency"
+         READ(100,"(a16,I5)") chr, nphotonfrequency
+           IF ( TRIM(chr) /= "nphotonfrequency" ) THEN
+            PRINT*, "Error in Routine ",  TRIM(subname),  " of ", TRIM(modulename)
+            PRINT*, "Waiting for nphotonfrequency", " Input = ", TRIM(chr)
+            STOP
+         ENDIF 
+   PRINT*, "          nphotonfrequency=", nphotonfrequency
+   !
+   PRINT*, "     ... READING photonmax"
+         READ(100,"(a9,F5.10)") chr, photonmax
+           IF ( TRIM(chr) /= "photonmax" ) THEN
+            PRINT*, "Error in Routine ",  TRIM(subname),  " of ", TRIM(modulename)
+            PRINT*, "Waiting for photonmax", " Input = ", TRIM(chr)
+            STOP
+         ENDIF 
+   PRINT*, "         photonmax=", photonmax
+   !
+   PRINT*, "     ... READING photonmin"
+         READ(100,"(a9,F5.10)") chr, photonmin
+           IF ( TRIM(chr) /= "photonmin" ) THEN
+            PRINT*, "Error in Routine ",  TRIM(subname),  " of ", TRIM(modulename)
+            PRINT*, "Waiting for photonmin", " Input = ", TRIM(chr)
+            STOP
+         ENDIF 
+   PRINT*, "         photonmin=", photonmin
+   !
+   PRINT*, "     ... READING photoncouplingconstant"
+         READ(100,"(a22,F10.10)") chr, photoncouplingconstant
+           IF ( TRIM(chr) /= "photoncouplingconstant" ) THEN
+            PRINT*, "Error in Routine ",  TRIM(subname),  " of ", TRIM(modulename)
+            PRINT*, "Waiting for photoncouplingconstant", " Input = ", TRIM(chr)
+            STOP
+         ENDIF 
+   PRINT*, "         photoncouplingconstant=", photoncouplingconstant
+   !
+   PRINT*, "     ... READING FGR_broadening"
+         READ(100,"(a14,F10.10)") chr, FGR_broadening
+           IF ( TRIM(chr) /= "FGR_broadening" ) THEN
+            PRINT*, "Error in Routine ",  TRIM(subname),  " of ", TRIM(modulename)
+            PRINT*, "Waiting for FGR_broadening", " Input = ", TRIM(chr)
+            STOP
+         ENDIF 
+   PRINT*, "        FGR_broadening=", FGR_broadening
+   !
+   PRINT*, "     ... READING emin"
+         READ(100,"(a4,F5.10)") chr, emin
+           IF ( TRIM(chr) /= "emin" ) THEN
+            PRINT*, "Error in Routine ",  TRIM(subname),  " of ", TRIM(modulename)
+            PRINT*, "Waiting for emin", " Input = ", TRIM(chr)
+            STOP
+         ENDIF 
+   PRINT*, "         emin=", emin
+   !
+   PRINT*, "     ... READING emax"
+         READ(100,"(a4,F5.10)") chr, emax
+           IF ( TRIM(chr) /= "emax" ) THEN
+            PRINT*, "Error in Routine ",  TRIM(subname),  " of ", TRIM(modulename)
+            PRINT*, "Waiting for emax", " Input = ", TRIM(chr)
+            STOP
+         ENDIF 
+   PRINT*, "         emax=", emax
+   !
+   PRINT*, "     ... READING nemax"
+         READ(100,"(a5,I10)") chr, nemax
+           IF ( TRIM(chr) /= "nemax" ) THEN
+            PRINT*, "Error in Routine ",  TRIM(subname),  " of ", TRIM(modulename)
+            PRINT*, "Waiting for nemax", " Input = ", TRIM(chr)
+            STOP
+         ENDIF 
+   PRINT*, "          nemax=", nemax
+   !
+   PRINT*, "     ... READING biasmin"
+         READ(100,"(a7,F5.10)") chr, biasmin
+           IF ( TRIM(chr) /= "biasmin" ) THEN
+            PRINT*, "Error in Routine ",  TRIM(subname),  " of ", TRIM(modulename)
+            PRINT*, "Waiting for biasmin", " Input = ", TRIM(chr)
+            STOP
+         ENDIF 
+   PRINT*, "         biasmin=", biasmin
+   !
+   PRINT*, "     ... READING biasmax"
+         READ(100,"(a7,F5.10)") chr, biasmax
+           IF ( TRIM(chr) /= "biasmax" ) THEN
+            PRINT*, "Error in Routine ",  TRIM(subname),  " of ", TRIM(modulename)
+            PRINT*, "Waiting for biasmax", " Input = ", TRIM(chr)
+            STOP
+         ENDIF 
+   PRINT*, "         biasmax=", biasmax
+   !
+   PRINT*, "     ... READING nbias"
+         READ(100,"(a5,I10)") chr, nbias
+           IF ( TRIM(chr) /= "nbias" ) THEN
+            PRINT*, "Error in Routine ",  TRIM(subname),  " of ", TRIM(modulename)
+            PRINT*, "Waiting for nbias", " Input = ", TRIM(chr)
+            STOP
+         ENDIF 
+   PRINT*, "          nbias=", nbias
+   !
+   PRINT*, "     ... READING alphamin"
+         READ(100,"(a8,F5.10)") chr, alphamin
+           IF ( TRIM(chr) /= "alphamin" ) THEN
+            PRINT*, "Error in Routine ",  TRIM(subname),  " of ", TRIM(modulename)
+            PRINT*, "Waiting for alphamin", " Input = ", TRIM(chr)
+            STOP
+         ENDIF 
+   PRINT*, "         alphamin=", alphamin
+   !
+   PRINT*, "     ... READING alphamax"
+         READ(100,"(a8,F5.10)") chr, alphamax
+           IF ( TRIM(chr) /= "alphamax" ) THEN
+            PRINT*, "Error in Routine ",  TRIM(subname),  " of ", TRIM(modulename)
+            PRINT*, "Waiting for alphamax", " Input = ", TRIM(chr)
+            STOP
+         ENDIF 
+   PRINT*, "         alphamax=", alphamax
+   !
+   PRINT*, "     ... READING nalpha"
+         READ(100,"(a6,I10)") chr, nalpha
+           IF ( TRIM(chr) /= "nalpha" ) THEN
+            PRINT*, "Error in Routine ",  TRIM(subname),  " of ", TRIM(modulename)
+            PRINT*, "Waiting for nalpha", " Input = ", TRIM(chr)
+            STOP
+         ENDIF 
+   PRINT*, "          nalpha=", nalpha
+   !
+   PRINT*, "     ... READING dimC"
+         READ(100,"(a4,I10)") chr, dimC
+           IF ( TRIM(chr) /= "dimC" ) THEN
+            PRINT*, "Error in Routine ",  TRIM(subname),  " of ", TRIM(modulename)
+            PRINT*, "Waiting for dimC", " Input = ", TRIM(chr)
+            STOP
+         ENDIF 
+   PRINT*, "          dimC=", dimC
+   !
+   PRINT*, "     ... READING dimL"
+         READ(100,"(a4,I10)") chr, dimL
+           IF ( TRIM(chr) /= "dimL" ) THEN
+            PRINT*, "Error in Routine ",  TRIM(subname),  " of ", TRIM(modulename)
+            PRINT*, "Waiting for dimL", " Input = ", TRIM(chr)
+            STOP
+         ENDIF 
+   PRINT*, "          dimL=", dimL
+   !
+   PRINT*, "     ... READING dimR"
+         READ(100,"(a4,I10)") chr, dimR
+           IF ( TRIM(chr) /= "dimR" ) THEN
+            PRINT*, "Error in Routine ",  TRIM(subname),  " of ", TRIM(modulename)
+            PRINT*, "Waiting for dimR", " Input = ", TRIM(chr)
+            STOP
+         ENDIF 
+   PRINT*, "          dimR=", dimR
+   !
+   PRINT*, "     ... READING HC_file"
+         READ(100,"(a7,a50)") chr, HC_file
+           IF ( TRIM(chr) /= "HC_file" ) THEN
+            PRINT*, "Error in Routine ",  TRIM(subname),  " of ", TRIM(modulename)
+            PRINT*, "Waiting for HC_file", " Input = ", TRIM(chr)
+            STOP
+         ENDIF 
+   PRINT*, "          HC_file=", TRIM(HC_file)
+   !
+   PRINT*, "     ... READING HL_file"
+         READ(100,"(a7,a50)") chr, HL_file
+           IF ( TRIM(chr) /= "HL_file" ) THEN
+            PRINT*, "Error in Routine ",  TRIM(subname),  " of ", TRIM(modulename)
+            PRINT*, "Waiting for HL_file", " Input = ", TRIM(chr)
+            STOP
+         ENDIF 
+   PRINT*, "          HL_file=", TRIM(HL_file)
+   !
+   PRINT*, "     ... READING HR_file"
+         READ(100,"(a7,a50)") chr, HR_file
+           IF ( TRIM(chr) /= "HR_file" ) THEN
+            PRINT*, "Error in Routine ",  TRIM(subname),  " of ", TRIM(modulename)
+            PRINT*, "Waiting for HR_file", " Input = ", TRIM(chr)
+            STOP
+         ENDIF 
+   PRINT*, "          HR_file=", TRIM(HR_file)
+   CLOSE(100)
+   PRINT*, "... END of READING Input File"
+
+    END SUBROUTINE read_input
+!***********************************************
+   SUBROUTINE input_manager
+   !***********************************************
+   ! 
+  IMPLICIT NONE
+      ! Local
+       CHARACTER(13)      :: subname="input_manager"
+       INTEGER :: ierr
+ 
+        CALL read_input()
+
+
+        CALL set_control()
+        CALL set_photon()
+        CALL set_photon_variable()
+        CALL set_egrid()
+        CALL set_bias()
+        CALL set_alpha()
+        CALL set_hamiltonian_workspace()
+        CALL set_hamiltonian_reference()
+
+        CALL input_summarize()
+
+    END SUBROUTINE input_manager
+!***********************************************
+   SUBROUTINE  set_control  
+   !***********************************************
+   ! 
+  USE T_control_module,       ONLY : nprint_ => nprint, &
+                                     nprint_PDOS_ => nprint_PDOS, &
+                                     nprint_transmission_ => nprint_transmission, &
+                                     calculate_RR_ => calculate_RR, &
+                                     debug_level_ => debug_level, &
+                                     print_RR_ => print_RR, &
+                                     print_Photocurrent_ => print_Photocurrent, &
+                                     print_current_ => print_current, &
+                                     print_Photocurrentmax_ => print_Photocurrentmax
+
+  IMPLICIT NONE
+      ! Local
+       CHARACTER(11)      :: subname="set_control"
+       INTEGER :: ierr
+         
+      
+        IF( nprint < 1 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) , " in module ", TRIM(modulename)
+            PRINT*, "Error in nprint definition", " nprint is intended to be > = 1", nprint
+            STOP
+        ENDIF 
+
+        IF ( ( debug_level < 0 ) .OR. ( debug_level > 5 )) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) , " in module ", TRIM(modulename)
+            PRINT*, "Error in debug level definition", " debug level is intended to be 6 >  dl > -1 ", debug_level
+            STOP
+        ENDIF 
+
+        nprint_       = nprint
+        nprint_PDOS_  = nprint_PDOS
+        nprint_transmission_  = nprint_transmission
+        calculate_RR_ = calculate_RR
+        debug_level_  = debug_level
+        print_RR_              = print_RR
+        print_Photocurrent_    = print_Photocurrent
+        print_current_         = print_current
+        print_Photocurrentmax_ = print_Photocurrentmax
+
+    END SUBROUTINE set_control
+!***********************************************
+   SUBROUTINE   set_photon
+   !***********************************************
+   ! 
+  USE photon_module,          ONLY : nphotonfrequency_  =>  nphotonfrequency, &
+                                     photonmax_         =>  photonmax, &
+                                     photonmin_         =>  photonmin
+   IMPLICIT NONE
+      ! Local
+       CHARACTER(10)      :: subname="set_photon"
+       INTEGER :: ierr
+         
+      
+        IF( nphotonfrequency < 1 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) , " in module ", TRIM(modulename)
+            PRINT*, "Error in nphotonfrequency definition:", "nphotonfrequency is intended to be > = 1", nphotonfrequency
+            STOP
+        ENDIF 
+
+        IF (   photonmax < photonmin  ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) , " in module ", TRIM(modulename)
+            PRINT*, "Error in photon energy definition:", " photonmax is supposed > photonmin "
+            PRINT*, " photonmax=", photonmax
+            PRINT*, " photonmin=", photonmin
+            STOP
+        ENDIF 
+
+        IF (  ( photonmax == photonmin ) .AND. ( nphotonfrequency > 1 )  ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) , " in module ", TRIM(modulename)
+            PRINT*, "Error in photon energy definition:", " photonmax == photonmin while nphoton > 1"
+            PRINT*, " photonmax=", photonmax
+            PRINT*, " photonmin=", photonmin
+            PRINT*, " nphotonfrequency=", nphotonfrequency
+            STOP
+        ENDIF 
+
+     
+        nphotonfrequency_  =  nphotonfrequency
+        photonmax_         =  photonmax
+        photonmin_         =  photonmin
+
+
+    END SUBROUTINE set_photon
+
+
+
+!***********************************************
+   SUBROUTINE   set_photon_variable
+   !***********************************************
+   ! 
+  USE photon_variable_module,          ONLY : FGR_broadening_         =>  FGR_broadening, &
+                                      photoncouplingconstant_         =>   Field Intensity
+   IMPLICIT NONE 
+      ! Local
+       CHARACTER(19)      :: subname="set_photon_variable"
+       INTEGER :: ierr
+         
+      
+  
+        IF (   FGR_broadening < ZERO  ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) , " in module ", TRIM(modulename)
+            PRINT*, "Error in broadening definition:", " broadening  is supposed > 0"
+            PRINT*, "  FGR_broadening=",  FGR_broadening
+            STOP
+        ENDIF 
+
+        IF ( photoncouplingconstant < ZERO   ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) , " in module ", TRIM(modulename)
+            PRINT*, "Error in coupling constant definition:", " coupling  is supposed > 0 "
+            PRINT*, " photoncouplingconstant", photoncouplingconstant
+            STOP
+        ENDIF 
+
+      FGR_broadening_ = FGR_broadening
+      photoncouplingconstant_         =  photoncouplingconstant
+
+    END SUBROUTINE set_photon_variable
+!***********************************************
+   SUBROUTINE   set_egrid
+   !***********************************************
+   !
+  USE T_egrid_module,         ONLY : emin_         =>  emin, &
+                                     emax_         =>  emax, &
+                                     nemax_        =>  nemax
+   IMPLICIT NONE
+      ! Local
+       CHARACTER(9)      :: subname="set_egrid"
+       INTEGER :: ierr
+         
+        !      
+        IF( nemax < 1 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) , " in module ", TRIM(modulename)
+            PRINT*, "Error in nemax definition:", "nemax is intended to be > = 1", nemax
+            STOP
+        ENDIF 
+        !
+        IF (   emax < emin  ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) , " in module ", TRIM(modulename)
+            PRINT*, "Error in energy definition:", " emax is supposed > emin "
+            PRINT*, " emax=", emax
+            PRINT*, " emin=", emin
+            STOP
+        ENDIF 
+        !
+        IF (  ( emax == emin ) .AND. ( nemax > 1 )  ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) , " in module ", TRIM(modulename)
+            PRINT*, "Error in energy definition:", " emax == emin while nemax > 1"
+            PRINT*, " emax=", emax
+            PRINT*, " emin=", emin
+            PRINT*, " nemax", nemax
+            STOP
+        ENDIF 
+
+        emin_    =  emin
+        emax_    =  emax
+        nemax_   =  nemax
+
+    END SUBROUTINE set_egrid
+!***********************************************
+   SUBROUTINE   set_bias
+   !***********************************************
+   ! set_bias    USE T_biasgrid_module,                  ONLY :  nbias, biasmax, biasmin
+  USE T_biasgrid_module,         ONLY : biasmin_      =>  biasmin, &
+                                        biasmax_      =>   biasmax, &
+                                        nbias_        =>  nbias
+   IMPLICIT NONE
+      ! Local
+       CHARACTER(8)      :: subname="set_bias"
+       INTEGER :: ierr
+         
+        !      
+        IF( nbias < 1 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) , " in module ", TRIM(modulename)
+            PRINT*, "Error in nbias definition:", " nbias is intended to be > = 1", nbias
+            STOP
+        ENDIF 
+        !
+        IF (   biasmax < biasmin  ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) , " in module ", TRIM(modulename)
+            PRINT*, "Error in bias definition:", " biasmax is supposed > biasmin "
+            PRINT*, " biasmax=", biasmax
+            PRINT*, " biasmin=", biasmin
+            STOP
+        ENDIF 
+        !
+        IF (  ( biasmax == biasmin ) .AND. ( nbias > 1 )  ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) , " in module ", TRIM(modulename)
+            PRINT*, "Error in bias definition:", " biasmax == biasmin while nbias > 1"
+            PRINT*, " biasmax=", biasmax
+            PRINT*, " biasmin=", biasmin
+            PRINT*, " nbias", nbias
+            STOP
+        ENDIF 
+        !
+        biasmin_   =  biasmin
+        biasmax_   =  biasmax
+        nbias_     =  nbias
+
+    END SUBROUTINE set_bias
+!***********************************************
+   SUBROUTINE   set_alpha
+   !***********************************************
+    ! set_alpha   USE T_alphagrid_module,                 ONLY : nalpha, alphamax, alphamin  
+  USE T_alphagrid_module,         ONLY : nalpha_          =>  nalpha, &
+                                        alphamax_        =>  alphamax, &
+                                        alphamin_        =>  alphamin
+   IMPLICIT NONE
+      ! Local
+       CHARACTER(9)      :: subname="set_alpha"
+       INTEGER :: ierr
+         
+        !      
+        IF( nalpha < 1 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) , " in module ", TRIM(modulename)
+            PRINT*, "Error in nalpha definition:", " nalpha is intended to be > = 1", nalpha
+            STOP
+        ENDIF 
+        !
+        IF (   alphamax < alphamin  ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) , " in module ", TRIM(modulename)
+            PRINT*, "Error in alpha definition:", " alphamax is supposed > alphamin "
+            PRINT*, " alphamax=", alphamax
+            PRINT*, " alphamin=", alphamin
+            STOP
+        ENDIF 
+        !
+        IF (  ( alphamax == alphamin ) .AND. ( nalpha > 1 )  ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) , " in module ", TRIM(modulename)
+            PRINT*, "Error in alpha definition:", " alphamax == alphamin while nalpha > 1"
+            PRINT*, " alphamax=", alphamax
+            PRINT*, " alphamin=", alphamin
+            PRINT*, " nalpha=", nalpha
+            STOP
+        ENDIF 
+        !
+        nalpha_   =  nalpha
+        alphamax_   =  alphamax
+        alphamin_   =  alphamin
+        !
+    END SUBROUTINE set_alpha
+
+!***********************************************
+   SUBROUTINE   set_hamiltonian_workspace
+   !***********************************************
+   ! set_hamiltonian_workspace     USE hamiltonian_workspace_module,       ONLY : dimL, dimC, dimR
+  USE hamiltonian_workspace_module,         ONLY : dimC_          =>  dimC, &
+                                                   dimL_          =>  dimL, &
+                                                   dimR_          =>  dimR
+   IMPLICIT NONE
+      ! Local
+       CHARACTER(25)      :: subname="set_hamiltonian_workspace"
+       INTEGER :: ierr
+         
+        !      
+        IF( dimC < 1 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) , " in module ", TRIM(modulename)
+            PRINT*, "Error in dimC definition:", " dimC is intended to be > = 1", dimC
+            STOP
+        ENDIF 
+        !
+        !      
+        IF( dimL < 1 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) , " in module ", TRIM(modulename)
+            PRINT*, "Error in dimL definition:", " dimL is intended to be > = 1", dimL
+            STOP
+        ENDIF 
+        !      
+        IF( dimR < 1 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) , " in module ", TRIM(modulename)
+            PRINT*, "Error in dimR definition:", " dimR is intended to be > = 1", dimR
+            STOP
+        ENDIF 
+        dimC_   =  dimC
+        dimL_   =  dimL
+        dimR_   =  dimR
+        !
+    END SUBROUTINE set_hamiltonian_workspace
+
+!***********************************************
+   SUBROUTINE   set_hamiltonian_reference
+   !***********************************************
+   ! set_hamiltonian_reference     USE hamiltonian_construction_module,       ONLY : dimL_ref, dimC_ref, dimR_ref,  HC_file,  HL_file,  HR_file
+  USE hamiltonian_construction_module,      ONLY : dimC_          =>  dimC_ref, &
+                                                   dimL_          =>  dimL_ref, &
+                                                   dimR_          =>  dimR_ref, &
+                                                   HC_file_       =>  HC_file, &
+                                                   HL_file_       =>  HL_file, &
+                                                   HR_file_       =>  HR_file
+   IMPLICIT NONE
+      ! Local
+       CHARACTER(25)      :: subname="set_hamiltonian_reference"
+       INTEGER :: ierr
+         
+        !      
+        IF( dimC < 1 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) , " in module ", TRIM(modulename)
+            PRINT*, "Error in dimC definition:", " dimC is intended to be > = 1", dimC
+            STOP
+        ENDIF 
+        !
+        !      
+        IF( dimL < 1 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) , " in module ", TRIM(modulename)
+            PRINT*, "Error in dimL definition:", " dimL is intended to be > = 1", dimL
+            STOP
+        ENDIF 
+        !      
+        IF( dimR < 1 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) , " in module ", TRIM(modulename)
+            PRINT*, "Error in dimR definition:", " dimR is intended to be > = 1", dimR
+            STOP
+        ENDIF 
+        dimC_   =  dimC
+        dimL_   =  dimL
+        dimR_   =  dimR
+        HC_file_  =  HC_file
+        HL_file_  =  HL_file
+        HR_file_  =  HR_file
+
+        !
+    END SUBROUTINE set_hamiltonian_reference
+
+
+!***********************************************
+   SUBROUTINE  input_summarize  
+   !***********************************************
+   ! 
+  IMPLICIT NONE
+      ! Local
+       CHARACTER(15)      :: subname="input_summarize"
+       INTEGER :: ierr
+
+       PRINT*, "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
+       PRINT*, "%                      General Control Variables                              %"
+       PRINT*, "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
+       PRINT*, "%%% debug_level  ---  debug level set to ",  debug_level
+   IF (debug_level == 0) THEN
+       PRINT*, "%%% Debug Mode: OFF"
+   ELSE
+       PRINT*, "%%% Debug Mode:  ON - Not Yet fully Implemented"
+       PRINT*, "%%% Debug Mode>= 1  - All the standard output files are printed"
+       PRINT*, "%%% Debug Mode>= 3  - All the Grids                 are printed"
+       PRINT*, "%%% Debug Mode>= 5  - All the Read Input            are printed"
+   ENDIF
+       PRINT*, "%%% HC_file      ---  Filename for Central Hamiltonian region: ",  TRIM(HC_file)
+       PRINT*, "%%% HL_file      ---  Filename for Left Hamiltonian region   : ",  TRIM(HL_file)
+       PRINT*, "%%% HR_file      ---  Filename for Right Hamiltonian region  : ",  TRIM(HR_file)
+       PRINT*, "%%% nprint       ---  Print Bias iterations all the",  nprint , " iterations "
+       PRINT*, "%%% nprint_PDOS  ---  Print PDOS all the",  nprint_PDOS , " bias iterations "
+       PRINT*, "%%% nprint_transmission ---  Print T(energy) all the",  nprint_transmission , " bias iterations "
+       PRINT*, "%%% calculate_RR ---  Calculation of rectification ratio",  calculate_RR
+       PRINT*, "%                             Output Files "
+       PRINT*, "%%% print_RR             ---  Print the rectification ratio           : ",  print_RR
+       PRINT*, "%%% print_Photocurren    ---  Print the Photocurrent                  : ",  print_Photocurrent
+       PRINT*, "%%% print_current        ---  Print the Current                       : ",  print_current
+       PRINT*, "%%% print_Photocurrentmax---  Print the max value of the Photocurrent : ",  print_Photocurrentmax
+       PRINT*, "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
+       PRINT*, "%                          Photon coupling variables                          %"
+       PRINT*, "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
+       PRINT*, "%%% photoncouplingconstant       --- Coupling Constant V0",   photoncouplingconstant
+   IF ( photoncouplingconstant == ZERO) THEN
+       PRINT*, "%%% WARNING %%%%%%               --- NO COUPLING "
+       PRINT*, "%%% WARNING %%%%%%               --- Photocurrent will be equal to 0"
+   ENDIF
+       PRINT*, "%%% FGR_broadening  --- Lorentzian Broad fortransition",  FGR_broadening
+
+       PRINT*, "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
+       PRINT*, "%                              Dimensions                                     %"
+       PRINT*, "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
+       PRINT*, "%%% dimC   --- Number of molecular levels  --- ",   dimC
+   IF ( dimC == 1) THEN
+       PRINT*, "%%% WARNING %%%%%%               --- Only one Molecular level used"
+       PRINT*, "%%% WARNING %%%%%%               --- bias and alpha loops useless"
+   ENDIF
+       PRINT*, "%%% dimL   --- Dimension of left lead      --- ",   dimL
+   IF ( dimL /= 1) THEN
+       PRINT*, "%%% WARNING %%%%%%               --- Calculation for Leads with dimension > 1 not yet implemented"
+       PRINT*, "%%% WARNING %%%%%%               --- Calculation will crash"
+   ENDIF
+       PRINT*, "%%% dimR   --- Dimension of right lead     --- ",   dimR
+   IF ( dimR /= 1) THEN
+       PRINT*, "%%% WARNING %%%%%%               --- Calculation for Leads with dimension > 1 not yet implemented"
+       PRINT*, "%%% WARNING %%%%%%               --- Calculation will crash"
+   ENDIF
+       PRINT*, "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
+       PRINT*, "%                        Grid Control Variables                               %"
+       PRINT*, "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
+       PRINT*, "%                      Photon Control Variables "
+       PRINT*, "%%% nphotonfrequency             --- ",   nphotonfrequency
+   IF ( nphotonfrequency == 1) THEN
+       PRINT*, "%%% WARNING %%%%%%               --- Only one Photon frequency used"
+       PRINT*, "%%% WARNING %%%%%%               --- Photon grid set to photonmax"
+   ENDIF
+       PRINT*, "%%% photonmax                    --- Maximum value of the photon frequency grid",   photonmax
+       PRINT*, "%%% photonmin                    --- Minimum value of the photon frequency grid",   photonmin
+       PRINT*, "%                 Energy grid Control Variables "
+       PRINT*, "%%% nemax       --- Maximum Number of points used for the energy grid ",   nemax
+       PRINT*, "%%% emax        --- Maximum value of the energy grid",   emax
+       PRINT*, "%%% COMMENT: emax is supposed to be set as position of the highest molecular orbital + bias/2 + photonmax + 1 eV"
+!       PRINT*, "%%% Checking..."
+!   IF ( emax < (LUMO_2 + (biasmax/2.0) + photonmax + 1.00) ) THEN
+!       PRINT*, " ...   %%% WARNING %%%%%%               --- Emax is found lower than the advised value"
+!       PRINT*, " ...   %%% WARNING %%%%%%               --- Advised value:  ", (LUMO_2 + (biasmax/2.0) + photonmax + 1.00), "  eV" 
+!   ELSE
+!       PRINT*, " ...   OK"
+!   ENDIF
+       PRINT*, "%%% emin        --- Minimum value of the energy grid",   emin
+       PRINT*, "%%% COMMENT: emin is supposed to be set as position of the lowest molecular orbital - bias/2 - photonmax - 1 eV"
+!       PRINT*, "%%% Checking..."
+!   IF ( emin > (HOMO_2 - (biasmax/2.0) - photonmax - 1.00) ) THEN
+!       PRINT*, " ...   %%% WARNING %%%%%%               --- Emin is found greater than the advised value"
+!       PRINT*, " ...   %%% WARNING %%%%%%               --- Advised value:  ", (HOMO_2 - (biasmax/2.0) - photonmax - 1.00), "  eV" 
+!   ELSE
+!       PRINT*, " ...   OK"
+!   ENDIF
+       PRINT*, "%                   Bias grid Control Variables "
+       PRINT*, "%%% nbias                               --- Number of points used for the bias grid ",   nbias
+   IF ( nbias == 1) THEN
+       PRINT*, "%%% WARNING %%%%%%                      --- Only one bias used"
+       PRINT*, "%%% WARNING %%%%%%                      --- Bias grid set to biasmax"
+   ENDIF
+       PRINT*, "%%% biasmax                             --- Maximum value of the bias grid",   biasmax
+       PRINT*, "%%% biasmin                             --- Minimum value of the bias grid",   biasmin
+
+       PRINT*, "%                  Alpha grid Control Variables "
+       PRINT*, "%%% nalpha                              --- Number of points used for the alpha grid ",   nalpha
+   IF ( nalpha == 1) THEN
+       PRINT*, "%%% WARNING %%%%%%                      --- Only one alpha used"
+       PRINT*, "%%% WARNING %%%%%%                      --- Alpha grid set to alphamax"
+   ENDIF
+       PRINT*, "%%% alphamax                            --- Maximum value of the alpha grid",   alphamax
+       PRINT*, "%%% aplhamin                            --- Minimum value of the alpha grid",   alphamin
+ 
+   
+    END SUBROUTINE input_summarize  
+  END  MODULE T_input_module
+
+ 
+
+ 
+
+

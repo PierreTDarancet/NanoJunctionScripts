@@ -1,0 +1,25 @@
+slw = .8   # line width signals
+elw = 1.6  # line width envelopes
+set style line  1 lc rgb 'grey90'  lw slw lt 1 # light grey
+set style line  2 lc rgb 'grey40'  lw slw lt 1 # grey
+set style line  3 lc rgb 'grey30'  lw slw lt 1 # dark grey
+set style line  4 lc rgb '#111111' lw elw lt 1 # filter envelope
+set style line  5 lc rgb '#000fff' lw slw lt 1 # Blue
+set style line  6 lc rgb '#0090ff' lw slw lt 1 # Light Blue
+set style line  7 lc rgb '#0fffee' lw slw lt 1 # Cyan
+set style line  8 lc rgb '#90ff70' lw slw lt 1 # Light Green
+set style line  9 lc rgb '#ffee00' lw slw lt 1 # yellow
+set style line 10 lc rgb '#ff7000' lw slw lt 1 # Orange
+
+set style line 11 lc rgb '#ff928f' lw slw lt 1 # light red
+set style line 12 lc rgb '#ff534f' lw slw lt 1 # red
+set style line 13 lc rgb '#ff231e' lw slw lt 1 # dark red
+set style line 14 lc rgb '#000000' lw elw lt 1 # signal envelope
+
+set style line  15 lc rgb '#ee0000' lw slw lt 1 # red
+set style line  16 lc rgb '#7f0000' lw slw lt 1 # dark red
+
+#set style line 11  lt  rgb "orange" lw 3 
+#set style line 12  lt  rgb "purple" lw 3 
+#set style line 13  lt  rgb "dark-orange lw 5
+#set style line 14  lt  rgb "black" lw 3

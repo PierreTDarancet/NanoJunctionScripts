@@ -1,0 +1,133 @@
+!
+! Copyright (C) 2009 Molecular Foundry Berkeley
+!
+! This file is distributed under the terms of the
+! GNU General Public License. See the file `License'
+! in the root directory of the present distribution,
+! or http://www.gnu.org/copyleft/gpl.txt .
+!
+! Contributors  : Pierre DARANCET
+!***********************************************
+   MODULE T_biasgrid_module
+   !***********************************************
+  USE kinds, ONLY : dbl
+  USE constants, ONLY : ZERO, ONE, CZERO, CONE, CI,PI
+   IMPLICIT NONE
+   PRIVATE 
+   SAVE
+!
+
+
+
+   ! Public
+   INTEGER                :: nbias     ! dimension of the bias grid (input)
+   REAL(dbl)              :: dbias        
+   REAL(dbl), ALLOCATABLE :: biasgrid(:)  ! grid values
+   REAL(dbl)              :: biasmax ! max bias (input) 
+   REAL(dbl)              :: biasmin ! min bias (input). At this stage of the code and for rectification ratio purpose, the bias is intended to be symmetric
+                                     ! A non symmetric bias grid while calculating RR should have only bad consequences on this part of the code
+                                     ! This point could be easily improved, without stopping to calculate the RR, by calculating the RR in this module
+                                     ! rather than in the main source
+
+   ! Private
+   LOGICAL :: alloc = .FALSE.
+
+   ! Public variables
+   PUBLIC                 :: nbias
+   PUBLIC                 :: dbias
+   PUBLIC                 :: biasgrid
+   PUBLIC                 :: biasmax
+   PUBLIC                 :: biasmin
+
+
+   ! Public routines:
+   PUBLIC                 :: biasgrid_allocate
+   PUBLIC                 :: biasgrid_deallocate
+   PUBLIC                 :: biasgrid_init
+
+   CONTAINS 
+!***********************************************
+   SUBROUTINE biasgrid_allocate
+   !***********************************************
+   IMPLICIT NONE
+       CHARACTER(17)      :: subname="biasgrid_allocate"
+       INTEGER  :: ierr
+       !
+        IF( alloc ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Already allocated"
+            STOP
+         ENDIF 
+
+        IF( nbias <= 0 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Error in nbias definition", " nbias = ", nbias
+            STOP
+         ENDIF 
+
+       ALLOCATE( biasgrid(nbias), STAT=ierr )
+       IF( ierr /=0 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Error allocating biasgrid"
+            STOP
+       ENDIF 
+       biasgrid(:) = ZERO
+       alloc = .TRUE.
+
+
+  END SUBROUTINE biasgrid_allocate
+!***********************************************
+   SUBROUTINE biasgrid_deallocate 
+   !***********************************************
+  IMPLICIT NONE
+       CHARACTER(19)      :: subname="biasgrid_deallocate"
+       INTEGER :: ierr
+
+
+       IF ( ALLOCATED(biasgrid) ) THEN
+            DEALLOCATE(biasgrid, STAT=ierr)
+            IF( ierr /=0 ) THEN 
+               PRINT*, "Error in Routine ",  TRIM(subname) 
+               PRINT*, "Error deallocating biasgrid"
+               STOP
+           ENDIF 
+       ENDIF
+       alloc = .FALSE.
+
+   END SUBROUTINE biasgrid_deallocate
+
+!***********************************************
+   SUBROUTINE biasgrid_init
+   !***********************************************
+  IMPLICIT NONE
+    CHARACTER(13)      :: subname="biasgrid_init"
+       INTEGER :: ierr, ibias
+
+        IF( .NOT. alloc ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Not allocated"
+            STOP
+         ENDIF 
+       !
+       IF ( nbias > 1 ) THEN
+          !
+          dbias = (biasmax - biasmin) / REAL(nbias -1, dbl)
+          !
+          DO ibias = 1, nbias
+             biasgrid(ibias) = biasmin + REAL(ibias -1, dbl) * dbias
+          ENDDO
+          !
+       ELSE ! if nbias = 1 
+          ! 
+          dbias = ZERO
+          biasgrid(nbias)= biasmax
+          !
+       ENDIF
+
+
+   END SUBROUTINE biasgrid_init
+
+
+  END  MODULE T_biasgrid_module
+
+

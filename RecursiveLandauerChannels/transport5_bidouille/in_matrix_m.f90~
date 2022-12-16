@@ -1,0 +1,533 @@
+!
+! Copyright (C) 2007 Institut Néel Grenoble
+!
+! This file is distributed under the terms of the
+! GNU General Public License. See the file `License'
+! in the root directory of the present distribution,
+! or http://www.gnu.org/copyleft/gpl.txt .
+!
+! Contributors  : Pierre DARANCET
+!*********************************************
+   MODULE in_matrix_module
+!*********************************************
+   USE parameters,      ONLY : nstrx
+   USE kinds
+   USE constants,            ONLY : ZERO, CZERO, CONE, ONE, EPS_m6, EPS_m4, EPS_m2
+   USE io_global_module,     ONLY : stdout
+   USE io_module,     ONLY :  mat_unit => aux_unit, ioname
+   USE files_module, ONLY : file_open, file_close
+   !USE parser_module
+   USE iotk_module
+   USE T_control_module,      ONLY : in_datafile_L,     &
+                                              in_datafile_R,     &
+                                              in_datafile_CC_1,     &
+                                              in_datafile_CC_2,     &
+                                              dim_subspace,      &
+                                              in_max_iter_R,     &
+                                              in_max_iter_L,     &
+                                              in_iter_CC_1,      &
+                                              in_iter_CC_2
+
+
+
+   IMPLICIT NONE
+   PRIVATE 
+   SAVE
+
+   ! variables for recursion
+            ! For first iteration
+   COMPLEX(dbl), ALLOCATABLE ::  in_A_matrix_L(:,:,:), in_B_matrix_L(:,:,:)
+   !
+   COMPLEX(dbl), ALLOCATABLE ::  in_A_matrix_R(:,:,:), in_B_matrix_R(:,:,:)
+   !
+   COMPLEX(dbl), ALLOCATABLE ::  in_A_matrix_CC_1(:,:,:), in_B_matrix_CC_1(:,:,:)
+   !
+   COMPLEX(dbl), ALLOCATABLE ::  in_A_matrix_CC_2(:,:,:), in_B_matrix_CC_2(:,:,:)
+   !
+   COMPLEX(dbl), ALLOCATABLE ::  A_matrix(:,:,:), B_matrix(:,:,:)
+    !
+   INTEGER :: in_dimL
+    !
+   INTEGER :: in_dimR
+    !
+   INTEGER :: total_iter
+    !
+   LOGICAL :: alloc
+
+    !
+   PUBLIC :: in_A_matrix_L, in_B_matrix_L
+   PUBLIC :: in_A_matrix_R, in_B_matrix_R
+   PUBLIC :: in_A_matrix_CC_1, in_B_matrix_CC_1
+   PUBLIC :: in_A_matrix_CC_2, in_B_matrix_CC_2
+   PUBLIC :: A_matrix, B_matrix
+   PUBLIC :: in_dimL
+   PUBLIC :: in_dimR
+   PUBLIC :: alloc
+   PUBLIC :: total_iter
+    !
+
+
+   ! general functions
+   PUBLIC :: in_matrix_allocate
+   PUBLIC :: in_matrix_deallocate
+   PUBLIC :: read_matrix
+   PUBLIC :: in_build_matrix
+    !
+    !
+
+
+
+CONTAINS
+
+
+
+!*******************************************************************
+   SUBROUTINE in_matrix_allocate
+   !*******************************************************************
+      CHARACTER(18)      :: subname="in_matrix_allocate"
+      INTEGER :: ierr
+
+
+    ! Allocate hamiltonian
+
+   !
+   in_dimL = in_max_iter_L*dim_subspace
+   in_dimR = in_max_iter_R*dim_subspace
+   !
+   total_iter = in_max_iter_R + in_max_iter_L + in_iter_CC_1 + in_iter_CC_2 - 1
+
+    ! Allocate A-type matrices
+   ALLOCATE ( in_A_matrix_L(in_max_iter_L,dim_subspace,dim_subspace), STAT=ierr )
+        IF( ierr /=0 ) CALL errore(subname, 'allocating in_A_matrix_L', ABS(ierr) )
+   ALLOCATE ( in_A_matrix_R(in_max_iter_R,dim_subspace,dim_subspace), STAT=ierr )
+        IF( ierr /=0 ) CALL errore(subname, 'allocating in_A_matrix_R', ABS(ierr) )
+   ALLOCATE ( in_A_matrix_CC_1(in_iter_CC_1,dim_subspace,dim_subspace), STAT=ierr )
+        IF( ierr /=0 ) CALL errore(subname, 'allocating in_A_matrix_R', ABS(ierr) )
+   ALLOCATE ( in_A_matrix_CC_2(in_iter_CC_2,dim_subspace,dim_subspace), STAT=ierr )
+        IF( ierr /=0 ) CALL errore(subname, 'allocating in_A_matrix_R', ABS(ierr) )
+
+
+   ALLOCATE ( A_matrix(total_iter,dim_subspace,dim_subspace), STAT=ierr )
+        IF( ierr /=0 ) CALL errore(subname, 'allocating A_matrix', ABS(ierr) )
+    ! Allocate B-type matrices
+   ALLOCATE ( in_B_matrix_L(in_max_iter_L,dim_subspace,dim_subspace), STAT=ierr )
+        IF( ierr /=0 ) CALL errore(subname, 'allocating in_B_matrix_L', ABS(ierr) )
+   ALLOCATE ( in_B_matrix_R(in_max_iter_R,dim_subspace,dim_subspace), STAT=ierr )
+        IF( ierr /=0 ) CALL errore(subname, 'allocating in_B_matrix_R', ABS(ierr) )
+   ALLOCATE ( in_B_matrix_CC_1(in_iter_CC_1,dim_subspace,dim_subspace), STAT=ierr )
+        IF( ierr /=0 ) CALL errore(subname, 'allocating in_B_matrix_R', ABS(ierr) )
+   ALLOCATE ( in_B_matrix_CC_2(in_iter_CC_2,dim_subspace,dim_subspace), STAT=ierr )
+        IF( ierr /=0 ) CALL errore(subname, 'allocating in_B_matrix_R', ABS(ierr) )
+
+
+   ALLOCATE ( B_matrix(total_iter + 1,dim_subspace,dim_subspace), STAT=ierr )
+        IF( ierr /=0 ) CALL errore(subname, 'allocating B_matrix', ABS(ierr) )
+   ! set alloc to true
+    alloc=.TRUE.
+
+END SUBROUTINE in_matrix_allocate
+
+!**********************************************************
+   SUBROUTINE in_matrix_deallocate()
+   !**********************************************************
+   IMPLICIT NONE
+      CHARACTER(20)      :: subname="in_matrix_deallocate"
+      INTEGER :: ierr
+
+
+     IF ( ALLOCATED( in_A_matrix_L  ) ) THEN
+           DEALLOCATE ( in_A_matrix_L, STAT=ierr )
+           IF( ierr /=0 ) CALL errore(subname, 'deallocating in_A_matrix_L', ABS(ierr) )
+      ENDIF
+     IF ( ALLOCATED( in_B_matrix_L  ) ) THEN
+           DEALLOCATE ( in_B_matrix_L, STAT=ierr )
+           IF( ierr /=0 ) CALL errore(subname, 'deallocating in_B_matrix_L', ABS(ierr) )
+      ENDIF
+     IF ( ALLOCATED( in_A_matrix_R  ) ) THEN
+           DEALLOCATE ( in_A_matrix_R, STAT=ierr )
+           IF( ierr /=0 ) CALL errore(subname, 'deallocating in_A_matrix_R', ABS(ierr) )
+      ENDIF
+
+
+     IF ( ALLOCATED( in_B_matrix_R  ) ) THEN
+           DEALLOCATE ( in_B_matrix_R, STAT=ierr )
+           IF( ierr /=0 ) CALL errore(subname, 'deallocating in_B_matrix_R', ABS(ierr) )
+      ENDIF
+     IF ( ALLOCATED( A_matrix  ) ) THEN
+           DEALLOCATE ( A_matrix, STAT=ierr )
+           IF( ierr /=0 ) CALL errore(subname, 'deallocating A_matrix', ABS(ierr) )
+      ENDIF
+     IF ( ALLOCATED( B_matrix  ) ) THEN
+           DEALLOCATE ( B_matrix, STAT=ierr )
+           IF( ierr /=0 ) CALL errore(subname, 'deallocating B_matrix', ABS(ierr) )
+      ENDIF
+
+
+     IF ( ALLOCATED( in_A_matrix_CC_1  ) ) THEN
+           DEALLOCATE ( in_A_matrix_CC_1, STAT=ierr )
+           IF( ierr /=0 ) CALL errore(subname, 'deallocating in_A_matrix_CC_1', ABS(ierr) )
+      ENDIF
+     IF ( ALLOCATED( in_A_matrix_CC_2  ) ) THEN
+           DEALLOCATE ( in_A_matrix_CC_2, STAT=ierr )
+           IF( ierr /=0 ) CALL errore(subname, 'deallocating in_A_matrix_CC_2', ABS(ierr) )
+      ENDIF
+
+     IF ( ALLOCATED( in_B_matrix_CC_1  ) ) THEN
+           DEALLOCATE ( in_B_matrix_CC_1, STAT=ierr )
+           IF( ierr /=0 ) CALL errore(subname, 'deallocating in_B_matrix_CC_1', ABS(ierr) )
+      ENDIF
+     IF ( ALLOCATED( in_B_matrix_CC_2  ) ) THEN
+           DEALLOCATE ( in_B_matrix_CC_2, STAT=ierr )
+           IF( ierr /=0 ) CALL errore(subname, 'deallocating in_B_matrix_CC_2', ABS(ierr) )
+      ENDIF
+
+
+     alloc=.FALSE.
+
+   END SUBROUTINE in_matrix_deallocate
+
+!*******************************************************************
+   SUBROUTINE in_build_matrix
+   !*******************************************************************
+
+     ! This program builds the final ordered A_matrix & B_matrix 
+     ! starting from the knowledge of the A/B_matrix_L/R read from recursion's files
+       CHARACTER(15)      :: subname="in_build_matrix"
+       LOGICAL   ::   test_equality
+       INTEGER   ::   irows, icols
+       INTEGER   ::   iter, shift_iter
+
+
+
+
+    IF (.NOT. alloc) CALL errore(subname,'matrix not allocated',1)
+
+     !Beginning
+    WRITE(stdout,"(2x,70('='))" )
+    WRITE(stdout,"(/,  7x,'Building ordered A & B matrices ')")
+    WRITE(stdout,"(2x,70('='))" )
+    WRITE(stdout,"()")
+    WRITE(stdout,"()")
+
+    !INitialize the final matrices : A_matrix & B_matrix
+    A_matrix(:,:,:)=CZERO
+    B_matrix(:,:,:)=CZERO
+    !test equality for the first element of matrices R/L
+    test_equality=.FALSE.
+    DO icols=1, dim_subspace
+      DO irows=1, dim_subspace
+         IF (ABS(in_A_matrix_CC_1(1,irows,icols) - in_A_matrix_CC_2(1,irows,icols)) > EPS_m4 ) &
+                test_equality=.TRUE.
+
+      ENDDO
+    ENDDO
+
+
+    IF (test_equality)  CALL errore(subname, 'initial subspace in L/R are different', 1 )
+
+   ! initialize the first (Left) part of the A matrix
+   ! initialize the first (Left) part of the B matrix=CONJG(TRANSPOSE(B_L))
+
+    DO iter=1,in_max_iter_L
+      ! corresponding iter in the R/L matrix 
+      shift_iter = in_max_iter_L - iter + 1
+
+      A_matrix(iter,:,:) = in_A_matrix_L(shift_iter,:,:)
+
+      DO icols=1, dim_subspace
+          DO irows=1, dim_subspace
+              !
+              B_matrix(iter,irows,icols) = CONJG(in_B_matrix_L(shift_iter,icols,irows))
+              !
+          ENDDO
+      ENDDO
+
+
+    ENDDO
+
+    DO iter=1,in_iter_CC_1
+      ! corresponding iter in the R/L matrix 
+      shift_iter = in_max_iter_L + in_iter_CC_1 - iter + 1
+
+      A_matrix(shift_iter,:,:) = in_A_matrix_CC_1(iter,:,:)
+
+      DO icols=1, dim_subspace
+          DO irows=1, dim_subspace
+              !
+              B_matrix(shift_iter,irows,icols) = CONJG(in_B_matrix_CC_1(iter,icols,irows))
+              !
+          ENDDO
+      ENDDO
+
+
+    ENDDO
+
+
+
+
+
+    ! new test on the general A matrix
+    iter=in_max_iter_L + in_iter_CC_1
+    test_equality=.FALSE.
+    DO icols=1, dim_subspace
+      DO irows=1, dim_subspace
+         IF (ABS(A_matrix(iter,irows,icols) - in_A_matrix_CC_2(1,irows,icols)) > EPS_m4) &
+                test_equality=.TRUE.
+
+      ENDDO
+    ENDDO
+    IF (test_equality)  CALL errore(subname, 'initial subspace in L/R are different', 2 )
+
+
+
+   ! initialize the second (Right) part of the A matrix
+   ! initialize the second (Right) part of the B matrix=B_R
+    shift_iter = in_max_iter_L + in_iter_CC_1
+
+
+    DO icols=1, dim_subspace
+        DO irows=1, dim_subspace
+          B_matrix(shift_iter+1,irows,icols) = in_B_matrix_CC_2(1,irows,icols)
+       ENDDO
+    ENDDO
+
+    DO iter=2,in_iter_CC_2
+      ! corresponding iter in the R/L matrix 
+      shift_iter = in_max_iter_L + in_iter_CC_1 + iter - 1 
+
+      A_matrix(shift_iter,:,:) = in_A_matrix_CC_2(iter,:,:)
+      DO icols=1, dim_subspace
+        DO irows=1, dim_subspace
+                B_matrix(shift_iter+1,irows,icols) = in_B_matrix_CC_2(iter,irows,icols)
+       ENDDO
+     ENDDO
+
+    ENDDO
+
+
+!    shift_iter = in_max_iter_L + in_iter_CC_1 + in_iter_CC_2
+! 
+!     DO icols=1, dim_subspace
+!         DO irows=1, dim_subspace
+!           B_matrix(shift_iter+1,irows,icols) = in_B_matrix_R(1,irows,icols)
+!        ENDDO
+!     ENDDO
+
+    DO iter=1,in_max_iter_R
+      ! corresponding iter in the R/L matrix 
+      shift_iter = in_max_iter_L + in_iter_CC_1  + in_iter_CC_2 + iter
+
+      A_matrix(shift_iter,:,:) = in_A_matrix_R(iter,:,:)
+      DO icols=1, dim_subspace
+        DO irows=1, dim_subspace
+                B_matrix(shift_iter+1,irows,icols) = in_B_matrix_R(iter,irows,icols)
+       ENDDO
+     ENDDO
+
+    ENDDO
+    WRITE(stdout,"()")
+    WRITE(stdout,"()")
+    WRITE(stdout,"(2x,70('='))" )
+    WRITE( stdout,"(/, 7x,' Ordered A & B matrices built ')")
+    WRITE(stdout,"(2x,70('='))" )
+
+
+
+   END SUBROUTINE in_build_matrix
+
+!*******************************************************************
+   SUBROUTINE read_matrix
+   !*******************************************************************
+       CHARACTER(11)      :: subname="read_matrix"
+       CHARACTER(6) :: name="MATRIX"
+       CHARACTER(nstrx)   :: attr
+       INTEGER            :: iter
+       INTEGER            :: ierr
+       INTEGER         :: final_iter, dim_sub
+      CHARACTER( LEN=nstrx )  :: filename
+
+
+       !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! RIGHT PART
+       CALL file_open(mat_unit,TRIM(in_datafile_R),PATH="/MATRIX/",ACTION="read", &
+                              FORM='formatted')
+
+
+       CALL iotk_scan_empty(mat_unit,"DATADIM",ATTR=attr)
+       !CALL iotk_scan_attr(attr,"dimwan_total",dimwan_total,FIRST=.TRUE.) 
+       !CALL iotk_scan_attr(attr,"dim_rec",dim_rec) 
+       CALL iotk_scan_attr(attr,"dim_sub",dim_sub) 
+       IF (dim_sub /= dim_subspace) CALL errore(subname, 'dim_subspace in input file and in .mat file are /=', ABS(dim_sub) )
+
+
+       CALL iotk_scan_empty(mat_unit,"DATAFINAL",ATTR=attr)
+       !CALL iotk_scan_attr(attr,"max_iter",max_iter,FIRST=.TRUE.) 
+       CALL iotk_scan_attr(attr,"final_iter",final_iter) 
+       !CALL iotk_scan_attr(attr,"dim_final",((max_iter+1)*dim_subspace)) 
+       IF (final_iter+1 /= in_max_iter_R) CALL errore(subname, 'read n_iter_R and given n_iter_R are /=', ABS(final_iter+1) )
+       !
+
+       CALL iotk_scan_begin(mat_unit,"A_MAT")
+       CALL iotk_scan_dat(mat_unit,"ITER"//TRIM(iotk_index(0)), in_A_matrix_R(1,:,:))
+       DO iter=1, final_iter
+        CALL iotk_scan_dat(mat_unit,"ITER"//TRIM(iotk_index(iter)), in_A_matrix_R(iter+1,:,:))
+       ENDDO
+       CALL iotk_scan_end(mat_unit,"A_MAT")
+       !
+       !
+       CALL iotk_scan_begin(mat_unit,"B_MAT")
+       CALL iotk_scan_dat(mat_unit,"ITER"//TRIM(iotk_index(0)), in_B_matrix_R(1,:,:))
+       DO iter=1, final_iter
+        CALL iotk_scan_dat(mat_unit,"ITER"//TRIM(iotk_index(iter)), in_B_matrix_R(iter+1,:,:))
+       ENDDO
+       CALL iotk_scan_end(mat_unit,"B_MAT")
+
+      ! CALL iotk_scan_end(mat_unit,TRIM(name))
+
+      CALL file_close(mat_unit,PATH="/MATRIX/",ACTION="read")
+
+      !CALL ioname('matrix',filename,LPATH=.FALSE.)
+      WRITE( stdout,"(/,'  Matrices on recursion basis read from file : ',5x,a)") TRIM(in_datafile_R)
+      ! End of right part
+
+      ! reinitialize local variables
+      final_iter = 0
+      dim_sub = 0
+      !
+      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! RIGHT PART 2
+       CALL file_open(mat_unit,TRIM(in_datafile_CC_2),PATH="/MATRIX/",ACTION="read", &
+                              FORM='formatted')
+
+
+       CALL iotk_scan_empty(mat_unit,"DATADIM",ATTR=attr)
+       !CALL iotk_scan_attr(attr,"dimwan_total",dimwan_total,FIRST=.TRUE.) 
+       !CALL iotk_scan_attr(attr,"dim_rec",dim_rec) 
+       CALL iotk_scan_attr(attr,"dim_sub",dim_sub) 
+       IF (dim_sub /= dim_subspace) CALL errore(subname, 'dim_subspace in input file and in .mat file are /=', ABS(dim_sub) )
+
+
+       CALL iotk_scan_empty(mat_unit,"DATAFINAL",ATTR=attr)
+       !CALL iotk_scan_attr(attr,"max_iter",max_iter,FIRST=.TRUE.) 
+       CALL iotk_scan_attr(attr,"final_iter",final_iter) 
+       !CALL iotk_scan_attr(attr,"dim_final",((max_iter+1)*dim_subspace)) 
+       IF (final_iter+1 /= in_iter_CC_2) CALL errore(subname, 'read n_iter_CC2 and given n_iter_CC2 are /=', ABS(final_iter+1) )
+       !
+
+       CALL iotk_scan_begin(mat_unit,"A_MAT")
+       CALL iotk_scan_dat(mat_unit,"ITER"//TRIM(iotk_index(0)), in_A_matrix_CC_2(1,:,:))
+       DO iter=1, final_iter
+        CALL iotk_scan_dat(mat_unit,"ITER"//TRIM(iotk_index(iter)), in_A_matrix_CC_2(iter+1,:,:))
+       ENDDO
+       CALL iotk_scan_end(mat_unit,"A_MAT")
+       !
+       !
+       CALL iotk_scan_begin(mat_unit,"B_MAT")
+       CALL iotk_scan_dat(mat_unit,"ITER"//TRIM(iotk_index(0)), in_B_matrix_CC_2(1,:,:))
+       DO iter=1, final_iter
+        CALL iotk_scan_dat(mat_unit,"ITER"//TRIM(iotk_index(iter)), in_B_matrix_CC_2(iter+1,:,:))
+       ENDDO
+       CALL iotk_scan_end(mat_unit,"B_MAT")
+
+      ! CALL iotk_scan_end(mat_unit,TRIM(name))
+
+      CALL file_close(mat_unit,PATH="/MATRIX/",ACTION="read")
+
+      !CALL ioname('matrix',filename,LPATH=.FALSE.)
+      WRITE( stdout,"(/,'  Matrices on recursion basis read from file : ',5x,a)") TRIM(in_datafile_CC_2)
+      ! End of right part
+
+      ! reinitialize local variables
+      final_iter = 0
+      dim_sub = 0
+      !
+
+       !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! LEFT PART
+
+       CALL file_open(mat_unit,TRIM(in_datafile_L),PATH="/MATRIX/",ACTION="read", &
+                              FORM='formatted')
+
+
+       CALL iotk_scan_empty(mat_unit,"DATADIM",ATTR=attr)
+       !CALL iotk_scan_attr(attr,"dimwan_total",dimwan_total,FIRST=.TRUE.) 
+       !CALL iotk_scan_attr(attr,"dim_rec",dim_rec) 
+       CALL iotk_scan_attr(attr,"dim_sub",dim_sub) 
+       IF (dim_sub /= dim_subspace) CALL errore(subname, 'dim_subspace in input file and in .mat file are /=', ABS(dim_sub) )
+
+
+       CALL iotk_scan_empty(mat_unit,"DATAFINAL",ATTR=attr)
+       !CALL iotk_scan_attr(attr,"max_iter",max_iter,FIRST=.TRUE.) 
+       CALL iotk_scan_attr(attr,"final_iter",final_iter) 
+       !CALL iotk_scan_attr(attr,"dim_final",((max_iter+1)*dim_subspace)) 
+       IF (final_iter+1 /= in_max_iter_L) CALL errore(subname, 'read n_iter_L and given n_iter_L are /=', ABS(final_iter+1) )
+       !
+
+       CALL iotk_scan_begin(mat_unit,"A_MAT")
+       CALL iotk_scan_dat(mat_unit,"ITER"//TRIM(iotk_index(0)), in_A_matrix_L(1,:,:))
+       DO iter=1, final_iter
+        CALL iotk_scan_dat(mat_unit,"ITER"//TRIM(iotk_index(iter)), in_A_matrix_L(iter+1,:,:))
+       ENDDO
+       CALL iotk_scan_end(mat_unit,"A_MAT")
+       !
+       !
+       CALL iotk_scan_begin(mat_unit,"B_MAT")
+       CALL iotk_scan_dat(mat_unit,"ITER"//TRIM(iotk_index(0)), in_B_matrix_L(1,:,:))
+       DO iter=1, final_iter
+        CALL iotk_scan_dat(mat_unit,"ITER"//TRIM(iotk_index(iter)), in_B_matrix_L(iter+1,:,:))
+       ENDDO
+       CALL iotk_scan_end(mat_unit,"B_MAT")
+
+       !CALL iotk_scan_end(mat_unit,TRIM(name))
+
+      CALL file_close(mat_unit,PATH="/MATRIX/",ACTION="read")
+
+      !CALL ioname('matrix',filename,LPATH=.FALSE.)
+      WRITE( stdout,"(/,'  Matrices on recursion basis read from file : ',5x,a)") TRIM(in_datafile_L)
+
+       !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! LEFT PART 2 
+
+       CALL file_open(mat_unit,TRIM(in_datafile_CC_1),PATH="/MATRIX/",ACTION="read", &
+                              FORM='formatted')
+
+
+       CALL iotk_scan_empty(mat_unit,"DATADIM",ATTR=attr)
+       !CALL iotk_scan_attr(attr,"dimwan_total",dimwan_total,FIRST=.TRUE.) 
+       !CALL iotk_scan_attr(attr,"dim_rec",dim_rec) 
+       CALL iotk_scan_attr(attr,"dim_sub",dim_sub) 
+       IF (dim_sub /= dim_subspace) CALL errore(subname, 'dim_subspace in input file and in .mat file are /=', ABS(dim_sub) )
+
+
+       CALL iotk_scan_empty(mat_unit,"DATAFINAL",ATTR=attr)
+       !CALL iotk_scan_attr(attr,"max_iter",max_iter,FIRST=.TRUE.) 
+       CALL iotk_scan_attr(attr,"final_iter",final_iter) 
+       !CALL iotk_scan_attr(attr,"dim_final",((max_iter+1)*dim_subspace)) 
+       IF (final_iter+1 /= in_iter_CC_1) CALL errore(subname, 'read n_iter_CC_1 and given n_iter_CC_1 are /=', ABS(final_iter+1) )
+       !
+
+       CALL iotk_scan_begin(mat_unit,"A_MAT")
+       CALL iotk_scan_dat(mat_unit,"ITER"//TRIM(iotk_index(0)), in_A_matrix_CC_1(1,:,:))
+       DO iter=1, final_iter
+        CALL iotk_scan_dat(mat_unit,"ITER"//TRIM(iotk_index(iter)), in_A_matrix_CC_1(iter+1,:,:))
+       ENDDO
+       CALL iotk_scan_end(mat_unit,"A_MAT")
+       !
+       !
+       CALL iotk_scan_begin(mat_unit,"B_MAT")
+       CALL iotk_scan_dat(mat_unit,"ITER"//TRIM(iotk_index(0)), in_B_matrix_CC_1(1,:,:))
+       DO iter=1, final_iter
+        CALL iotk_scan_dat(mat_unit,"ITER"//TRIM(iotk_index(iter)), in_B_matrix_CC_1(iter+1,:,:))
+       ENDDO
+       CALL iotk_scan_end(mat_unit,"B_MAT")
+
+       !CALL iotk_scan_end(mat_unit,TRIM(name))
+
+      CALL file_close(mat_unit,PATH="/MATRIX/",ACTION="read")
+
+      !CALL ioname('matrix',filename,LPATH=.FALSE.)
+      WRITE( stdout,"(/,'  Matrices on recursion basis read from file : ',5x,a)") TRIM(in_datafile_CC_1)
+
+
+  END SUBROUTINE read_matrix
+
+
+ END MODULE in_matrix_module
+
+

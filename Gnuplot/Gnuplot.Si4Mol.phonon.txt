@@ -1,0 +1,62 @@
+set size ratio 0.18
+set xtics 50 mirror
+set mxtics 5 
+set terminal aqua title 'Si4 Molecule'  font "Helvetica,20" enhanced
+set title "Si4 Molecule"offset 0,-1.1
+set multiplot
+set xrange [0:400]
+set xtics format " "
+
+set tmargin at screen 0.95 
+set bmargin at screen 0.75
+set lmargin at screen 0.12
+
+unset xlabel
+set ylabel 'DoS(meV^{-1})' offset 2,0
+set yrange [0:6]
+set ytics 2.5 ; 
+
+plot '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si4/Phonons/phononsDos.Smeared.dat' u ($1*0.12398):($2/0.12398) w l  lc rgb 'grey20' lw 4 t "DoS" ,  '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si4/Phonons/phononsDos.dat' u ($1*0.12398):($2*0.8) w impulses lc rgb 'red' t "States"
+
+unset title
+set tmargin at screen 0.75
+set bmargin at screen 0.55
+set lmargin at screen 0.12
+
+set ylabel 'Rel.Disp. (A)' offset 3,0
+set yrange [0:0.6]
+set ytics 0.25 
+set mytics 5
+plot  '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si4/Phonons/Si4.mol.Si23Stretch.Total.dat' u 3:7 w impulses lc rgb "orange" lw 2 t "Si2-Si3 Stretch", \
+      '< paste /Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si4/Phonons/Si4.mol.Si12Stretch.Total.dat /Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si4/Phonons/Si4.mol.Si23Stretch.Total.dat /Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si4/Phonons/Si4.mol.Si34Stretch.Total.dat' u 3:7:(4.0*($14+$21)) w circles lc rgb "light-red"   t "Total Si-Si Stretch"
+
+
+unset title
+set tmargin at screen 0.55
+set bmargin at screen 0.35
+set lmargin at screen 0.12
+
+set ylabel 'Disp. (A)' offset 3,0
+set yrange [0:0.6]
+set ytics 0.25 
+set mytics 5
+plot '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si4/Phonons/Si4.mol.Cmotion.Total.dat' u 3:7 w impulses lc rgb "green" lw 3 t "C motion", '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si4/Phonons/Si4.mol.Smotion.Total.dat' u 3:7 w impulses lc rgb 'blue' lw 2 t "S motion" 
+
+
+unset title
+set tmargin at screen 0.35
+set bmargin at screen 0.15
+set lmargin at screen 0.12
+set xlabel 'Energy (meV)' offset 0,1
+set xtics format "%g" offset 0,0.5
+set ylabel 'Disp. (A)' offset 3,0
+set yrange [0:0.6]
+set ytics 0.25 
+set mytics 5
+plot  '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si4/Phonons/Si4.mol.Hmotion.Total.dat' u 3:7 w impulses lc rgb "cyan" lw 3 t "H motion", '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si4/Phonons/Si4.mol.Simotion.Total.dat' u 3:7 w impulses lc rgb 'orange' lw 2 t "Si motion" 
+
+
+
+
+
+unset multiplot

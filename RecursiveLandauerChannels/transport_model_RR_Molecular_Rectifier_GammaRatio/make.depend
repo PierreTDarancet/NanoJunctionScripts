@@ -1,0 +1,20 @@
+conductor.o : ../libs/constants.o
+conductor.o : ../libs/kind.o
+conductor.o : gammagrid.o
+conductor.o : biasgrid.o
+conductor.o : gapgrid.o
+conductor.o : control_m.o
+conductor.o : input.o
+biasgrid.o : ../libs/constants.o
+biasgrid.o : ../libs/kind.o
+gammagrid.o : ../libs/constants.o
+gammagrid.o : ../libs/kind.o
+gapgrid.o : ../libs/constants.o
+gapgrid.o : ../libs/kind.o
+input.o :  ../libs/kind.o
+input.o :  ../libs/constants.o
+input.o : alphagrid.o
+input.o : gapgrid.o
+input.o : control_m.o
+input.o : biasgrid.o
+

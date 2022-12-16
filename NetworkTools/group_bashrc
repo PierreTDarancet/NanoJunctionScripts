@@ -1,0 +1,8 @@
+source /opt/intel/composerxe/bin/compilervars.sh intel64
+alias ..='cd ..'
+alias ...='cd ../..'
+shopt -s histappend
+export PROMPT_COMMAND='history -a'
+export HISTFILESIZE=20000
+export HISTSIZE=20000
+export PATH=$PATH:~/bin/:/usr/local/bin/

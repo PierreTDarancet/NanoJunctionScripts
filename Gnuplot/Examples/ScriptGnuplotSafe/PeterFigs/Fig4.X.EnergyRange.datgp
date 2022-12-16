@@ -1,0 +1,6 @@
+#in eV
+XMIN=3.5
+XMAX=6.5
+XTICS=0.5
+XLABEL = 'Energy [eV]'
+

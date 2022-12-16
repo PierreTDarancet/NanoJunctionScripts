@@ -1,0 +1,22 @@
+reset
+PLOT_TYPE="TransmissionDensity"
+G0=.000077480917346 #7.7480917346(25)×10−5 Ω−1
+S0=.000007257580194 #7.257580194 eV * 10-6V /K
+FermiEnergy = -4.5545
+
+it=0
+load "specs.ingp"
+load "PS.setgp"
+
+load "5plots.Fig4.setgp"
+
+load "oneshot.5plots.42D.rungp"
+
+load "5plots.Fig2Left.setgp"
+
+load "oneshot.5plots.42D.rungp"
+
+
+load "close.rungp"
+
+

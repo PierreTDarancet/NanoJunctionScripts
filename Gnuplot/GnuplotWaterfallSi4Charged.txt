@@ -1,0 +1,39 @@
+set terminal aqua font "Helvetica, 20" size 1200,400 enhanced title "Si4 Phonons"
+set title "Si4 gas phase: Phonons vs Charge"
+# color definitions
+set style line 2  lc rgb '#0025ad' lt 1 lw 2
+set style line 3  lc rgb '#0042ad' lt 1 lw 2
+set style line 4  lc rgb '#0060ad' lt 1 lw 2
+set style line 5  lc rgb '#007cad' lt 1 lw 2
+set style line 6  lc rgb '#0099ad' lt 1 lw 2
+set style line 7  lc rgb '#00ada4' lt 1 lw 2
+set style line 8  lc rgb '#00ad88' lt 1 lw 2
+set style line 9  lc rgb '#00ad6b' lt 1 lw 2
+set style line 10 lc rgb '#00ad4e' lt 1 lw 2
+set style line 11 lc rgb '#00ad31' lt 1 lw 2
+set style line 12 lc rgb '#00ad14' lt 1 lw 2
+set style line 13 lc rgb '#09ad00' lt 1 lw 2
+set xrange [0:400]
+set yrange [0:0.6]
+set size ratio 0.3
+maxoffset=0.5
+numberofplots=11.-1.0
+set key outside
+set grid
+set xtics 50
+unset ytics
+set ylabel 'Phonons DoS (a.u)'
+set xtics 50
+set mxtics 5
+set xlabel  'Energy (meV)' 
+plot '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si4/Phonons/phononsDos.Smeared.dat' u ($1*0.12398):(maxoffset+$2) w l ls 2  t "0", \
+     '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si4_Charged_100/Phonons/phononsDos.Smeared.dat' u ($1*0.12398):((maxoffset*(1.0 - 1.0/numberofplots)) +$2) w l ls 3  t '0.01|e|', \
+     '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si4_Charged_200/Phonons/phononsDos.Smeared.dat' u ($1*0.12398):((maxoffset*(1.0 - 2.0/numberofplots)) +$2) w l ls 4  t '0.02|e|', \
+     '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si4_Charged_300/Phonons/phononsDos.Smeared.dat' u ($1*0.12398):((maxoffset*(1.0 - 3.0/numberofplots)) +$2) w l ls 5  t '0.03|e|', \
+     '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si4_Charged_400/Phonons/phononsDos.Smeared.dat' u ($1*0.12398):((maxoffset*(1.0 - 4.0/numberofplots)) +$2) w l ls 6  t '0.04|e|', \
+     '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si4_Charged_500/Phonons/phononsDos.Smeared.dat' u ($1*0.12398):((maxoffset*(1.0 - 5.0/numberofplots)) +$2) w l ls 7  t '0.05|e|', \
+     '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si4_Charged_600/Phonons/phononsDos.Smeared.dat' u ($1*0.12398):((maxoffset*(1.0 - 6.0/numberofplots)) +$2) w l ls 8  t '0.06|e|', \
+     '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si4_Charged_700/Phonons/phononsDos.Smeared.dat' u ($1*0.12398):((maxoffset*(1.0 - 7.0/numberofplots)) +$2) w l ls 9  t '0.07|e|', \
+     '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si4_Charged_800/Phonons/phononsDos.Smeared.dat' u ($1*0.12398):((maxoffset*(1.0 - 8.0/numberofplots)) +$2) w l ls 10  t '0.08|e|', \
+     '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si4_Charged_900/Phonons/phononsDos.Smeared.dat' u ($1*0.12398):((maxoffset*(1.0 - 9.0/numberofplots)) +$2) w l ls 11  t '0.09|e|', \
+     '/Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si4_Charged_1000/Phonons/phononsDos.Smeared.dat' u ($1*0.12398):((maxoffset*(1.0 - 10.0/numberofplots)) +$2) w l ls 12  t '0.1|e|'

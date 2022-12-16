@@ -1,0 +1,16 @@
+PLOT_TYPE="Density"
+load "specs.ingp"
+
+load "AGif.setgp"
+
+load "4plots.2x2D_2x1D.setgp"
+
+load "setup+.rungp"
+load "iterate.4plots.4D.rungp"
+
+load "setup-.rungp"
+load "iterate.4plots.4D.rungp"
+
+load "close.rungp"
+
+

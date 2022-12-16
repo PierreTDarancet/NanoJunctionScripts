@@ -1,0 +1,6 @@
+#in a u 
+YMIN=1.5
+YMAX=5.95
+YTICS=0.5
+YLABEL = 'e^{-}-h^{+} interaction [eV]'
+

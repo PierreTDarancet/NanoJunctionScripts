@@ -1,0 +1,206 @@
+!      Copyright (C) 2010 Molecular Foundry, LBNL
+!      Pierre Darancet
+!      This file is distributed under the terms of the
+!      GNU General Public License. See the file `License\'
+!      in the root directory of the present distribution,
+!      or http://www.gnu.org/copyleft/gpl.txt .
+!
+!***********************************************
+   PROGRAM transmissionperk
+   !***********************************************
+
+
+   IMPLICIT NONE
+   INTEGER, PARAMETER   ::  curr_unit =  11
+   INTEGER, PARAMETER   ::  cond_unit = 12
+   CHARACTER(99)         :: filein='Butaneperkpoint.dat'                 ! input  filename (transmittanceperk)
+   CHARACTER(99)         :: fileout='Butane_2x2.dat'                 ! output filename (transmittance)
+   CHARACTER(99)         :: routinename='Transmission per k point'                 ! output filename (transmittance)
+   REAL*16, PARAMETER   :: ZERO=0.0000000000000000000000000 
+
+
+   INTEGER, PARAMETER   ::  NbkOutput_x =2
+   INTEGER, PARAMETER   ::  NbkOutput_y =2
+   !
+   REAL*16, ALLOCATABLE   :: transmk(:,:)               ! transmittance at kfrom data file
+   REAL*16, ALLOCATABLE   :: transm(:)               ! transmittance sum out 
+
+   !
+   CHARACTER(99)         :: chr                 !
+   !
+   ! energy grid
+   !
+   INTEGER                :: ne                      ! dimension of the energy grid
+   REAL*16, ALLOCATABLE   :: egrid(:)                ! energy grid
+   REAL*16                :: norm       
+   !
+   ! k grid
+   !
+   INTEGER                :: nk
+   REAL, ALLOCATABLE   :: kgrid(:,:)
+   REAL   :: kgridout(2,(NbkOutput_x*NbkOutput_y))
+
+   INTEGER             :: kgridoutput((NbkOutput_x*NbkOutput_y)) 
+   REAL   :: weigh((NbkOutput_x*NbkOutput_y))
+   !
+   !
+   ! interpolation variables
+   !
+   !
+   ! local variables
+   !
+   INTEGER                  :: ie, ik, ierr, ios, ikout
+   ! input 
+!
+!------------------------------
+! main body
+!------------------------------
+!
+!   CALL startup(version_number,TRIM(routinename))
+
+!
+! init
+!
+   !
+   ! get energy grid and transmittance from data file
+   !
+
+
+   !
+   OPEN ( cond_unit, FILE=TRIM(filein), FORM='formatted', IOSTAT=ierr )
+   IF ( ierr/=0 ) THEN
+        PRINT*, TRIM(routinename),'opening file = '//TRIM(filein), ABS(ierr)
+        STOP
+   ENDIF
+
+   READ ( cond_unit, *, IOSTAT=ios ) chr
+   READ ( cond_unit, *, IOSTAT=ios ) nk
+   PRINT*, "Number of K-point in the input file = ", nk
+   ALLOCATE ( kgrid(6,nk), STAT=ierr )
+   IF( ierr /=0 ) THEN 
+          PRINT*, TRIM(routinename),'allocating kgrid', ABS(ierr)
+          STOP 
+   ENDIF 
+
+
+   ikout=0
+   kgridout(:,:)=ZERO
+   DO ik = 1, NbkOutput_x
+       DO ik2 = 1, NbkOutput_y
+          ikout=ikout+1
+          kgridout(2,ikout) = REAL( ( ik - (NbkOutput_y/2)) * SQRT(nk) /NbkOutput_y   ) 
+          kgridout(1,ikout) = REAL( ( ik2 - (NbkOutput_x/2)) * SQRT(nk) /NbkOutput_x   )
+       ENDDO
+   ENDDO
+  
+   ikout=1
+   DO ik = 1, nk
+ 	  READ ( cond_unit, *, IOSTAT=ios ) ik, ( kgrid(ios,ik), ios = 1 , 6 )
+          IF ( ( kgrid(1,ik) ==  kgridout(1,ikout) )   ) .AND. (kgrid(2,ik) ==  kgridout(2,ikout) ) ) THEN
+               kgridoutput(ikout)=ik
+               weigh(ikout) = REAL(1.00/(NbkOutput_x*NbkOutput_y))
+               ikout=ikout+1
+          ENDIF
+   ENDDO
+
+   IF ( ikout-1 > (NbkOutput_x*NbkOutput_y) ) THEN 
+          PRINT*, TRIM(routinename),'Too many kpoints read, ikout = ', ikout
+          STOP 
+   ELSE IF ( ikout-1 < (NbkOutput_x*NbkOutput_y) ) THEN 
+          PRINT*, TRIM(routinename),'Not enough kpoints read, ikout = ', ikout
+          STOP 
+   ENDIF 
+
+   PRINT*, "Summation will take place on the following kpoints "
+   PRINT*, "Index - Original Index - BZ indices- Reciprocal space coordinates -  Weigh  "
+   DO ikout = 1, (NbkOutput_x*NbkOutput_y)
+            PRINT*,  ikout, kgridoutput(ikout), ( kgrid(ios,kgridoutput(ikout)), ios = 1 , 6 )  ,   weigh(ikout)  
+   ENDDO
+
+   READ ( cond_unit, *, IOSTAT=ios ) chr !Energy
+   READ ( cond_unit, *, IOSTAT=ios ) ne
+   PRINT*, "Number of Energy point in the input file = ", ne
+   ALLOCATE ( egrid(ne), STAT=ierr )
+   IF( ierr /=0 ) THEN 
+          PRINT*, TRIM(routinename),'allocating egrid', ABS(ierr)
+          STOP 
+   ENDIF 
+   ALLOCATE ( transmk(nk,ne), STAT=ierr )
+   IF( ierr /=0 ) THEN 
+          PRINT*, TRIM(routinename),'allocating transmk', ABS(ierr)
+          STOP 
+   ENDIF 
+   ALLOCATE ( transm(ne), STAT=ierr )
+   IF( ierr /=0 ) THEN 
+          PRINT*, TRIM(routinename),'allocating transm', ABS(ierr)
+          STOP 
+   ENDIF 
+
+
+  DO ik = 1, nk
+      READ ( cond_unit, *, IOSTAT=ios ) chr !  #  spin =            1  k =            1
+      PRINT*, ".... Reading transmission for ", TRIM(chr)
+      READ ( cond_unit, *, IOSTAT=ios ) chr !  #  E(eV)   Sum T(E,1->2) Sum T(E,2->1)   phase-shift    reciprocal-condition-number  min(flux_sum)  max(flux_sum) 
+      DO ie=1, ne
+ 	  READ ( cond_unit, *, IOSTAT=ios ) egrid(ie), transmk(ik,ie), chr
+      ENDDO
+   ENDDO
+
+   PRINT*, "End of Reading "
+   CLOSE( cond_unit )
+
+   PRINT*, "Summing transmission functions"
+
+   !
+
+   DO ikout = 1, (NbkOutput_x * NbkOutput_y)
+       transm(:)= transm(:) +   (transmk(kgridoutput(ikout),:) / weigh(ikout))
+   ENDDO
+   !
+
+
+
+
+
+   !
+    OPEN ( curr_unit, FILE=TRIM(fileout), FORM='formatted' )
+   !
+   DO ie = 1, ne
+       WRITE ( curr_unit, '(4(f15.9))' ) egrid(ie),  transm(ie)
+   ENDDO
+   !
+   CLOSE( curr_unit )
+
+  
+   
+   !
+   ! deallocate
+   !
+   DEALLOCATE ( egrid, STAT=ierr )
+   IF( ierr /=0 ) THEN 
+          PRINT*, TRIM(routinename),'deallocating egrid', ABS(ierr) 
+          STOP 
+   ENDIF !!!!!!TRIM(routinename),'deallocating egrid', ABS(ierr) )
+   !
+   DEALLOCATE ( kgrid, STAT=ierr )
+   IF( ierr /=0 ) THEN 
+          PRINT*, TRIM(routinename),'deallocating kgrid', ABS(ierr) 
+          STOP 
+   ENDIF !!!!!!TRIM(routinename),'deallocating Vgrid', ABS(ierr) )
+   !
+   DEALLOCATE ( transm, STAT=ierr )
+   IF( ierr /=0 ) THEN 
+          PRINT*, TRIM(routinename),'deallocating transmittance', ABS(ierr) 
+          STOP 
+   ENDIF !!!!!!TRIM(routinename),'deallocating transmittance', ABS(ierr) )
+   !
+   DEALLOCATE ( transmk, STAT=ierr )
+   IF( ierr /=0 ) THEN 
+          PRINT*, TRIM(routinename),'deallocating transmittance per k point', ABS(ierr) 
+          STOP 
+   ENDIF !!!!!!TRIM(routinename),'deallocating transmittance', ABS(ierr) )
+
+   !
+
+END PROGRAM current
+  

@@ -1,0 +1,362 @@
+!
+! Copyright (C) 2011 Molecular Foundry Berkeley
+!
+! This file is distributed under the terms of the
+! GNU General Public License. See the file `License'
+! in the root directory of the present distribution,
+! or http://www.gnu.org/copyleft/gpl.txt .
+!
+! Contributors  : Pierre DARANCET
+
+!***********************************************
+   PROGRAM conductor
+   !***********************************************
+   USE constants,                          ONLY : PI, ZERO, ONE, CZERO, CONE, CI, EPS_m5, EPS_m4, EPS_m2, EPS_m1 !ok
+   USE kinds,                              ONLY : dbl !ok
+
+   USE T_control_module,                   ONLY : debug_level,  fract => gamma_big!,  alpha
+
+
+   USE T_biasgrid_module,                      ONLY : biasgrid_allocate, biasgrid_deallocate, biasgrid_init, nbias, biasgrid !ok
+   USE T_gapgrid_module,                   ONLY : gapgrid_allocate, gapgrid_deallocate, gapgrid_init, ngap, gapgrid, gapmax, gapmin !ok
+   USE T_gammagrid_module,                 ONLY : gammagrid_allocate, gammagrid_deallocate, gammagrid_init, ngamma, gammagrid !ok
+
+
+   USE T_input_module,                     ONLY : input_manager
+
+
+
+
+
+
+
+
+   IMPLICIT NONE
+
+   !
+   ! local variables
+   !
+
+   INTEGER, PARAMETER :: Fil1 = 11 
+   INTEGER, PARAMETER :: Fil2 = 12 
+   INTEGER, PARAMETER :: Fil3 = 13
+   INTEGER, PARAMETER :: Fil4 = 14
+   INTEGER, PARAMETER :: Fil5 = 15
+   INTEGER, PARAMETER :: Fil6 = 16
+   INTEGER, PARAMETER :: Fil7 = 17
+   REAL(dbl), PARAMETER :: G0 = 77.480917*ONE*1000.0  ! NanoS
+
+ 
+   CHARACTER(100)  :: outputfile_name, chr
+   INTEGER          :: ie, ierr, ncount, igap, igamma, ibias
+   !
+
+! Contains transport fundamental variables
+! 
+
+   REAL(dbl), ALLOCATABLE              :: CurrentPositive(:,:,:) ! NanoS
+   REAL(dbl), ALLOCATABLE              :: CurrentNegative(:,:,:) ! NanoS
+   REAL(dbl), ALLOCATABLE              :: RR(:,:,:)
+   REAL(dbl), ALLOCATABLE              :: PrefactorPositive(:,:,:)
+   REAL(dbl), ALLOCATABLE              :: PrefactorNegative(:,:,:)
+   REAL(dbl), ALLOCATABLE              :: Ene_resonancePositive(:,:,:), Ene_resonanceNegative(:,:,:)
+   REAL(dbl), ALLOCATABLE              :: gamma_small(:), gamma_big(:), alpha(:)
+
+!
+!------------------------------
+! main body
+!------------------------------
+!   !
+   ! read input file
+   !
+
+
+   CALL input_manager()
+   !
+   ! init
+   !
+      !
+  
+
+
+     ALLOCATE ( CurrentPositive(ngamma, ngap,nbias), STAT=ierr )
+         IF( ierr /=0 ) THEN 
+            PRINT*, "Error allocating current"
+            STOP
+         ENDIF 
+
+     ALLOCATE ( CurrentNegative(ngamma, ngap,nbias), STAT=ierr )
+         IF( ierr /=0 ) THEN 
+            PRINT*, "Error allocating current"
+            STOP
+         ENDIF 
+
+
+     ALLOCATE ( RR(ngamma, ngap,nbias), STAT=ierr )
+         IF( ierr /=0 ) THEN 
+            PRINT*, "Error allocating rectification ratio"
+            STOP
+         ENDIF 
+    ALLOCATE ( PrefactorPositive(ngamma, ngap,nbias), STAT=ierr )
+         IF( ierr /=0 ) THEN 
+            PRINT*, "Error allocating rectification ratio2"
+            STOP
+         ENDIF 
+    ALLOCATE ( PrefactorNegative(ngamma, ngap,nbias), STAT=ierr )
+         IF( ierr /=0 ) THEN 
+            PRINT*, "Error allocating rectification ratio2"
+            STOP
+         ENDIF 
+    ALLOCATE ( Ene_resonancePositive(ngamma, ngap,nbias), STAT=ierr )
+         IF( ierr /=0 ) THEN 
+            PRINT*, "Error allocating ene 1"
+            STOP
+         ENDIF 
+    ALLOCATE ( Ene_resonanceNegative(ngamma, ngap,nbias), STAT=ierr )
+         IF( ierr /=0 ) THEN 
+            PRINT*, "Error allocating ene 2"
+            STOP
+         ENDIF 
+
+   ALLOCATE ( gamma_small(ngamma), STAT=ierr )
+         IF( ierr /=0 ) THEN 
+            PRINT*, "Error allocating ngammasmall"
+            STOP
+         ENDIF 
+   ALLOCATE ( gamma_big(ngamma), STAT=ierr )
+         IF( ierr /=0 ) THEN 
+            PRINT*, "Error allocating ngammabig"
+            STOP
+         ENDIF 
+   ALLOCATE ( alpha(ngamma), STAT=ierr )
+         IF( ierr /=0 ) THEN 
+            PRINT*, "Error allocating alpha"
+            STOP
+         ENDIF 
+
+
+    gamma_small(:)= ZERO
+    gamma_big(:)= ZERO
+    alpha(:)= ZERO
+
+       RR(:,:,:) = ZERO
+       CurrentPositive(:,:,:) = ZERO
+       CurrentNegative(:,:,:) = ZERO
+       PrefactorPositive(:,:,:) = ZERO
+       PrefactorNegative(:,:,:) = ZERO
+       Ene_resonancePositive(:,:,:) = ZERO
+       Ene_resonanceNegative(:,:,:) = ZERO
+
+    PRINT*, 'Beginning grid allocations'
+
+   !
+    CALL biasgrid_allocate()
+    CALL gammagrid_allocate()
+    CALL gapgrid_allocate()
+  
+
+    PRINT*, 'Beginning Main Loop'
+
+    CALL gammagrid_init()
+    CALL gapgrid_init()
+    CALL biasgrid_init()
+   !
+
+
+
+
+   gamma_loop: &
+   DO igamma=1, ngamma
+      alpha(igamma) = -log(gammagrid(igamma)) / ((2*fract)**2)
+      IF  ( ABS (alpha(igamma)) > ONE ) THEN
+           alpha(igamma) = ONE  
+      ENDIF
+       
+      gamma_big(igamma)   =   exp( - (  ( fract * (ONE - alpha(igamma)))**2 )  /2.0  )
+      gamma_small(igamma) =  gammagrid(igamma) * gamma_big(igamma)
+
+
+	   DO ibias = 1,nbias 
+
+	   gap_loop: &
+	   DO igap=1, ngap
+
+                   Ene_resonancePositive(igamma,igap,ibias) = (biasgrid(ibias)/2.0) * alpha(igamma) + gapgrid(igap)
+
+                   
+		   !Forward bias
+		   CurrentPositive(igamma,igap,ibias)=ZERO
+                   PrefactorPositive(igamma,igap,ibias) = 2.0*PI*  gamma_small(igamma) / (ONE +  (gamma_small(igamma) / gamma_big(igamma)))
+                   CurrentPositive(igamma,igap,ibias)=G0 * (PrefactorPositive(igamma,igap,ibias) /PI) * (  ATAN(( (biasgrid(ibias)/2.0) + Ene_resonancePositive(igamma,igap,ibias) )/( (ONE +  (gamma_small(igamma) / gamma_big(igamma)))*gamma_big(igamma)/2.0 ) ) +  ATAN(( (biasgrid(ibias)/2.0) -Ene_resonancePositive(igamma,igap,ibias) )/( (ONE +  (gamma_small(igamma) / gamma_big(igamma)))*gamma_big(igamma)/2.0 ) ) )
+
+	           !Reverse bias
+                   Ene_resonanceNegative(igamma,igap,ibias) = (-biasgrid(ibias)/2.0) * alpha(igamma) + gapgrid(igap)
+
+                   PrefactorNegative(igamma,igap,ibias) = 2.0*PI*  gamma_small(igamma) / (ONE +  (gamma_small(igamma) / gamma_big(igamma)))
+       		   CurrentNegative(igamma,igap,ibias)=ZERO
+                   CurrentNegative(igamma,igap,ibias)=G0 * (PrefactorNegative(igamma,igap,ibias) /PI) * (  ATAN(( (-biasgrid(ibias)/2.0) + Ene_resonanceNegative(igamma,igap,ibias) )/( (ONE +  (gamma_small(igamma) / gamma_big(igamma)))*gamma_big(igamma)/2.0 ) ) +  ATAN(( (-biasgrid(ibias)/2.0) - Ene_resonanceNegative(igamma,igap,ibias) )/( (ONE +  (gamma_small(igamma) / gamma_big(igamma)))*gamma_big(igamma)/2.0 ) ) )
+  
+  
+         	    RR(igamma, igap,ibias)=-CurrentPositive(igamma,igap,ibias) / CurrentNegative(igamma,igap,ibias)
+ 
+                   !
+	   ENDDO gap_loop  
+   ENDDO ! bias loop
+   ENDDO gamma_loop
+
+
+
+
+!
+! ... writedata on files
+!
+
+  PRINT*, "Writing output files"
+
+
+
+  PRINT*, "  ...Writing results"    
+   
+   !
+
+   DO ibias = 1,nbias 
+        WRITE (outputfile_name,*) TRIM("RectificationRatio"),  biasgrid(ibias), TRIM(".dat")   
+        OPEN ( Fil4, FILE=TRIM(outputfile_name), FORM='formatted' )
+	   DO igamma = 1, ngamma
+		DO igap = 1, ngap
+            		WRITE (Fil4, '(3(f15.9))' ) gammagrid(igamma) ,  gapgrid(igap) ,  RR(igamma,igap,ibias)
+        	ENDDO
+		WRITE (Fil4, '(2(e15.9))' )
+	   ENDDO
+           CLOSE(Fil4)
+   ENDDO 
+
+   DO ibias = 1,nbias 
+        WRITE (outputfile_name,*) TRIM("RectificationRatioInv"),  biasgrid(ibias), TRIM(".dat")   
+        OPEN ( Fil4, FILE=TRIM(outputfile_name), FORM='formatted' )
+	   DO igamma = 1, ngamma
+		DO igap = 1, ngap
+            		WRITE (Fil4, '(3(f15.9))' ) gammagrid(igamma),  gapgrid(igap) ,  ONE/RR(igamma,igap,ibias)
+        	ENDDO
+		WRITE (Fil4, '(2(e15.9))' )
+	   ENDDO
+           CLOSE(Fil4)
+   ENDDO 
+   DO ibias = 1,nbias 
+        WRITE (outputfile_name,*) TRIM("ResonancePositive-Negative"),  biasgrid(ibias), TRIM(".dat")   
+        OPEN ( Fil4, FILE=TRIM(outputfile_name), FORM='formatted' )
+	   DO igamma = 1, ngamma
+		DO igap = 1, ngap
+            		WRITE (Fil4, '(3(f15.9))' ) gammagrid(igamma),  gapgrid(igap) , (Ene_resonancePositive(igamma,igap,ibias) - Ene_resonanceNegative(igamma,igap,ibias))
+        	ENDDO
+		WRITE (Fil4, '(2(e15.9))' )
+	   ENDDO
+           CLOSE(Fil4)
+   ENDDO 
+
+
+   IF ( debug_level > 2) THEN
+
+          !PRINT GRIDS
+	   OPEN ( Fil5, FILE='gammagrid.dat', FORM='formatted' )
+	   DO igamma = 1, ngamma
+	           WRITE (Fil5, '(I10,f15.9)' )  igamma, gammagrid(igamma) 
+	   ENDDO
+	   CLOSE( Fil5 )
+          !PRINT GRIDS
+	   OPEN ( Fil5, FILE='gapgrid.dat', FORM='formatted' )
+	   DO igap = 1, ngap
+	           WRITE (Fil5, '(I10,f15.9)' )  igap, gapgrid(igap) 
+	   ENDDO
+	   CLOSE( Fil5 )
+
+          !PRINT GRIDS
+	   OPEN ( Fil5, FILE='biasgrid.dat', FORM='formatted' )
+	   DO ibias = 1, nbias
+	           WRITE (Fil5, '(I10,f15.9)' )  ibias, biasgrid(ibias) 
+	   ENDDO
+	   CLOSE( Fil5 )
+
+	   OPEN ( Fil5, FILE='GammaRelations.dat', FORM='formatted' )
+	   DO igamma = 1, ngamma
+	           WRITE (Fil5, '(I10,f15.9)' )  igamma, gammagrid(igamma),  alpha(igamma),  gamma_big(igamma),  gamma_small(igamma)
+
+	   ENDDO
+	   CLOSE( Fil5 )
+
+
+
+   ENDIF
+
+
+!
+!...  free memory
+!
+
+  PRINT*, "Deallocate grids"
+  CALL gammagrid_deallocate()
+  CALL biasgrid_deallocate()
+  CALL gapgrid_deallocate()
+  
+
+
+  PRINT*, "Deallocate transport variables"
+    DEALLOCATE ( CurrentPositive, STAT=ierr )
+         IF( ierr /=0 ) THEN 
+            PRINT*, "Error deallocating current"
+            STOP
+         ENDIF 
+    DEALLOCATE ( CurrentNegative, STAT=ierr )
+         IF( ierr /=0 ) THEN 
+            PRINT*, "Error deallocating current"
+            STOP
+         ENDIF 
+    DEALLOCATE ( PrefactorPositive, STAT=ierr )
+         IF( ierr /=0 ) THEN 
+            PRINT*, "Error deallocating prefactor"
+            STOP
+         ENDIF 
+  DEALLOCATE ( PrefactorNegative, STAT=ierr )
+         IF( ierr /=0 ) THEN 
+            PRINT*, "Error deallocating prefactor"
+            STOP
+         ENDIF 
+
+     DEALLOCATE ( RR, STAT=ierr )
+         IF( ierr /=0 ) THEN 
+            PRINT*, "Error deallocating rectification ratio"
+            STOP
+         ENDIF 
+
+     DEALLOCATE ( gamma_small, STAT=ierr )
+         IF( ierr /=0 ) THEN 
+            PRINT*, "Error deallocating rectification ratio"
+            STOP
+         ENDIF 
+     DEALLOCATE ( gamma_big, STAT=ierr )
+         IF( ierr /=0 ) THEN 
+            PRINT*, "Error deallocating rectification ratio"
+            STOP
+         ENDIF 
+     DEALLOCATE ( alpha, STAT=ierr )
+         IF( ierr /=0 ) THEN 
+            PRINT*, "Error deallocating rectification ratio"
+            STOP
+         ENDIF 
+     DEALLOCATE ( Ene_resonancePositive, STAT=ierr )
+         IF( ierr /=0 ) THEN 
+            PRINT*, "Error deallocating rectification ratio"
+            STOP
+         ENDIF 
+     DEALLOCATE ( Ene_resonanceNegative, STAT=ierr )
+         IF( ierr /=0 ) THEN 
+            PRINT*, "Error deallocating Ene_resonanceNegative"
+            STOP
+         ENDIF 
+
+
+ 
+ PRINT*, "End"
+
+
+END PROGRAM conductor

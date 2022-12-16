@@ -1,0 +1,68 @@
+#!/bin/bash
+WORKDIR=`pwd`
+DIRLIST="$1"
+NATOMS=20
+NSPECIES=3
+
+echo "DIRLIST=${DIRLIST}"
+
+for dir in ${DIRLIST}
+do 
+	echo $dir
+	cd $WORKDIR/$dir
+	echo "TARGET=$WORKDIR/$dir"
+	pwd
+	if [ "$WORKDIR/$dir" = `pwd` ]; then 
+		echo '# -- PBS script for nano --' >run
+		echo '#!/bin/bash' >>run
+		echo '# specify the queue: nano or debug-nano' >>run
+		echo '#PBS -q nano2' >>run
+		echo '# specify number of nodes and processors per node' >>run
+		echo '#PBS -l walltime=20:00:00' >>run
+		echo '#PBS -l nodes=4:ppn=2:nano' >>run
+		echo '# specify output for STDERR and STDOUT' >>run
+		echo '#PBS -e job.err' >>run
+		echo '#PBS -o job.out' >>run
+		echo "#PBS -N $dir" >>run
+		echo '#PBS -m e -M pdarancet@lbl.gov' >>run
+		echo '#executable commands...' >>run
+		echo 'cd $PBS_O_WORKDIR' >>run
+		echo 'module load  qchem/4.0.0.1' >>run
+		echo 'export QCSCRATCH=$PBS_O_WORKDIR' >>run
+		echo '/global/software/sl-6.x86_64/modules/tools/qchem/4.0.0.1/bin/qchem -pbs -save -np 8 cation.in  Cation.out scratch_cation' >>run
+		echo '/global/software/sl-6.x86_64/modules/tools/qchem/4.0.0.1/bin/qchem -pbs -save -np 8 anion.in   Anion.out scratch_anion' >>run
+		echo '/global/software/sl-6.x86_64/modules/tools/qchem/4.0.0.1/bin/qchem -pbs -save -np 8 neutral.in Neutral.out scratch_neutral' >>run
+		echo '$molecule'> anion.in
+		echo '-1 2'>> anion.in
+		echo '$molecule'> cation.in
+		echo '1 2'>> cation.in
+		echo '$molecule'> neutral.in
+		echo '0 1'>> neutral.in
+		SOURCEDIR=`echo ${dir%_MOL_DELTASCF}`
+		SOURCEFILE=`ls $WORKDIR/$SOURCEDIR/ | grep '_2x2cold.xyz'`
+		for file in anion.in cation.in neutral.in
+		do
+			TMP="$(echo "scale=10; $NATOMS + 2" | bc)" 
+			head -$TMP  $WORKDIR/$SOURCEDIR/$SOURCEFILE | tail -n $NATOMS >> ${file}
+			echo '$end' >> ${file}
+			echo '$rem' >> ${file}
+			echo ' jobtype                sp' >> ${file}
+			echo ' EXCHANGE		b3lyp' >> ${file}
+			echo ' XC_GRID		1' >> ${file}
+			echo ' MAX_SCF_CYCLES		300' >> ${file}
+			echo ' SCF_ALGORITHM          RCA_DIIS' >> ${file}
+			echo ' INCDFT			FALSE' >> ${file}
+			echo ' SYMMETRY               FALSE' >> ${file}
+			echo ' SYM_IGNORE             TRUE' >> ${file}
+			echo ' MOLDEN_FORMAT		TRUE' >> ${file}
+			echo ' basis                  6-311++G**' >> ${file}
+			echo ' SCF_FINAL_PRINT        1' >> ${file}
+			#echo ' THRESH                 14' >> ${file}
+			echo '$end' >> ${file}
+
+
+
+		done
+		qsub run
+	fi
+done

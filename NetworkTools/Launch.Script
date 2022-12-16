@@ -1,0 +1,85 @@
+#!/bin/bash
+SCRATCHDIRECTORY=`pwd`
+Jobslistout="LaunchJobs.20120602"
+JOBSDIRECTORY="jobs"
+JOBSDIRECTORYCOMMON="jobs/COMMON"
+JUNCTIONLIST="UDOAKBEN00 UDOAKBEN30 UDOAKBEN90 UDOAKDUR DOAKBEN00 DOAKBEN30 PPV1TRIMTRIM PPV2TRIMTRIM PPV3TRIMTRIM PPV4TRIMTRIM PPV5TRIMTRIM"
+BIASLIST="-100 -50 0 50 100"
+mkdir $SCRATCHDIRECTORY/temp
+
+
+#############################################
+#############################################
+#############################################
+#LOOP for LOCAL_M in 1 2 3 4 5
+
+
+for LOCALDIR in $JUNCTIONLIST
+do
+
+cd $SCRATCHDIRECTORY/temp
+
+echo "Launching Junction: " $LOCALDIR
+
+#############################################
+#############################################
+# BIAS LOOP
+for BIAS  in  $BIASLIST
+do
+cd $SCRATCHDIRECTORY/temp
+echo "Launching Junction: " $LOCALDIR" at bias " $BIAS
+mkdir  $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS
+cd  $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS
+echo "Target Directory: "  $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS
+echo "Actual Directory: " `pwd`
+ln -s ../*.psf ./
+############################################# COMMON
+cp $SCRATCHDIRECTORY/$JOBSDIRECTORYCOMMON/leftlead.fdf     $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/
+cp $SCRATCHDIRECTORY/$JOBSDIRECTORYCOMMON/rightlead.fdf    $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/
+cp $SCRATCHDIRECTORY/$JOBSDIRECTORYCOMMON/periodic.fdf     $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/
+cp $SCRATCHDIRECTORY/$JOBSDIRECTORYCOMMON/dp.output        $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/files.output
+cp $SCRATCHDIRECTORY/$JOBSDIRECTORYCOMMON/5.precision      $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/convergence.precision
+cp $SCRATCHDIRECTORY/$JOBSDIRECTORYCOMMON/large.grid       $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/
+cp $SCRATCHDIRECTORY/$JOBSDIRECTORYCOMMON/small.grid       $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/
+cp $SCRATCHDIRECTORY/$JOBSDIRECTORYCOMMON/main2_large.fdf  $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/main2_large.fdf 
+cp $SCRATCHDIRECTORY/$JOBSDIRECTORYCOMMON/main2_small.fdf  $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/main2_small.fdf 
+############# Main (0 bias or Finite Bias)
+if [ "$BIAS" = "0" ]; then
+cp $SCRATCHDIRECTORY/$JOBSDIRECTORYCOMMON/main1.fdf     $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/main_density.fdf
+else
+cp $SCRATCHDIRECTORY/$JOBSDIRECTORYCOMMON/main3.fdf     $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/main_density.fdf 
+fi
+############# Run Density
+cat $SCRATCHDIRECTORY/$JOBSDIRECTORYCOMMON/run_begin       >  $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/run$LOCALDIR\_$BIAS.density 
+jobname=`echo $LOCALDIR $BIAS "-Den"  | tr -d ' '`
+echo "#PBS -N"  $jobname >> $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/run$LOCALDIR\_$BIAS.density
+cat $SCRATCHDIRECTORY/$JOBSDIRECTORYCOMMON/run_d           >>  $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/run$LOCALDIR\_$BIAS.density
+############# Run Transport  
+cat $SCRATCHDIRECTORY/$JOBSDIRECTORYCOMMON/run_begin       >  $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/run$LOCALDIR\_$BIAS.transport 
+jobname=`echo $LOCALDIR "-Tr"  | tr -d ' '`
+echo "#PBS -N"  $jobname >> $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/run$LOCALDIR\_$BIAS.transport 
+if [ "$BIAS" = "0" ]; then
+cat $SCRATCHDIRECTORY/$JOBSDIRECTORYCOMMON/run_t_0         >>  $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/run$LOCALDIR\_$BIAS.transport
+else
+cat $SCRATCHDIRECTORY/$JOBSDIRECTORYCOMMON/run_t           >>  $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/run$LOCALDIR\_$BIAS.transport
+fi
+
+############################################# Junction/Bias Specific
+cp $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/$LOCALDIR\.main$BIAS\.lattice   $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/main.lattice
+cp $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/$LOCALDIR\.leftlead.coord       $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/leftlead.coord
+cp $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/$LOCALDIR\.rightlead.coord      $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/rightlead.coord
+cp $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/$LOCALDIR\.periodic.coord       $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/periodic.coord 
+cp $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/$LOCALDIR\.main.coord           $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/main.coord
+cp $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/$LOCALDIR\.DFT.0.shift_mo       $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/DFT.0.shift_mo 
+echo $LOCALDIR "Setup Directory: Completed for Bias "  $BIAS
+qsub -h run$LOCALDIR\_$BIAS.density   
+qsub -h run$LOCALDIR\_$BIAS.transport  
+cd $SCRATCHDIRECTORY/temp
+done
+echo "Completed for Junction: "  $LOCALDIR
+done
+
+echo "Done"
+
+
+

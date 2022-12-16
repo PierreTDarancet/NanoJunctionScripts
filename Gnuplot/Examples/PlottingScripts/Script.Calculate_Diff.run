@@ -1,0 +1,119 @@
+#!/bin/bash
+#############################################
+##### Calculation VARIABLES		#####
+#############################################
+SCRATCHDIRECTORY=`pwd`
+OUTDIRECTORY="Diff"
+CUBEFILENAME="Temp.cube"
+REFERENCEDENSITYFILE="0"
+REFERENCEPOTENTIALFILE="0"
+JUNCTIONLIST="CGBSTRIMTRIM"
+BIASLIST="-1000 -500 -100 -50 0 50 100 500 1000"
+DENSITYDIFFEXE=/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+POTENTIALDIFFEXE=/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+#############################################
+##### GNUPLOT VARIABLES			#####
+#############################################
+GNUPLOTFILE="Makeplot.Seebeck.rungp"
+GNUPLOTEXE="gnuplot"
+GNUPLOTDIRECTORYCOMMON=$SCRATCHDIRECTORY/GPFILES
+SPECSCOMMON=$SCRATCHDIRECTORY/SPECSFILES
+#############################################
+#############################################
+#############################################
+
+mkdir $SCRATCHDIRECTORY/temp
+
+
+echo SCRATCHDIRECTORY
+echo $SCRATCHDIRECTORY
+
+#############################################
+#############################################
+#############################################
+#LOOP for LOCAL_M in 1 2 3 4 5
+for LOCALDIR in $JUNCTIONLIST
+do
+cd $SCRATCHDIRECTORY/temp
+echo "Launching Junction: " $LOCALDIR
+cd $SCRATCHDIRECTORY/$LOCALDIR
+echo "Target Directory: "  $SCRATCHDIRECTORY/$LOCALDIR
+echo "Actual Directory: " `pwd`
+#############################################
+mkdir $SCRATCHDIRECTORY/$LOCALDIR/$OUTDIRECTORY
+cd $SCRATCHDIRECTORY/temp/
+rm ./*
+# BIAS LOOP
+for BIAS  in  $BIASLIST
+do
+echo "Launching Junction: " $LOCALDIR" at bias " $BIAS
+############################################# 
+cp  $SCRATCHDIRECTORY/$LOCALDIR/$REFERENCEDENSITYFILE\.RHO  $SCRATCHDIRECTORY/temp/
+cp  $SCRATCHDIRECTORY/$LOCALDIR/$BIAS\.RHO                  $SCRATCHDIRECTORY/temp/
+cp  $SCRATCHDIRECTORY/$LOCALDIR/main.xyz                   $SCRATCHDIRECTORY/temp/
+
+rm $SCRATCHDIRECTORY/temp/DATA.in
+echo  "Creating Density INPUT FILE"
+echo  $REFERENCEDENSITYFILE ".RHO" | tr -d ' ' >  DATA.in
+echo  $BIAS ".RHO"  | tr -d ' ' >> DATA.in
+echo "main.xyz"                 >> DATA.in
+echo  $CUBEFILENAME | tr -d ' ' >> DATA.in
+echo  $BIAS ".deltad.x.gp" | tr -d ' '  >> DATA.in
+echo  $BIAS ".deltad.y.gp" | tr -d ' '  >> DATA.in
+echo  $BIAS ".deltad.xy.dat" | tr -d ' '>> DATA.in
+echo  $REFERENCEDENSITYFILE ".d.xy.dat" | tr -d ' '>> DATA.in
+echo  $BIAS ".d.xy.dat" | tr -d ' '     >> DATA.in
+#echo "main.xyz"                 >> DATA.in
+echo  "... DONE"
+echo  "Running Density Difference"
+nohup $DENSITYDIFFEXE > $BIAS\.DensityDifference.out 
+echo  "... DONE"
+
+rm $SCRATCHDIRECTORY/temp/DATA.in
+############################################# 
+cp  $SCRATCHDIRECTORY/$LOCALDIR/$REFERENCEDENSITYFILE\.VH  $SCRATCHDIRECTORY/temp/
+cp  $SCRATCHDIRECTORY/$LOCALDIR/$BIAS\.VH                  $SCRATCHDIRECTORY/temp/
+
+echo  "Creating POTENTIAL INPUT FILE"
+echo  $REFERENCEDENSITYFILE ".RHO" | tr -d ' ' >  DATA.in
+echo  $BIAS ".RHO"  | tr -d ' ' >> DATA.in
+echo  $REFERENCEPOTENTIALFILE ".VH" | tr -d ' ' >>  DATA.in
+echo  $BIAS ".VH"  | tr -d ' ' >> DATA.in
+echo "main.xyz"                 >> DATA.in
+echo  $CUBEFILENAME | tr -d ' ' >> DATA.in
+echo  $BIAS ".deltavh.x.gp" | tr -d ' '  >> DATA.in
+echo  $BIAS ".deltavh.y.gp" | tr -d ' '  >> DATA.in
+echo  $BIAS ".deltavh.xy.dat" | tr -d ' '>> DATA.in
+echo  $REFERENCEPOTENTIALFILE ".vh.xy.dat" | tr -d ' '>> DATA.in
+echo  $BIAS ".vh.xy.dat" | tr -d ' '     >> DATA.in
+echo  "... DONE"
+echo  "Running Potential Difference"
+nohup $POTENTIALDIFFEXE > $BIAS\.PotentialDifference.out 
+echo  "... DONE"
+############################################# 
+done
+#############################################
+##### GNUPLOT/SAVING			#####
+#############################################
+echo  "Saving Output Files"
+cp $SCRATCHDIRECTORY/temp/*.dat $SCRATCHDIRECTORY/$LOCALDIR/$OUTDIRECTORY
+cp $SCRATCHDIRECTORY/temp/*.gp  $SCRATCHDIRECTORY/$LOCALDIR/$OUTDIRECTORY
+cp $SCRATCHDIRECTORY/temp/*.out $SCRATCHDIRECTORY/$LOCALDIR/$OUTDIRECTORY
+#ln -s $GNUPLOTDIRECTORYCOMMON/*.setgp   $SCRATCHDIRECTORY/temp/
+#ln -s $GNUPLOTDIRECTORYCOMMON/*.rungp   $SCRATCHDIRECTORY/temp/
+#ln -s $GNUPLOTDIRECTORYCOMMON/*.plt     $SCRATCHDIRECTORY/temp/
+#cp $SPECSCOMMON/$LOCALDIR\.ingp   $SCRATCHDIRECTORY/temp/specs.ingp
+#cp $SPECSCOMMON/common.ingp       $SCRATCHDIRECTORY/temp/common.ingp
+
+echo  "... DONE"
+
+echo  "Plotting Output Files"
+
+echo "Completed for Junction: "  $LOCALDIR
+
+done
+
+echo "Done"
+
+
+

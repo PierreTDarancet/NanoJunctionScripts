@@ -1,0 +1,6 @@
+#in Debye 
+YMIN=0
+YMAX=39
+YTICS=5
+YLABEL= '{/Symbol D m} [D]'
+

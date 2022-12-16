@@ -1,0 +1,77 @@
+reset
+PLOT_TYPE="Fig2_AbsVsFragments"
+PLOTNAME="Fig2_AbsVsFragments"
+set terminal  postscript enhanced font 'Helvetica,20'
+unset pm3d
+OUTPUT_NAME=sprintf("%s.ps",PLOTNAME);
+RydtoeV=13.605
+eVtoRyd=1.0/13.605
+
+set output OUTPUT_NAME
+
+
+
+load "PS.setgp"
+load  "Fig2.1plot.setgp"
+load  "Fig2.INPUTFILES.datgp"
+load  "Fig2.X.EnergyRange.datgp"
+load  "Fig2.Y.AbsorptionRange.datgp"
+load "Fig2.Styles.Lines.setgp"
+
+
+set size ratio SIZE_RATIO
+LMARGIN = LMARGIN_1
+RMARGIN = RMARGIN_1
+TMARGIN = TMARGIN_1
+BMARGIN = BMARGIN_1
+SETXLABEL = SETXLABEL_1
+SETYLABEL = SETYLABEL_1
+
+set border 1
+unset colorbox
+set key outside spacing 3.5 
+unset title
+unset contour
+unset xlabel
+unset ylabel
+unset cblabel
+unset xtics
+unset ytics
+unset cbtics
+set lmargin at screen LMARGIN
+set rmargin at screen RMARGIN
+set tmargin at screen TMARGIN
+set bmargin at screen BMARGIN
+
+set xrange [XMIN:XMAX]
+set yrange [YMIN:YMAX]
+
+if (SETXLABEL) set xlabel XLABEL font 'Helvetica,20' offset 0,-1
+set xtics  XTICS nomirror  font 'Helvetica,0.1'
+set mxtics 2
+if (SETXLABEL) set xtics  XTICS nomirror  font 'Helvetica,20'
+if (SETYLABEL) set ylabel YLABEL font 'Helvetica,20'  offset -2,0
+set ytics  YTICS nomirror  font 'Helvetica,0.1'
+if (SETYLABEL) set ytics nomirror YTICS font 'Helvetica,20'
+#set mytics 2
+OFFSET_1=1
+OFFSET_2=0.8
+OFFSET_3=0.6
+OFFSET_4=0.4
+OFFSET_5=0.2
+OFFSET_6=0.0
+plot    INPUT_FILE_D using 1:($2+OFFSET_1)   w filledcurves  y1=OFFSET_1 ls 7 title "{/Helvetica=20 D_{2}B_{2}A_{2}}",  \
+        INPUT_FILE_D using 1:($2+OFFSET_1)   w l ls 4  notitle, \
+	INPUT_FILE_C using 1:($2+OFFSET_2)   w filledcurves  y1=OFFSET_2 ls 10 title "{/Helvetica=20 D_{2}B_{1}A_{2}}", \
+	INPUT_FILE_C using 1:($2+OFFSET_2)   w l ls 4 notitle, \
+	INPUT_FILE_A using 1:($8+OFFSET_3)   w filledcurves  y1=OFFSET_3 ls 12 title "{/Helvetica=20 D_{2}}",  \
+	INPUT_FILE_A using 1:($8+OFFSET_3)   w l ls 4 notitle,  \
+	INPUT_FILE_A using 1:($4+OFFSET_4)   w filledcurves  y1=OFFSET_4 ls 2  title "{/Helvetica=20 B_{1}}", \
+	INPUT_FILE_A using 1:($4+OFFSET_4)   w l ls 4  notitle, \
+	INPUT_FILE_B using 1:($2+OFFSET_5)   w filledcurves  y1=OFFSET_5 ls 1  title "{/Helvetica=20 B_{2}}", \
+	INPUT_FILE_B using 1:($2+OFFSET_5)   w l ls 4  notitle, \
+	INPUT_FILE_A using 1:($6+OFFSET_6)   w filledcurves  y1=OFFSET_6 ls 5  title "{/Helvetica=20 A_{2}}", \
+	INPUT_FILE_A using 1:($6+OFFSET_6)   w l ls 4  notitle
+
+
+#, INPUT_FILE_B using 1:2:4  with labels font 'Helvetica,20'  offset +8

@@ -1,0 +1,117 @@
+#!/bin/bash
+MYNAME="LAUNCHBOOMERANG" 
+OUTPUTSCRIPT="boomerang_submit.sh"
+BOOMERANGEXE="/home/darancet/bin/boomerang.py"
+VASPINPUTSCRIPT="/home/darancet/bin/VASP.INPUT.GENERATOR"
+VASPOUTPUTSCRIPT="/home/darancet/bin/VASP.OUTPUT.MANAGER"
+EMAIL="pierre.darancet@gmail.com"
+NOW=`date`
+EMAILMESSAGE=`echo "/tmp/Tmp.file.emailcontent.$NOW.pierre.darancet.txt" | tr -d ' '`
+EMAILCOMMAND="/usr/bin/mail"
+
+
+LOCALDIR=`pwd`
+# Copyright (C) 2012 Colunbia University
+#
+# This file is distributed under the terms of the
+# GNU General Public License. See the file `License'
+# in the root directory of the present distribution,
+# or http://www.gnu.org/copyleft/gpl.txt .
+#
+# Contributors  : Pierre Darancet
+# ***********************************************
+#
+# This program calls the Oneshot.General Script to launch 
+# a calculation on a given machine
+# ARGUMENTS  
+# $1 = JOBTYPE LIST
+# $2 = OPT ARGUMENTS
+# $ = READMEINFO
+echo '# ********************************************************#'
+echo '# *  Launch Script: Version 0.1                          *#'
+echo '# ********************************************************#'
+echo '# Copyright (C) 2012-13 Columbia University               #'
+echo '#                                                         #'
+echo '# This file is distributed under the terms of the         #'
+echo '# GNU General Public License. See the file License        #'
+echo '# in the root directory of the present distribution,      #'
+echo '# or http://www.gnu.org/copyleft/gpl.txt .                #'
+echo '#                                                         #'
+echo '# Contributors  : Pierre Darancet                         #'
+echo '# ********************************************************#'
+echo '#                                                         #'
+echo '# This program calls the Oneshot.General Script to launch #'
+echo '# a calculation on a given machine                        #'
+echo '# ARGUMENTS                                               #'
+echo '# $1 = JOBTYPE LIST                                       #'
+echo '# $2 = OPTARGUMENT                                        #'
+echo '# $3 = READMEINFO                                         #'
+echo '# ********************************************************#'
+##################################################
+echo "$MYNAME $MYVERSION beginning at" `date`  
+##################################################
+echo '# SCRIPT WAS CALLED BY: #'
+echo "${0} $@"
+echo 'JOPTYPE LIST:      ' $1
+echo 'OPTIONAL ARGUMENT: ' $2
+echo 'READMEINFO:        ' $3
+echo '# ********************************************************#'
+echo '# Calculation will take place in the following directory: #'
+pwd
+echo '# ********************************************************#'
+JOBTYPELIST="$1"
+echo '# ********************************************************#'
+echo '# Preparing Boomerang Script                                    '
+NOW=`date "+%Y-%m-%dT-%H%M%S"`
+OUTPUTSCRIPT_DATE=`echo "boomerang.${NOW}" | tr -d ' '`
+DATEFOREMAIL="`date`"
+echo "# This script has been generated on $NOW" > ./$OUTPUTSCRIPT_DATE 
+echo "# Launched on `hostname`"
+echo "# It will execute the following jobs  $JOBTYPELIST" >> ./$OUTPUTSCRIPT_DATE 
+echo "# OPTIONS: $2 " >> ./$OUTPUTSCRIPT_DATE 
+echo "# README INFO:  $3                #" >> ./$OUTPUTSCRIPT_DATE 
+for JOBTYPE in  $JOBTYPELIST
+do
+	echo "Job type:"  $JOBTYPE
+	echo "#Job type:  $JOBTYPE" >> ./$OUTPUTSCRIPT_DATE 
+	echo "$VASPINPUTSCRIPT \"$JOBTYPE\" \"$2\"  \"$3\" > ./VASPINPUTSCRIPT.${JOBTYPE}.out" >> ./$OUTPUTSCRIPT_DATE 
+	echo "#EXE:  $JOBTYPE" >> ./$OUTPUTSCRIPT_DATE 
+	echo "mv ./vaspexe ./vaspexe.XXXX" >> ./$OUTPUTSCRIPT_DATE 
+	echo "/usr/bin/time -a -o $JOBTYPE.err -f \"\\n%PCPU \\n%U user-sec \\n%S system-sec \\n%E elapsed-hr:min:sec \\n%e elapsed-sec\" ./vaspexe.XXXX > $JOBTYPE.out " >> ./$OUTPUTSCRIPT_DATE 
+	echo "#OUTPUTMANAGER:  $JOBTYPE" >> ./$OUTPUTSCRIPT_DATE 
+	echo "if [ -f $VASPOUTPUTSCRIPT ]; then $VASPOUTPUTSCRIPT  \"$JOBTYPE\" > ./VASPOUTPUTSCRIPT.${JOBTYPE}.out ; fi " >> ./$OUTPUTSCRIPT_DATE 
+	echo "rm ./vaspexe.XXXX" >> ./$OUTPUTSCRIPT_DATE
+	##################################################
+	# EMAIL Beginning
+	##################################################
+	echo "EMAILCOMMAND=\`which mail\`" >>./$OUTPUTSCRIPT_DATE 
+	echo "EMAILMESSAGE=$EMAILMESSAGE" >>./$OUTPUTSCRIPT_DATE 
+	echo "echo \"Original Directory: `pwd`\">> \$EMAILMESSAGE">>./$OUTPUTSCRIPT_DATE 
+	echo "echo \"JOB $JOBTYPE done on \`hostname\`\"   >>\$EMAILMESSAGE">>./$OUTPUTSCRIPT_DATE 
+	echo "echo \"Local DIR \`pwd\`\"   >>\$EMAILMESSAGE">>./$OUTPUTSCRIPT_DATE 
+	echo "echo \"Job Starting at $DATEFOREMAIL\" >>\$EMAILMESSAGE">>./$OUTPUTSCRIPT_DATE
+	echo "echo \"Job Ending at \`date\`\" >>\$EMAILMESSAGE">>./$OUTPUTSCRIPT_DATE
+ 
+	##################################################
+	# EMAIL
+	###################################################
+	echo "SUBJECT=\"`pwd`\"">>./$OUTPUTSCRIPT_DATE 
+	echo "\`\$EMAILCOMMAND -s \"\$SUBJECT\" \"$EMAIL\" < \$EMAILMESSAGE\`">>./$OUTPUTSCRIPT_DATE 
+
+done
+rm -f ./$OUTPUTSCRIPT
+cp  ./$OUTPUTSCRIPT_DATE ./$OUTPUTSCRIPT
+
+echo '# ********************************************************#'
+echo '#             LAUNCHING BOOMERANG                         #'
+/home/darancet/bin/boomerang.py -queue
+#/home/darancet/bin/boomerang.py -force gramercy
+echo '# ********************************************************#'
+echo '#                                                         #'
+echo '# This program will now end                               #'
+echo '# Have a good day!                                        #'
+echo '#                                                         #'
+echo '# ********************************************************#'
+
+
+

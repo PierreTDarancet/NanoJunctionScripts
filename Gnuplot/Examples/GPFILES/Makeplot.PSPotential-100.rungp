@@ -1,0 +1,13 @@
+PLOT_TYPE="Potential"
+it=-100
+load "specs.ingp"
+
+load "PS.setgp"
+
+load "4plotsPS.2x2D_2x1D.setgp"
+
+load "oneshot.4plots.4P.rungp"
+
+load "close.rungp"
+
+

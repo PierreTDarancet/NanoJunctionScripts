@@ -1,0 +1,46 @@
+#!/bin/bash
+
+echo $LOCALDIR
+cd $HOMETEST/$LOCALDIR/
+echo "... Target Directory: "
+echo $HOMETEST/$LOCALDIR
+echo "... Actual Directory: "
+pwd
+echo "... Copying Input Files"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.png
+rm $HOMETEST/$LOCALDIR/*.ps
+ln -s $HOMETEST/GPFILES/*.setgp  $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp  $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt  $HOMETEST/$LOCALDIR/
+cp $HOMETEST/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "... Animated Gif Potential"
+nohup gnuplot Makeplot.AGifPotential.rungp   > Gnuplot.AGifPotential.out
+echo "... Animated Gif Density"
+nohup gnuplot Makeplot.AGifDensity.rungp  > Gnuplot.AGifDensity.out
+echo "... Animated Gif All Contour"
+nohup gnuplot Makeplot.AGifCommon2panels.rungp > Gnuplot.AGifCommon2panels.out
+echo "... Post Script -1000 Common 2 panels"
+nohup gnuplot Makeplot.PSCommon2panels-1000.rungp > Gnuplot.PSCommon2panels-1000.out
+echo "... Post Script -500 Common 2 panels"
+nohup gnuplot Makeplot.PSCommon2panels-500.rungp > Gnuplot.PSCommon2panels-500.out
+echo "... Post Script 500 Common 2 panels"
+nohup gnuplot Makeplot.PSCommon2panels500.rungp > Gnuplot.PSCommon2panels500.out
+echo "... Post Script 1000 Common 2 panels"
+nohup gnuplot Makeplot.PSCommon2panels1000.rungp > Gnuplot.PSCommon2panels1000.out
+echo "... Post Script Current 2 panels"
+nohup gnuplot Makeplot.PSCurrent2panels.rungp  > Gnuplot.PSCurrent2panels.out
+echo "... Post Script Current 1 panel"
+nohup gnuplot Makeplot.PSCurrent1panel.rungp  > Gnuplot.PSCurrent1panel.out
+
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Gnuplot.out >> $HOMETEST/Plots/Results.dat  
+
+cp   $HOMETEST/$LOCALDIR/*.ps  $HOMETEST/$LOCALDIR/*.gif  $HOMETEST/$LOCALDIR/*.png $HOMETEST/Plots/
+
+cd $HOMETEST
+
+
+

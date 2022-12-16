@@ -1,0 +1,105 @@
+#!/bin/bash
+REFDIR=`pwd`
+MODE="static"
+HARTREETOEV="27.211396132"
+OUTPUTDATFILE=`echo "$REFDIR/DATA.dat"`
+
+
+
+EPSLIST="1.0 5.0 10.0 20.0 100.0"
+
+echo '# Epsilon Bias[mV]  EnergyAnion[eV] EnergyNeutral[eV] EnergyCation[eV] HOMO(corr)[eV] LUMO(corr)[eV] dE(N,V)[eV] dE(N-1,V)[eV] dE(N+1,V)[eV]' > $OUTPUTDATFILE
+
+
+for EPSILON in $EPSLIST
+do
+echo "Epsilon = $EPSILON"
+OUTPUTDATEPSFILE=`echo "$REFDIR/DATA.$EPSILON.dat"`
+
+echo "Bias[mV]  EnergyAnion[eV] EnergyNeutral[eV] EnergyCation[eV] HOMO(corr)[eV] LUMO(corr)[eV] dE(N,V)[eV] dE(N-1,V)[eV] dE(N+1,V)[eV]" > $OUTPUTDATEPSFILE
+
+
+BIAS="1"
+TARGETDIR=`echo "$REFDIR/$BIAS.$MODE.$EPSILON" |tr -d ' '`
+echo "Target Directory: $TARGETDIR"
+echo "...Getting TOTEN Cation 1"
+EnergyCation_lbplus=`cat $TARGETDIR/Cation.out | grep "Convergence criterion met" | tail -n 1 | awk '{print $2}'`
+echo "...Getting TOTEN Anion 1"
+EnergyAnion_lbplus=`cat $TARGETDIR/Anion.out | grep "Convergence criterion met" | tail -n 1 | awk '{print $2}'`
+
+BIAS="-1"
+TARGETDIR=`echo "$REFDIR/$BIAS.$MODE.$EPSILON"|tr -d ' '`
+echo "Target Directory: $TARGETDIR"
+echo "...Getting TOTEN Cation -1"
+EnergyCation_lbminus=`cat $TARGETDIR/Cation.out | grep "Convergence criterion met" | tail -n 1 | awk '{print $2}'`
+echo "...Getting TOTEN Anion -1"
+EnergyAnion_lbminus=`cat $TARGETDIR/Anion.out | grep "Convergence criterion met" | tail -n 1 | awk '{print $2}'`
+
+echo "...Calculating Linear corrections"
+LINEARCOEFFACation=$(echo "scale=13; ($EnergyCation_lbplus - $EnergyCation_lbminus)*0.5" | bc)
+LINEARCOEFFAAnion=$(echo "scale=13; ($EnergyAnion_lbplus - $EnergyAnion_lbminus)*0.5" | bc)
+LINEARCOEFFBCation=$(echo "scale=13; ($EnergyCation_lbplus + $EnergyCation_lbminus)*0.5" | bc)
+LINEARCOEFFBAnion=$(echo "scale=13; ($EnergyAnion_lbplus + $EnergyAnion_lbminus)*0.5" | bc )
+
+BIAS="0"
+TARGETDIR=`echo "$REFDIR/$BIAS.$MODE.$EPSILON"|tr -d ' '`
+echo "Target Directory: $TARGETDIR"
+
+
+echo "...Calculating 0 bias neutral"
+LINEARCOEFFBNeutral=`cat $TARGETDIR/Neutral.out | grep "Convergence criterion met" | awk '{print $2}'`
+
+
+echo "...Starting main loop"
+BIASLIST="-1000 -900 -800 -700 -600 -500 -400 -300 -200 -100 -3 -2 -1 0 1 2 3 100 200 300 400 500 600 700 800 900 1000"
+
+for BIAS in $BIASLIST
+do
+TARGETDIR=`echo "$REFDIR/$BIAS.$MODE.$EPSILON"|tr -d ' '`
+echo "Target Directory: $TARGETDIR"
+cd $TARGETDIR
+pwd
+
+echo "Epsilon = $EPSILON Bias = $BIAS"
+echo "...Getting Dipole"
+DIPOLE_Z=`cat Neutral.out | grep -A 1 "Dipole Moment (Debye)" | tail -n 1 | awk '{print $6}'`
+echo "...Getting TOTEN Neutral"
+EnergyNeutral=`cat Neutral.out | grep "Convergence criterion met" | tail -n 1 | awk '{print $2}'`
+echo "...Getting TOTEN Cation"
+EnergyCation=`cat Cation.out | grep "Convergence criterion met" | tail -n 1 | awk '{print $2}'`
+echo "...Getting TOTEN Anion"
+EnergyAnion=`cat Anion.out | grep "Convergence criterion met" | tail -n 1| awk '{print $2}'`
+
+echo "...Calculating Energy Cation - corr"
+EnergyCation_minuscorr=$(echo "scale=13;( $HARTREETOEV * ($EnergyCation - ($BIAS * $LINEARCOEFFACation )))" | bc)
+echo "...Calculating Energy Anion - corr"
+EnergyAnion_minuscorr=$(echo "scale=13;( $HARTREETOEV * ($EnergyAnion - ($BIAS * $LINEARCOEFFAAnion )))" | bc)
+
+echo "...Calculating Energy Neutral - (0 bias)"
+DeltaEnergyNeutral=$(echo "scale=13;( $HARTREETOEV * ($EnergyNeutral - ( $LINEARCOEFFBNeutral )))" | bc)
+echo "...Calculating Energy Cation - (0 bias)"
+DeltaEnergyCation=$(echo "scale=13;( $EnergyCation_minuscorr - ( $HARTREETOEV * $LINEARCOEFFBCation ))" | bc)
+echo "...Calculating Energy Anion - (0 bias)"
+DeltaEnergyAnion=$(echo "scale=13;( $EnergyAnion_minuscorr - ( $HARTREETOEV * $LINEARCOEFFBAnion))" | bc)
+
+echo "...Calculating Energies in eV"
+EnergyNeutral_scaled=$(echo "scale=13;($HARTREETOEV * $EnergyNeutral)" | bc)
+EnergyCation_scaled=$(echo "scale=13;($HARTREETOEV * $EnergyCation)" | bc)
+EnergyAnion_scaled=$(echo "scale=13;($HARTREETOEV * $EnergyAnion)" | bc)
+
+echo "...Calculating HOMO/LUMO Energies in eV"
+HOMO=$(echo "scale=13;($EnergyCation_minuscorr - $EnergyNeutral_scaled)" | bc)
+LUMO=$(echo "scale=13;($EnergyNeutral_scaled - $EnergyAnion_minuscorr)" | bc)
+
+#echo '# Epsilon Bias[mV]  EnergyAnion[eV] EnergyNeutral[eV] EnergyCation[eV] HOMO(corr)[eV] LUMO(corr)[eV] dE(N,V)[eV] dE(N-1,V)[eV] dE(N+1,V)[eV]' >> $OUTPUTDATFILE
+echo "...printing out the results"
+echo "$EPSILON $BIAS $EnergyAnion_scaled $EnergyNeutral_scaled $EnergyCation_scaled $HOMO $LUMO $DeltaEnergyNeutral $DeltaEnergyCation $DeltaEnergyAnion">> $OUTPUTDATFILE
+
+
+#echo "Bias[mV]  EnergyAnion[eV] EnergyNeutral[eV] EnergyCation[eV] HOMO(corr)[eV] LUMO(corr)[eV] dE(N,V)[eV] dE(N-1,V)[eV] dE(N+1,V)[eV]" >> $OUTPUTDATEPSFILE
+echo "$BIAS $EnergyAnion_scaled $EnergyNeutral_scaled $EnergyCation_scaled $HOMO $LUMO $DeltaEnergyNeutral $DeltaEnergyCation $DeltaEnergyAnion">> $OUTPUTDATEPSFILE
+
+
+done
+done
+

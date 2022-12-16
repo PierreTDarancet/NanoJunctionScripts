@@ -1,0 +1,47 @@
+# make.sys.  Generated from make.sys.in by configure.
+
+# compilation rules
+
+.SUFFIXES :
+.SUFFIXES : .o .c .f .f90
+
+.f90.o:
+	$(F90) $(F90FLAGS) -c $<
+
+.f.o:
+	$(F77) $(FFLAGS) -c $<
+
+.c.o:
+	$(CC) $(CFLAGS) -c $<
+
+
+CC             = icc
+CFLAGS         = -O3 $(DFLAGS) $(IFLAGS)
+CPP            = cpp
+CPPFLAGS       = -P -traditional $(DFLAGS) $(IFLAGS)
+F77            = ifort
+F90            = ifort
+FFLAGS         = -O2 -assume byterecl
+F90FLAGS       = $(FFLAGS) -nomodule -fpp $(FDFLAGS) $(IFLAGS) $(MODFLAGS)
+FFLAGS_NOOPT   = -O0 -assume byterecl
+F90FLAGS_NOOPT = $(FFLAGS_NOOPT) -nomodule -fpp $(FDFLAGS) $(IFLAGS) $(MODFLAGS)
+LD             = ifort
+LDFLAGS        =  $(LIBOBJS) $(LIBS)
+AR             = ar
+ARFLAGS        = ruv
+RANLIB         = echo
+
+# -----------------------------
+# application-specific settings
+
+# See include/defs.h.README for a list of precompilation options
+# (possible arguments to -D or -U) and their meaning
+DFLAGS         = -D__LINUX64 -D__INTEL -D__FFTW -D__USE_INTERNAL_FFTW 
+FDFLAGS        = $(DFLAGS)
+IFLAGS         = -I./
+MODFLAGS       = -I. -I./
+
+#LIBOBJS        = ./libwant.a
+# LIBS must contain the location of all needed external libraries
+LIBS           =  -llapack  -lblas 
+MYLIB          = 

@@ -1,0 +1,58 @@
+# make.sys.  Generated from make.sys.in by configure.
+
+# compilation rules
+
+.SUFFIXES :
+.SUFFIXES : .o .c .f .f90
+
+.f90.o:
+	$(F90) $(F90FLAGS) -c $<
+
+.f.o:
+	$(F77) $(FFLAGS) -c $<
+
+.c.o:
+	$(CC) $(CFLAGS) -c $<
+
+
+CC             = icc
+CFLAGS         = -O3 $(DFLAGS) $(IFLAGS)
+CPP            = cpp
+CPPFLAGS       = -P -traditional $(DFLAGS) $(IFLAGS)
+F77            = ifort
+F90            = ifort
+FFLAGS         = -O2 -assume byterecl
+F90FLAGS       = $(FFLAGS) -nomodule -fpp $(FDFLAGS) $(IFLAGS) $(MODFLAGS)
+FFLAGS_NOOPT   = -O0 -assume byterecl
+F90FLAGS_NOOPT = $(FFLAGS_NOOPT) -nomodule -fpp $(FDFLAGS) $(IFLAGS) $(MODFLAGS)
+LD             = ifort
+LDFLAGS        =  $(LIBOBJS) $(LIBS)
+AR             = ar
+ARFLAGS        = ruv
+RANLIB         = echo
+
+# -----------------------------
+# application-specific settings
+
+# See include/defs.h.README for a list of precompilation options
+# (possible arguments to -D or -U) and their meaning
+DFLAGS         = -D__LINUX64 -D__INTEL -D__FFTW -D__USE_INTERNAL_FFTW 
+FDFLAGS        = $(DFLAGS)
+IFLAGS         = -I../include 
+MODFLAGS       = -I. -I../iotk -I../libs -I../wannier -I../transport
+
+LIBOBJS        = ../iotk/libiotk.a ../libs/libwant.a
+# LIBS must contain the location of all needed external libraries
+LIBS           =  -llapack  -lblas 
+# MYLIB can be one of the following (depending on LIBS):
+# blas       : compile the local copy of blas routines
+# lapack     : compile the local copy of lapack routines
+# blas_and_lapack : all of the above - use this for a quick test
+#              or if you don't have an optimized blas/lapack library
+# lapack_ibm : compile only lapack routines not present in IBM ESSL
+#              use this together with IBM ESSL
+# lapack_t3e : compile only lapack routines not present in T3E scilib
+#              use this together with T3E scilib
+# lapack_mkl : compile only lapack routines not present in Intel MKL
+#              use this together with Intel MKL
+MYLIB          = 

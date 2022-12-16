@@ -1,0 +1,292 @@
+!
+! Copyright (C) 2005 WanT Group
+!
+! This file is distributed under the terms of the
+! GNU General Public License. See the file `License\'
+! in the root directory of the present distribution,
+! or http://www.gnu.org/copyleft/gpl.txt .
+!
+!*********************************************
+   MODULE T_gamma_module
+!*********************************************
+   USE kinds,           ONLY : dbl
+   USE parameters,      ONLY : nstrx
+   USE constants,            ONLY : PI, ZERO, CZERO, CONE, CI, EPS_m5
+   USE T_control_module,     ONLY : dim_subspace
+   USE T_egrid_module,       ONLY : ne, emin, emax
+   USE iotk_module
+
+   IMPLICIT NONE
+   PRIVATE 
+   SAVE
+!
+! Contains transport hamiltonian data
+! 
+    ! 
+    !
+    COMPLEX(dbl), ALLOCATABLE :: sigma_L(:,:,:), sigma_R(:,:,:)
+    !
+    COMPLEX(dbl), ALLOCATABLE :: gamma_L_s(:,:,:), gamma_R_s(:,:,:)
+    !
+
+    !
+    LOGICAL :: alloc = .FALSE.
+
+
+!
+! end delcarations
+!
+
+   PUBLIC :: sigma_L, sigma_R, gamma_R_s, gamma_L_s
+   !
+   PUBLIC :: alloc
+   !
+   PUBLIC :: gamma_allocate
+   PUBLIC :: gamma_deallocate
+   PUBLIC :: gamma_L_print
+   PUBLIC :: gamma_R_print
+   PUBLIC :: sigma_L_print
+   PUBLIC :: sigma_R_print
+
+
+CONTAINS
+
+!
+! subroutines
+!
+
+!**********************************************************
+   SUBROUTINE gamma_allocate()
+   !**********************************************************
+   IMPLICIT NONE
+      CHARACTER(20)      :: subname="hamiltonian_allocate"
+      INTEGER  :: ierr
+
+      IF ( alloc )       CALL errore(subname,'already allocated', 1 )
+
+      !
+      !
+      ALLOCATE ( sigma_L(ne,dim_subspace,dim_subspace), STAT=ierr )
+           IF( ierr /=0 ) CALL errore(subname, ' allocating sigma_L', 1 )
+      ALLOCATE ( sigma_R(ne,dim_subspace,dim_subspace), STAT=ierr )
+           IF( ierr /=0 ) CALL errore(subname, ' allocating sigma_R', 1 )
+
+      ALLOCATE ( gamma_L_s(ne,dim_subspace,dim_subspace), STAT=ierr )
+           IF( ierr /=0 ) CALL errore(subname, ' allocating gamma_L_s', 1 )
+      ALLOCATE ( gamma_R_s(ne,dim_subspace,dim_subspace), STAT=ierr )
+           IF( ierr /=0 ) CALL errore(subname, ' allocating gamma_R_s', 1 )
+
+      !
+      !
+      sigma_L(:,:,:) = CZERO
+      sigma_R(:,:,:) = CZERO
+      !
+      gamma_L_s(:,:,:) = CZERO
+      gamma_R_s(:,:,:) = CZERO
+      !
+
+      alloc = .TRUE.
+      !
+   END SUBROUTINE gamma_allocate
+
+
+!**********************************************************
+   SUBROUTINE gamma_deallocate()
+   !**********************************************************
+   IMPLICIT NONE
+      CHARACTER(22)      :: subname="hamiltonian_deallocate"
+      INTEGER :: ierr
+
+      IF ( .NOT. alloc ) RETURN
+
+      DEALLOCATE ( sigma_L, STAT=ierr )
+           IF( ierr /=0 ) CALL errore(subname, 'deallocating sigma_L', 1 )
+      DEALLOCATE ( sigma_R, STAT=ierr )
+           IF( ierr /=0 ) CALL errore(subname, 'deallocating sigma_R', 1 )
+          !
+      DEALLOCATE ( gamma_L_s, STAT=ierr )
+           IF( ierr /=0 ) CALL errore(subname, 'deallocating gamma_L_s', 1 )
+      DEALLOCATE ( gamma_R_s, STAT=ierr )
+           IF( ierr /=0 ) CALL errore(subname, 'deallocating gamma_R_s', 1 )
+          !
+
+      alloc = .FALSE.   
+
+   END SUBROUTINE gamma_deallocate
+
+
+!**********************************************************
+   SUBROUTINE gamma_L_print(unit, name)
+   !**********************************************************
+   IMPLICIT NONE
+       INTEGER,         INTENT(in) :: unit
+       CHARACTER(*),    INTENT(in) :: name
+       CHARACTER(nstrx)   :: attr
+       CHARACTER(13)      :: subname="gamma_L_print"
+       INTEGER            :: ierr, ien
+ 
+       CALL iotk_write_begin(unit,TRIM(name))
+
+       CALL iotk_write_begin(unit,"DATA")
+       CALL iotk_write_attr(attr,"nomega",ne) 
+       CALL iotk_write_attr(attr,"emin",emin) 
+       CALL iotk_write_attr(attr,"emax",emax) 
+       CALL iotk_write_empty(unit,"DATA",ATTR=attr)
+
+       CALL iotk_write_begin(unit,"gamma_L")
+
+!        CALL iotk_write_begin(unit,"sigma_rp")
+!           DO ien = 1, ne
+!              CALL iotk_write_dat(unit,"sigma_rp"//TRIM(iotk_index(ien)), sigma_rp(ien,:,:))
+!           ENDDO
+!        CALL iotk_write_end(unit,"sigma_rp")
+!        CALL iotk_write_begin(unit,"sigma_ip")
+!            DO ien = 1, ne
+!              CALL iotk_write_dat(unit,"sigma_ip"//TRIM(iotk_index(ien)), sigma_ip(ien,:,:))
+!           ENDDO
+!        CALL iotk_write_end(unit,"sigma_ip")
+
+       DO ien = 1, ne
+             !
+             CALL iotk_write_dat(unit,"sigma"//TRIM(iotk_index(ien)), gamma_L_s(ien,:,:))
+       ENDDO
+
+
+       CALL iotk_write_end(unit,"gamma_L")
+       CALL iotk_write_end(unit,TRIM(name))
+
+   END SUBROUTINE gamma_L_print
+
+!**********************************************************
+   SUBROUTINE gamma_R_print(unit, name)
+   !**********************************************************
+   IMPLICIT NONE
+       INTEGER,         INTENT(in) :: unit
+       CHARACTER(*),    INTENT(in) :: name
+       CHARACTER(nstrx)   :: attr
+       CHARACTER(13)      :: subname="gamma_R_print"
+       INTEGER            :: ierr, ien
+ 
+       CALL iotk_write_begin(unit,TRIM(name))
+
+       CALL iotk_write_begin(unit,"DATA")
+       CALL iotk_write_attr(attr,"nomega",ne) 
+       CALL iotk_write_attr(attr,"emin",emin) 
+       CALL iotk_write_attr(attr,"emax",emax) 
+       CALL iotk_write_empty(unit,"DATA",ATTR=attr)
+
+       CALL iotk_write_begin(unit,"gamma_R")
+
+!        CALL iotk_write_begin(unit,"sigma_rp")
+! 
+!        DO ien = 1, ne
+!              sigma_rp(:,:) = REAL(sigma_R(ien,:,:))
+!              CALL iotk_write_dat(unit,"sigma_rp"//TRIM(iotk_index(ien)), sigma_rp(:,:))
+!        ENDDO
+!        CALL iotk_write_end(unit,"sigma_rp")
+!        CALL iotk_write_begin(unit,"sigma_ip")
+!        !
+!        DO ien = 1, ne
+!              sigma_ip(:,:) = AIMAG(sigma_R(ien,:,:))
+!              CALL iotk_write_dat(unit,"sigma_ip"//TRIM(iotk_index(ien)), sigma_ip(:,:))
+!        ENDDO
+!        CALL iotk_write_end(unit,"sigma_ip")
+       DO ien = 1, ne
+             !
+             CALL iotk_write_dat(unit,"sigma"//TRIM(iotk_index(ien)), gamma_R_s(ien,:,:))
+       ENDDO
+
+       CALL iotk_write_end(unit,"gamma_R")
+       CALL iotk_write_end(unit,TRIM(name))
+
+   END SUBROUTINE gamma_R_print
+
+
+!**********************************************************
+   SUBROUTINE sigma_L_print(unit, name)
+   !**********************************************************
+   IMPLICIT NONE
+       INTEGER,         INTENT(in) :: unit
+       CHARACTER(*),    INTENT(in) :: name
+       CHARACTER(nstrx)   :: attr
+       CHARACTER(13)      :: subname="sigma_L_print"
+       INTEGER            :: ierr, ien
+ 
+       CALL iotk_write_begin(unit,TRIM(name))
+
+       CALL iotk_write_begin(unit,"DATA")
+       CALL iotk_write_attr(attr,"nomega",ne) 
+       CALL iotk_write_attr(attr,"emin",emin) 
+       CALL iotk_write_attr(attr,"emax",emax) 
+       CALL iotk_write_empty(unit,"DATA",ATTR=attr)
+
+       CALL iotk_write_begin(unit,"sigma_L")
+
+!        CALL iotk_write_begin(unit,"sigma_rp")
+!           DO ien = 1, ne
+!              CALL iotk_write_dat(unit,"sigma_rp"//TRIM(iotk_index(ien)), sigma_rp(ien,:,:))
+!           ENDDO
+!        CALL iotk_write_end(unit,"sigma_rp")
+!        CALL iotk_write_begin(unit,"sigma_ip")
+!            DO ien = 1, ne
+!              CALL iotk_write_dat(unit,"sigma_ip"//TRIM(iotk_index(ien)), sigma_ip(ien,:,:))
+!           ENDDO
+!        CALL iotk_write_end(unit,"sigma_ip")
+
+       DO ien = 1, ne
+             !
+             CALL iotk_write_dat(unit,"sigma"//TRIM(iotk_index(ien)), sigma_L(ien,:,:))
+       ENDDO
+
+
+       CALL iotk_write_end(unit,"sigma_L")
+       CALL iotk_write_end(unit,TRIM(name))
+
+   END SUBROUTINE sigma_L_print
+
+!**********************************************************
+   SUBROUTINE sigma_R_print(unit, name)
+   !**********************************************************
+   IMPLICIT NONE
+       INTEGER,         INTENT(in) :: unit
+       CHARACTER(*),    INTENT(in) :: name
+       CHARACTER(nstrx)   :: attr
+       CHARACTER(13)      :: subname="sigma_R_print"
+       INTEGER            :: ierr, ien
+ 
+       CALL iotk_write_begin(unit,TRIM(name))
+
+       CALL iotk_write_begin(unit,"DATA")
+       CALL iotk_write_attr(attr,"nomega",ne) 
+       CALL iotk_write_attr(attr,"emin",emin) 
+       CALL iotk_write_attr(attr,"emax",emax) 
+       CALL iotk_write_empty(unit,"DATA",ATTR=attr)
+
+       CALL iotk_write_begin(unit,"sigma_R")
+
+!        CALL iotk_write_begin(unit,"sigma_rp")
+! 
+!        DO ien = 1, ne
+!              sigma_rp(:,:) = REAL(sigma_R(ien,:,:))
+!              CALL iotk_write_dat(unit,"sigma_rp"//TRIM(iotk_index(ien)), sigma_rp(:,:))
+!        ENDDO
+!        CALL iotk_write_end(unit,"sigma_rp")
+!        CALL iotk_write_begin(unit,"sigma_ip")
+!        !
+!        DO ien = 1, ne
+!              sigma_ip(:,:) = AIMAG(sigma_R(ien,:,:))
+!              CALL iotk_write_dat(unit,"sigma_ip"//TRIM(iotk_index(ien)), sigma_ip(:,:))
+!        ENDDO
+!        CALL iotk_write_end(unit,"sigma_ip")
+       DO ien = 1, ne
+             !
+             CALL iotk_write_dat(unit,"sigma"//TRIM(iotk_index(ien)), sigma_R(ien,:,:))
+       ENDDO
+
+       CALL iotk_write_end(unit,"sigma_R")
+       CALL iotk_write_end(unit,TRIM(name))
+
+   END SUBROUTINE sigma_R_print
+
+END MODULE T_gamma_module
+

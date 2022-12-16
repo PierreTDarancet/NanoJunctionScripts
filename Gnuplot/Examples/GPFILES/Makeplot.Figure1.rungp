@@ -1,0 +1,179 @@
+PLOT_TYPE="Figure1"
+FermiEnergy = -4.5545
+
+load "PS.setgp"
+load "4plots.Fig1.setgp"
+
+set multiplot
+
+LMARGIN = LMARGIN_1
+RMARGIN = RMARGIN_1 
+TMARGIN = TMARGIN_1 
+BMARGIN = BMARGIN_1
+SETXLABEL = SETXLABEL_1
+SETYLABEL = SETYLABEL_1
+SETCBLABEL = SETCBLABEL_1
+SETTITLE = SETTITLE_1
+XOFFSET = XOFFSET_1
+YOFFSET = YOFFSET_1
+CBOFFSET = CBOFFSET_1
+
+#Molecule 1
+load "molecule1.specs.ingp"
+Scaling_factor_X = Scaling_factor_X_
+XMAX   = XMAX_
+XMIN   =  XMIN_
+XTICS  = XTICS_
+XLABEL = XLABEL_
+Scaling_factor_Y = Scaling_factor_Y_
+YMAX    = YMAX_
+YMIN    = YMIN_
+YTICS   = YTICS_
+YLABEL  = YLABEL_
+Scaling_factor_Z = Scaling_factor_Z_
+CBMIN   =  CBMIN_
+CBMAX   =  CBMAX_
+CBTICS  =  CBTICS_
+CBLABEL =  CBLABEL_
+Filename_ = 
+CONTOURINCREMENT = CONTOURINCREMENT_
+
+
+INPUT_FILE=sprintf("%d.%s.gp", it,Filename_);
+load "plotcurrentexp.plt"
+
+
+
+INPUT_FILE=sprintf("%d.%s.gp", it,Filename_);
+load "plotcurrent.plt"
+
+
+LMARGIN = LMARGIN_2
+RMARGIN = RMARGIN_2 
+TMARGIN = TMARGIN_2 
+BMARGIN = BMARGIN_2
+SETXLABEL = SETXLABEL_2
+SETYLABEL = SETYLABEL_2
+SETCBLABEL = SETCBLABEL_2
+SETTITLE = SETTITLE_2
+XOFFSET = XOFFSET_2
+YOFFSET = YOFFSET_2
+CBOFFSET = CBOFFSET_2
+
+
+
+#Molecule 2
+load "molecule1.specs.ingp"
+Scaling_factor_X = Scaling_factor_X_
+XMAX   = XMAX_
+XMIN   =  XMIN_
+XTICS  = XTICS_
+XLABEL = XLABEL_
+Scaling_factor_Y = Scaling_factor_Y_
+YMAX    = YMAX_
+YMIN    = YMIN_
+YTICS   = YTICS_
+YLABEL  = YLABEL_
+Scaling_factor_Z = Scaling_factor_Z_
+CBMIN   =  CBMIN_
+CBMAX   =  CBMAX_
+CBTICS  =  CBTICS_
+CBLABEL =  CBLABEL_
+Filename_ = 
+CONTOURINCREMENT = CONTOURINCREMENT_
+
+
+INPUT_FILE=sprintf("%d.%s.gp", it,Filename_);
+load "plotcurrentexp.plt"
+INPUT_FILE=sprintf("%d.%s.gp", it,Filename_);
+load "plotcurrent.plt"
+
+
+
+
+
+LMARGIN = LMARGIN_3
+RMARGIN = RMARGIN_3 
+TMARGIN = TMARGIN_3 
+BMARGIN = BMARGIN_3
+SETXLABEL = SETXLABEL_3
+SETYLABEL = SETYLABEL_3
+SETCBLABEL = SETCBLABEL_3
+SETTITLE = SETTITLE_3
+XOFFSET = XOFFSET_3
+YOFFSET = YOFFSET_3
+CBOFFSET = CBOFFSET_3
+
+
+#Molecule 3
+load "molecule1.specs.ingp"
+Scaling_factor_X = Scaling_factor_X_
+XMAX   = XMAX_
+XMIN   =  XMIN_
+XTICS  = XTICS_
+XLABEL = XLABEL_
+Scaling_factor_Y = Scaling_factor_Y_
+YMAX    = YMAX_
+YMIN    = YMIN_
+YTICS   = YTICS_
+YLABEL  = YLABEL_
+Scaling_factor_Z = Scaling_factor_Z_
+CBMIN   =  CBMIN_
+CBMAX   =  CBMAX_
+CBTICS  =  CBTICS_
+CBLABEL =  CBLABEL_
+Filename_ = 
+CONTOURINCREMENT = CONTOURINCREMENT_
+
+
+INPUT_FILE=sprintf("%d.%s.gp", it,Filename_);
+load "plotcurrentexp.plt"
+INPUT_FILE=sprintf("%d.%s.gp", it,Filename_);
+load "plotcurrent.plt"
+
+
+
+LMARGIN = LMARGIN_4
+RMARGIN = RMARGIN_4 
+TMARGIN = TMARGIN_4 
+BMARGIN = BMARGIN_4
+SETXLABEL = SETXLABEL_4
+SETYLABEL = SETYLABEL_4
+SETCBLABEL = SETCBLABEL_4
+SETTITLE = SETTITLE_4
+XOFFSET = XOFFSET_4
+YOFFSET = YOFFSET_4
+CBOFFSET = CBOFFSET_4
+
+#Molecule 1
+load "molecule1.specs.ingp"
+Scaling_factor_X = Scaling_factor_X_
+XMAX   = XMAX_
+XMIN   =  XMIN_
+XTICS  = XTICS_
+XLABEL = XLABEL_
+Scaling_factor_Y = Scaling_factor_Y_
+YMAX    = YMAX_
+YMIN    = YMIN_
+YTICS   = YTICS_
+YLABEL  = YLABEL_
+Scaling_factor_Z = Scaling_factor_Z_
+CBMIN   =  CBMIN_
+CBMAX   =  CBMAX_
+CBTICS  =  CBTICS_
+CBLABEL =  CBLABEL_
+Filename_ = 
+CONTOURINCREMENT = CONTOURINCREMENT_
+
+
+INPUT_FILE=sprintf("%d.%s.gp", it,Filename_);
+load "plotcurrentexp.plt"
+INPUT_FILE=sprintf("%d.%s.gp", it,Filename_);
+load "plotcurrent.plt"
+
+unset multiplot
+
+
+load "close.rungp"
+
+

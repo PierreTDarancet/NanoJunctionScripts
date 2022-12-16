@@ -1,0 +1,127 @@
+
+SIZE_RATIO =  VSIZE/HSIZE
+
+#INPUT_FILE_LARGE_DFT=sprintf("%s.gp", Filename_TransmissionLargeDFT);
+#INPUT_FILE_SMALL_DFT=sprintf("%s.gp", Filename_TransmissionSmallDFT);
+#INPUT_FILE_LARGE_DFTS=sprintf("%s.gp", Filename_TransmissionLargeDFTS);
+#INPUT_FILE_SMALL_DFTS=sprintf("%s.gp", Filename_TransmissionSmallDFTS);
+
+
+LABEL="DFT-PBE"
+
+
+LMARGIN = LMARGIN_1
+RMARGIN = RMARGIN_1 
+TMARGIN = TMARGIN_1
+BMARGIN = BMARGIN_1
+SETTITLE = SETTITLE_1
+SETXLABEL = SETXLABEL_1
+SETYLABEL = SETYLABEL_1
+SETCBLABEL = SETCBLABEL_1
+
+
+#INPUT_FILE_LARGE=INPUT_FILE_LARGE_DFT
+#INPUT_FILE_SMALL=INPUT_FILE_SMALL_DFT
+INPUT_FILE="DFT.gp"
+print("UpperLeft")
+XMAX   = 0.5
+XMIN   = -0.5
+XTICS  = 0.25 
+XLABEL = "Energy-E_F [eV]"
+YMAX    = YMAX_TransmissionSmallDFT
+YMIN    = YMIN_TransmissionSmallDFT
+YTICS   = YTICS_TransmissionSmallDFT
+YLABEL  = "Transmission Function"
+
+
+load "plotTransmissionBias.plt"
+########################################
+LMARGIN = LMARGIN_2
+RMARGIN = RMARGIN_2 
+TMARGIN = TMARGIN_2
+BMARGIN = BMARGIN_2
+SETTITLE = SETTITLE_2
+SETXLABEL = SETXLABEL_2
+SETYLABEL = SETYLABEL_2
+SETCBLABEL = SETCBLABEL_2
+
+LABEL="DFT+{/Symbol S}"
+#INPUT_FILE_LARGE=INPUT_FILE_LARGE_DFTS
+#INPUT_FILE_SMALL=INPUT_FILE_SMALL_DFTS
+INPUT_FILE="DFT+S.gp"
+
+XMAX   = 0.5
+XMIN   = -0.5
+XTICS  = 0.25 
+XLABEL = "Energy-E_F [eV]"
+print("BottomLeft")
+YMAX    = YMAX_TransmissionSmallDFTS
+YMIN    = YMIN_TransmissionSmallDFTS
+YTICS   = YTICS_TransmissionSmallDFTS
+YLABEL  = "Transmission Function"
+
+
+
+load "plotTransmissionBias.plt"
+########################################
+
+LMARGIN = LMARGIN_3
+RMARGIN = RMARGIN_3 
+TMARGIN = TMARGIN_3
+BMARGIN = BMARGIN_3
+SETTITLE = SETTITLE_3
+SETXLABEL = SETXLABEL_3
+SETYLABEL = SETYLABEL_3
+SETCBLABEL = SETCBLABEL_3
+
+#INPUT_FILE_LARGE=INPUT_FILE_LARGE_DFT
+#INPUT_FILE_SMALL=INPUT_FILE_SMALL_DFT
+INPUT_FILE="DFT.gp"
+LABEL="DFT-PBE"
+
+XMAX   = 3
+XMIN   = -3
+XTICS  = 1.5
+XLABEL = "Energy-E_F [eV]"
+print("UpperRight")
+YMAX    = YMAX_TransmissionMediumDFT
+YMIN    = YMIN_TransmissionMediumDFT
+YTICS   = YTICS_TransmissionMediumDFT
+YLABEL  = "Transmission Function"
+
+
+
+load "plotTransmissionBias.plt"
+########################################
+
+
+LMARGIN = LMARGIN_4
+RMARGIN = RMARGIN_4 
+TMARGIN = TMARGIN_4
+BMARGIN = BMARGIN_4
+SETTITLE = SETTITLE_4
+SETXLABEL = SETXLABEL_4
+SETYLABEL = SETYLABEL_4
+SETCBLABEL = SETCBLABEL_4
+
+#INPUT_FILE_LARGE=INPUT_FILE_LARGE_DFTS
+#INPUT_FILE_SMALL=INPUT_FILE_SMALL_DFTS
+INPUT_FILE="DFT+S.gp"
+print("BottomRight")
+XMAX   = 3
+XMIN   = -3
+XTICS  = 1.5
+XLABEL = "Energy-E_F [eV]"
+LABEL="DFT+{/Symbol S}"
+YMAX    = YMAX_TransmissionMediumDFTS
+YMIN    = YMIN_TransmissionMediumDFTS
+YTICS   = YTICS_TransmissionMediumDFTS
+YLABEL  = "Transmission Function"
+
+
+
+load "plotTransmissionBias.plt"
+########################################
+
+
+

@@ -1,0 +1,249 @@
+#!/bin/bash
+
+cd DASTRIMAD
+echo "DASTRIMAD"
+ln -s ../*.in ./
+echo "-1000"
+cp ./-1000.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./-1000.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+echo "-500"
+cp ./-500.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./-500.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+echo "0"
+cp ./0.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./0.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+echo "500"
+cp ./500.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./500.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+echo "1000"
+cp ./1000.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./1000.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+
+echo "DASTRIMAD Done"
+
+cd ../DASADAD
+echo "DASADAD"
+ln -s ../*.in ./
+echo "-1000"
+cp ./-1000.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./-1000.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+echo "-500"
+cp ./-500.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./-500.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+echo "0"
+cp ./0.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./0.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+echo "500"
+cp ./500.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./500.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+echo "1000"
+cp ./1000.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./1000.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+echo "DASADAD Done"
+BP
+
+cd BPTRIMAD
+echo "BPTRIMAD"
+ln -s ../*.in ./
+echo "-1000"
+cp ./-1000.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./-1000.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+echo "-500"
+cp ./-500.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./-500.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+echo "0"
+cp ./0.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./0.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+echo "500"
+cp ./500.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./500.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+echo "1000"
+cp ./1000.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./1000.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+
+echo "BPTRIMAD Done"
+
+cd ../BPADAD
+echo "BPADAD"
+ln -s ../*.in ./
+echo "-1000"
+cp ./-1000.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./-1000.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+echo "-500"
+cp ./-500.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./-500.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+echo "0"
+cp ./0.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./0.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+echo "500"
+cp ./500.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./500.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+echo "1000"
+cp ./1000.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./1000.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+echo "BPADAD Done"
+
+
+cd HDATRIMAD
+echo "HDATRIMAD"
+ln -s ../*.in ./
+echo "-1000"
+cp ./-1000.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./-1000.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+echo "-500"
+cp ./-500.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./-500.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+echo "0"
+cp ./0.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./0.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+echo "500"
+cp ./500.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./500.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+echo "1000"
+cp ./1000.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./1000.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+
+echo "HDATRIMAD Done"
+
+cd ../HDAADAD
+echo "HDAADAD"
+ln -s ../*.in ./
+echo "-1000"
+cp ./-1000.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./-1000.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+echo "-500"
+cp ./-500.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./-500.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+echo "0"
+cp ./0.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./0.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+echo "500"
+cp ./500.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./500.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+echo "1000"
+cp ./1000.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./1000.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+echo "HDAADAD Done"
+
+
+cd BAPATRIMAD
+echo "BAPATRIMAD"
+ln -s ../*.in ./
+echo "-1000"
+cp ./-1000.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./-1000.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+echo "-500"
+cp ./-500.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./-500.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+echo "0"
+cp ./0.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./0.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+echo "500"
+cp ./500.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./500.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+echo "1000"
+cp ./1000.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./1000.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+
+echo "BAPATRIMAD Done"
+
+cd ../BAPAADAD
+echo "BAPAADAD"
+ln -s ../*.in ./
+echo "-1000"
+cp ./-1000.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./-1000.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+echo "-500"
+cp ./-500.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./-500.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+echo "0"
+cp ./0.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./0.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+echo "500"
+cp ./500.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./500.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+echo "1000"
+cp ./1000.1.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptDensity.x
+cp ./1000.2.in ./DATA.in
+/home/pdarancet/Desktop/Codes\&Scripts/Densityscripts/ScriptPotential.x
+echo "BAPAADAD Done"
+

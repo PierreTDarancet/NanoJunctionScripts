@@ -1,0 +1,593 @@
+###########  Ge2 Molecule ##############
+cd /Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Ge2/Phonons/
+# S Au stretch
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;   paste <(cat $file | grep Au | head -2 |  sort  -k4) <(cat  $file | grep "S " | sort  -k4 )  | awk -v moden=${moden} -v freq=${freq}  '{ p += ($5-$12)**2 ; q += ($6-$13)**2 ; r += ($7-$14)**2} END {print moden,freq, (freq*0.12398),sqrt(p),sqrt(q),sqrt(r),sqrt(p+q+r)} ' ; done  > tmp.mode
+echo '#S-Au Stretch  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode
+sort -n tmp.mode  > Ge2.S-Au.Stretch.dat
+# S motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "S " | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Hmotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Ge2.Smotion.Total.dat
+# C motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "C" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Hmotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Ge2.Cmotion.Total.dat
+# H motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "H" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Hmotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Ge2.Hmotion.Total.dat
+# Au motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "Au" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Aumotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Ge2.Aumotion.Total.dat
+# Ge motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "Ge" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Si motion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Ge2.Gemotion.Total.dat
+#Ge Ge stretch
+# for 2 Ge
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "Ge" | awk -v moden=${moden} -v freq=${freq}  'NR>1{print moden,freq, (freq*0.12398), $5-p, $6-q, $7-r , sqrt(   ($5-p)**2 + ($6-q)**2 + ( $7-r )**2 )  } {p=$5; q=$6; r=$7}' ; done  > tmp.mode
+echo '#Si-Si stretch motion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Ge2.GeStretch.Total.dat
+
+###########  Si2  Molecule ##############
+cd /Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si2/Phonons/
+# S H stretch
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;   paste <(cat $file | grep "H "  | sort  -k4 -g  | awk 'NR==1 END {print}') <(cat  $file | grep "S " | sort  -k4 -g )  | awk -v moden=${moden} -v freq=${freq}  '{ p += ($5-$12)**2 ; q += ($6-$13)**2 ; r += ($7-$14)**2} END {print moden,freq, (freq*0.12398),sqrt(p),sqrt(q),sqrt(r),sqrt(p+q+r)} ' ; done  > tmp.mode
+echo '#S-Au Stretch  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode
+sort -n tmp.mode  > Si2.S-H.Stretch.dat
+# S motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "S " | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Smotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Si2.Smotion.Total.dat
+# All C motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "C" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#AllC motion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Si2.Cmotion.Total.dat
+# H motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "H" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Hmotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Si2.Hmotion.Total.dat
+
+# Si motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "Si" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Simotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Si2.Simotion.Total.dat
+#Si Si stretch
+# Si-Si stretch
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "Si" | awk -v moden=${moden} -v freq=${freq}  'NR>1{print moden,freq, (freq*0.12398), $5-p, $6-q, $7-r , sqrt(   ($5-p)**2 + ($6-q)**2 + ( $7-r )**2 )  } {p=$5; q=$6; r=$7}' ; done  > tmp.mode
+echo '#Si-Si stretch motion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Si2.SiStretch.Total.dat
+#Si-C stretch along chain
+# C-Si stretch
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;   paste <( cat $file | grep Si | sort -g -k 4) <(cat $file | grep "C " | sort -g -k 4  | awk 'NR==1 END{print}')  | awk -v moden=${moden} -v freq=${freq}  '{ p += ($5-$12)**2 ; q += ($6-$13)**2 ; r += ($7-$14)**2} END {print moden,freq, (freq*0.12398),sqrt(p),sqrt(q),sqrt(r),sqrt(p+q+r)} ' ; done  > tmp.mode
+echo '#C-Si_inchain Stretch  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode
+sort -n tmp.mode  > Si2.C-Si_inchain.Stretch.dat
+
+#C motion in chain
+
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "C"  | sort -g -k 4  | awk 'NR==1 END{print}'  | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#C_naphta Stretch  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode
+sort -n tmp.mode  > Si2.C_inchain.Total.dat
+
+
+
+
+#cp Si2.Aumotion.Total.dat    ~/Dropbox/Latha/DATA_ModeDecomposition/Si2.Molecule.Phonons.Decomposition.Aumotion.dat
+cp Si2.Cmotion.Total.dat     ~/Dropbox/Latha/DATA_ModeDecomposition/Si2.Molecule.Phonons.Decomposition.Cmotion.dat
+cp Si2.C_inchain.Total.dat ~/Dropbox/Latha/DATA_ModeDecomposition/Si2.Molecule.Phonons.Decomposition.Cmotioninchain.dat
+#cp Si2.C_Naphta.Total.dat    ~/Dropbox/Latha/DATA_ModeDecomposition/Si2.Molecule.Phonons.Decomposition.CmotioninNaphthalene.dat
+cp Si2.Hmotion.Total.dat     ~/Dropbox/Latha/DATA_ModeDecomposition/Si2.Molecule.Phonons.Decomposition.Hmotion.dat
+cp Si2.S-H.Stretch.dat      ~/Dropbox/Latha/DATA_ModeDecomposition/Si2.Molecule.Phonons.Decomposition.SHStretch.dat
+cp Si2.C-Si_inchain.Stretch.dat ~/Dropbox/Latha/DATA_ModeDecomposition/Si2.Molecule.Phonons.Decomposition.SiCstretchinchain.dat
+$cp Si2.C-Si_naphta.Stretch.dat  ~/Dropbox/Latha/DATA_ModeDecomposition/Si2.Molecule.Phonons.Decomposition.SiCstretchNaphthalene.dat
+cp Si2.Simotion.Total.dat       ~/Dropbox/Latha/DATA_ModeDecomposition/Si2.Molecule.Phonons.Decomposition.Simotion.dat
+cp Si2.SiStretch.Total.dat      ~/Dropbox/Latha/DATA_ModeDecomposition/Si2.Molecule.Phonons.Decomposition.Sistretch.dat
+cp Si2.Smotion.Total.dat        ~/Dropbox/Latha/DATA_ModeDecomposition/Si2.Molecule.Phonons.Decomposition.Smotion.dat
+mkdir ~/Dropbox/Latha/Modes.Si2.Molecule
+cp ./sl_* ~/Dropbox/Latha/Modes.Si2.Molecule/
+
+
+
+
+
+
+
+###########  Si2  Junction ##############
+
+
+cd /Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si2TRIMTRIM/Phonons/
+# S Au stretch
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;   paste <(cat $file | grep "Au"  | sort  -k4 -g  | awk 'NR==19 || NR==20') <(cat  $file | grep "S " | sort  -k4 -g )  | awk -v moden=${moden} -v freq=${freq}  '{ p += ($5-$12)**2 ; q += ($6-$13)**2 ; r += ($7-$14)**2} END {print moden,freq, (freq*0.12398),sqrt(p),sqrt(q),sqrt(r),sqrt(p+q+r)} ' ; done  > tmp.mode
+echo '#S-Au Stretch  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode
+sort -n tmp.mode  > Si2TRIMTRIM.S-Au.Stretch.dat
+# S motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "S " | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Smotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Si2TRIMTRIM.Smotion.Total.dat
+# All C motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "C" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#AllC motion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Si2TRIMTRIM.Cmotion.Total.dat
+# H motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "H" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Hmotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Si2TRIMTRIM.Hmotion.Total.dat
+# Au motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "Au" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Aumotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Si2TRIMTRIM.Aumotion.Total.dat
+
+# Si motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "Si" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Simotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Si2TRIMTRIM.Simotion.Total.dat
+#Si Si stretch
+# Si-Si stretch
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "Si" | awk -v moden=${moden} -v freq=${freq}  'NR>1{print moden,freq, (freq*0.12398), $5-p, $6-q, $7-r , sqrt(   ($5-p)**2 + ($6-q)**2 + ( $7-r )**2 )  } {p=$5; q=$6; r=$7}' ; done  > tmp.mode
+echo '#Si-Si stretch motion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Si2TRIMTRIM.SiStretch.Total.dat
+#Si-C stretch along chain
+# C-Si stretch
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;   paste <( cat $file | grep Si | sort -g -k 4) <(cat $file | grep "C " | sort -g -k 4  | awk 'NR==1 END{print}')  | awk -v moden=${moden} -v freq=${freq}  '{ p += ($5-$12)**2 ; q += ($6-$13)**2 ; r += ($7-$14)**2} END {print moden,freq, (freq*0.12398),sqrt(p),sqrt(q),sqrt(r),sqrt(p+q+r)} ' ; done  > tmp.mode
+echo '#C-Si_inchain Stretch  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode
+sort -n tmp.mode  > Si2TRIMTRIM.C-Si_inchain.Stretch.dat
+
+#C motion in chain
+
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "C"  | sort -g -k 4  | awk 'NR==1 END{print}'  | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#C_naphta Stretch  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode
+sort -n tmp.mode  > Si2TRIMTRIM.C_inchain.Total.dat
+
+
+
+
+cp Si2TRIMTRIM.Aumotion.Total.dat    ~/Dropbox/Latha/DATA_ModeDecomposition/Si2.Junction.Phonons.Decomposition.Aumotion.dat
+cp Si2TRIMTRIM.Cmotion.Total.dat     ~/Dropbox/Latha/DATA_ModeDecomposition/Si2.Junction.Phonons.Decomposition.Cmotion.dat
+cp Si2TRIMTRIM.C_inchain.Total.dat ~/Dropbox/Latha/DATA_ModeDecomposition/Si2.Junction.Phonons.Decomposition.Cmotioninchain.dat
+#cp Si2TRIMTRIM.C_Naphta.Total.dat    ~/Dropbox/Latha/DATA_ModeDecomposition/Si2.Junction.Phonons.Decomposition.CmotioninNaphthalene.dat
+cp Si2TRIMTRIM.Hmotion.Total.dat     ~/Dropbox/Latha/DATA_ModeDecomposition/Si2.Junction.Phonons.Decomposition.Hmotion.dat
+cp Si2TRIMTRIM.S-H.Stretch.dat      ~/Dropbox/Latha/DATA_ModeDecomposition/Si2.Junction.Phonons.Decomposition.SHStretch.dat
+cp Si2TRIMTRIM.C-Si_inchain.Stretch.dat ~/Dropbox/Latha/DATA_ModeDecomposition/Si2.Junction.Phonons.Decomposition.SiCstretchinchain.dat
+#cp Si2TRIMTRIM.C-Si_naphta.Stretch.dat  ~/Dropbox/Latha/DATA_ModeDecomposition/Si2.Junction.Phonons.Decomposition.SiCstretchNaphthalene.dat
+cp Si2TRIMTRIM.Simotion.Total.dat       ~/Dropbox/Latha/DATA_ModeDecomposition/Si2.Junction.Phonons.Decomposition.Simotion.dat
+cp Si2TRIMTRIM.SiStretch.Total.dat      ~/Dropbox/Latha/DATA_ModeDecomposition/Si2.Junction.Phonons.Decomposition.Sistretch.dat
+cp Si2TRIMTRIM.Smotion.Total.dat        ~/Dropbox/Latha/DATA_ModeDecomposition/Si2.Junction.Phonons.Decomposition.Smotion.dat
+mkdir ~/Dropbox/Latha/Modes.Si2.Junction
+cp ./sl_* ~/Dropbox/Latha/Modes.Si2.Junction/
+
+
+
+
+
+
+
+
+
+
+
+###########  Si2 Naphtalene Junction ##############
+cd /Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si2NaphtaleneTRIMTRIM/Phonons/
+# S Au stretch
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;   paste <(cat $file | grep Au  | head -20 | tail -n 2 | sort  -k4 ) <(cat  $file | grep "S " | sort  -k4 )  | awk -v moden=${moden} -v freq=${freq}  '{ p += ($5-$12)**2 ; q += ($6-$13)**2 ; r += ($7-$14)**2} END {print moden,freq, (freq*0.12398),sqrt(p),sqrt(q),sqrt(r),sqrt(p+q+r)} ' ; done  > tmp.mode
+echo '#S-Au Stretch  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode
+sort -n tmp.mode  > Si2NaphtaleneTRIMTRIM.S-Au.Stretch.dat
+# S motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "S " | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Smotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Si2NaphtaleneTRIMTRIM.Smotion.Total.dat
+# All C motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "C" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#AllC motion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Si2NaphtaleneTRIMTRIM.Cmotion.Total.dat
+# H motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "H" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Hmotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Si2NaphtaleneTRIMTRIM.Hmotion.Total.dat
+# Au motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "Au" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Aumotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Si2NaphtaleneTRIMTRIM.Aumotion.Total.dat
+# Si motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "Si" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Simotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Si2NaphtaleneTRIMTRIM.Simotion.Total.dat
+#Si Si stretch
+# for 2 si
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "Si" | awk -v moden=${moden} -v freq=${freq}  'NR>1{print moden,freq, (freq*0.12398), $5-p, $6-q, $7-r , sqrt(   ($5-p)**2 + ($6-q)**2 + ( $7-r )**2 )  } {p=$5; q=$6; r=$7}' ; done  > tmp.mode
+echo '#Si-Si stretch motion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Si2NaphtaleneTRIMTRIM.SiStretch.Total.dat
+
+
+#Si-C stretch along chain
+# for 2 Si
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;   paste <( cat $file | grep Si | sort -g -k 4) <(cat $file | grep "C " | sort -g -k 4  | awk 'NR==1 END{print}')  | awk -v moden=${moden} -v freq=${freq}  '{ p += ($5-$12)**2 ; q += ($6-$13)**2 ; r += ($7-$14)**2} END {print moden,freq, (freq*0.12398),sqrt(p),sqrt(q),sqrt(r),sqrt(p+q+r)} ' ; done  > tmp.mode
+echo '#C-Si_inchain Stretch  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode
+sort -n tmp.mode  > Si2NaphtaleneTRIMTRIM.C-Si_inchain.Stretch.dat
+
+#Si-C stretch Naphta
+# for 2 Si
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;   paste <( cat $file | grep Si | sort -g -k 4) <(cat $file | grep "C " | sort -g -k 4  | awk 'NR==4 || NR==10') | awk -v moden=${moden} -v freq=${freq}  '{ p += ($5-$12)**2 ; q += ($6-$13)**2 ; r += ($7-$14)**2} END {print moden,freq, (freq*0.12398),sqrt(p),sqrt(q),sqrt(r),sqrt(p+q+r)} ' ; done  > tmp.mode
+echo '#C-Si_inchain Stretch  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode
+sort -n tmp.mode  > Si2NaphtaleneTRIMTRIM.C-Si_naphta.Stretch.dat
+
+
+#C motion Naphta
+
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "C"  | sort -g -k 4  | awk 'NR!=1 && NR!=14 && NR!=6 && NR!=9 '  | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#C_naphta Stretch  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode
+sort -n tmp.mode  > Si2NaphtaleneTRIMTRIM.C_Naphta.Total.dat
+
+
+#C motion not Naphta
+
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "C"  | sort -g -k 4  | awk 'NR==1 || NR==14 || NR==6 || NR==9 '  | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#C_naphta Stretch  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode
+sort -n tmp.mode  > Si2NaphtaleneTRIMTRIM.C_notNaphta.Total.dat
+
+###########  Si2 Naphtalene Molecule ##############
+
+
+
+
+cd /Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si2Naphthalene/Phonons/
+# S Au stretch
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;   paste <(cat  $file | grep "H " | sort  -k4 -g  | awk 'NR==1 || NR==18') <(cat  $file | grep "S " | sort  -k4 -g  )  | awk -v moden=${moden} -v freq=${freq}  '{ p += ($5-$12)**2 ; q += ($6-$13)**2 ; r += ($7-$14)**2} END {print moden,freq, (freq*0.12398),sqrt(p),sqrt(q),sqrt(r),sqrt(p+q+r)} ' ; done  > tmp.mode
+echo '#S-Au Stretch  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode
+sort -n tmp.mode  > Si2Naphtalene.S-H.Stretch.dat
+# S motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "S " | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Smotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Si2Naphtalene.Smotion.Total.dat
+# C motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "C" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Hmotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Si2Naphtalene.Cmotion.Total.dat
+# H motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "H" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Hmotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Si2Naphtalene.Hmotion.Total.dat
+# Au motion
+#for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d #'_'` ;  cat $file | grep "Au" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+#echo '#Aumotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+#sort -n tmp.mode  > Si2Naphtalene.Aumotion.Total.dat
+# Si motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "Si" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Si motion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Si2Naphtalene.Simotion.Total.dat
+
+#Si Si stretch
+# for 2 si
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "Si" | awk -v moden=${moden} -v freq=${freq}  'NR>1{print moden,freq, (freq*0.12398), $5-p, $6-q, $7-r , sqrt(   ($5-p)**2 + ($6-q)**2 + ( $7-r )**2 )  } {p=$5; q=$6; r=$7}' ; done  > tmp.mode
+echo '#Si-Si stretch motion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Si2Naphtalene.SiStretch.Total.dat
+
+
+#C motion not Naphta
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "C"  | sort -g -k 4  | awk 'NR==1 || NR==14 || NR==6 || NR==8' | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#C_naphta Stretch  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode
+sort -n tmp.mode  > Si2Naphtalene.C_notNaphta.Total.dat
+
+
+#C motion Naphta
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "C"  | sort -g -k 4  | awk 'NR!=1 && NR!=14 && NR!=6 && NR!=8'  | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#C_naphta Stretch  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode
+sort -n tmp.mode  > Si2Naphtalene.C_Naphta.Total.dat
+
+
+
+#Si-C stretch along chain
+# for 2 Si
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;   paste <( cat $file | grep Si | sort -g -k 4) <(cat $file | grep "C"  | sort -g -k 4  | awk 'NR==1 || NR==14' )  | awk -v moden=${moden} -v freq=${freq}  '{ p += ($5-$12)**2 ; q += ($6-$13)**2 ; r += ($7-$14)**2} END {print moden,freq, (freq*0.12398),sqrt(p),sqrt(q),sqrt(r),sqrt(p+q+r)} ' ; done  > tmp.mode
+echo '#C-Si_inchain Stretch  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode
+sort -n tmp.mode  > Si2Naphtalene.C-Si_inchain.Stretch.dat
+
+#Si-C stretch Naphta
+# for 2 Si
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;   paste <( cat $file | grep Si | sort -g -k 4) <(cat $file | grep "C " | sort -g -k 4  | awk 'NR==4 || NR==10') | awk -v moden=${moden} -v freq=${freq}  '{ p += ($5-$12)**2 ; q += ($6-$13)**2 ; r += ($7-$14)**2} END {print moden,freq, (freq*0.12398),sqrt(p),sqrt(q),sqrt(r),sqrt(p+q+r)} ' ; done  > tmp.mode
+echo '#C-Si_inchain Stretch  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode
+sort -n tmp.mode  > Si2Naphtalene.C-Si_naphta.Stretch.dat
+
+
+
+
+
+#cp Si2Naphtalene.Aumotion.Total.dat    ~/Dropbox/Latha/DATA_ModeDecomposition/Si2Naphthalene.Molecule.Phonons.Decomposition.Aumotion.dat
+cp Si2Naphtalene.Cmotion.Total.dat     ~/Dropbox/Latha/DATA_ModeDecomposition/Si2Naphthalene.Molecule.Phonons.Decomposition.Cmotion.dat
+cp Si2Naphtalene.C_notNaphta.Total.dat ~/Dropbox/Latha/DATA_ModeDecomposition/Si2Naphthalene.Molecule.Phonons.Decomposition.Cmotioninchain.dat
+cp Si2Naphtalene.C_Naphta.Total.dat    ~/Dropbox/Latha/DATA_ModeDecomposition/Si2Naphthalene.Molecule.Phonons.Decomposition.CmotioninNaphthalene.dat
+cp Si2Naphtalene.Hmotion.Total.dat     ~/Dropbox/Latha/DATA_ModeDecomposition/Si2Naphthalene.Molecule.Phonons.Decomposition.Hmotion.dat
+cp Si2Naphtalene.S-H.Stretch.dat      ~/Dropbox/Latha/DATA_ModeDecomposition/Si2Naphthalene.Molecule.Phonons.Decomposition.SHStretch.dat
+cp Si2Naphtalene.C-Si_inchain.Stretch.dat ~/Dropbox/Latha/DATA_ModeDecomposition/Si2Naphthalene.Molecule.Phonons.Decomposition.SiCstretchinchain.dat
+cp Si2Naphtalene.C-Si_naphta.Stretch.dat  ~/Dropbox/Latha/DATA_ModeDecomposition/Si2Naphthalene.Molecule.Phonons.Decomposition.SiCstretchNaphthalene.dat
+cp Si2Naphtalene.Simotion.Total.dat       ~/Dropbox/Latha/DATA_ModeDecomposition/Si2Naphthalene.Molecule.Phonons.Decomposition.Simotion.dat
+cp Si2Naphtalene.SiStretch.Total.dat      ~/Dropbox/Latha/DATA_ModeDecomposition/Si2Naphthalene.Molecule.Phonons.Decomposition.Sistretch.dat
+cp Si2Naphtalene.Smotion.Total.dat        ~/Dropbox/Latha/DATA_ModeDecomposition/Si2Naphthalene.Molecule.Phonons.Decomposition.Smotion.dat
+
+
+#mv Si2Naphtalene.Aumotion.Total.dat    Si2Naphthalene.Aumotion.Total.dat
+mv Si2Naphtalene.Cmotion.Total.dat     Si2Naphthalene.Cmotion.Total.dat
+mv Si2Naphtalene.C_notNaphta.Total.dat Si2Naphthalene.C_notNaphta.Total.dat
+mv Si2Naphtalene.C_Naphta.Total.dat    Si2Naphthalene.C_Naphta.Total.dat
+mv Si2Naphtalene.Hmotion.Total.dat     Si2Naphthalene.Hmotion.Total.dat
+mv Si2Naphtalene.S-H.Stretch.dat      Si2Naphthalene.S-H.Stretch.dat 
+mv Si2Naphtalene.C-Si_inchain.Stretch.dat Si2Naphthalene.C-Si_inchain.Stretch.dat
+mv Si2Naphtalene.C-Si_naphta.Stretch.dat  Si2Naphthalene.C-Si_naphta.Stretch.dat
+mv Si2Naphtalene.Simotion.Total.dat       Si2Naphthalene.Simotion.Total.dat
+mv Si2Naphtalene.SiStretch.Total.dat      Si2Naphthalene.SiStretch.Total.dat
+mv Si2Naphtalene.Smotion.Total.dat        Si2Naphthalene.Smotion.Total.dat
+
+mkdir ~/Dropbox/Latha/Modes.Si2Naphthalene.Molecule
+cp ./sl_* ~/Dropbox/Latha/Modes.Si2Naphthalene.Molecule/
+
+
+
+
+
+
+###########  Si2 Molecule ##############
+cd /Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si2/Phonons/
+# S Au stretch
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;   paste <(cat $file | grep Au | head -2 |  sort  -k4) <(cat  $file | grep "S " | sort  -k4 )  | awk -v moden=${moden} -v freq=${freq}  '{ p += ($5-$12)**2 ; q += ($6-$13)**2 ; r += ($7-$14)**2} END {print moden,freq, (freq*0.12398),sqrt(p),sqrt(q),sqrt(r),sqrt(p+q+r)} ' ; done  > tmp.mode
+echo '#S-Au Stretch  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode
+sort -n tmp.mode  > Si2.S-Au.Stretch.dat
+# S motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "S " | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Hmotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Si2.Smotion.Total.dat
+# C motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "C" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Hmotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Si2.Cmotion.Total.dat
+# H motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "H" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Hmotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Si2.Hmotion.Total.dat
+# Au motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "Au" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Aumotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Si2.Aumotion.Total.dat
+# Si motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "Si" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Si motion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Si2.Simotion.Total.dat
+#Si Si stretch
+# for 2 si
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "Si" | awk -v moden=${moden} -v freq=${freq}  'NR>1{print moden,freq, (freq*0.12398), $5-p, $6-q, $7-r , sqrt(   ($5-p)**2 + ($6-q)**2 + ( $7-r )**2 )  } {p=$5; q=$6; r=$7}' ; done  > tmp.mode
+echo '#Si-Si stretch motion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Si2.SiStretch.Total.dat
+
+
+
+
+###########  Si3 Molecule ##############
+cd /Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si3/Phonons/
+# S Au stretch
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;   paste <(cat $file | grep Au | head -2 |  sort  -k4) <(cat  $file | grep "S " | sort  -k4 )  | awk -v moden=${moden} -v freq=${freq}  '{ p += ($5-$12)**2 ; q += ($6-$13)**2 ; r += ($7-$14)**2} END {print moden,freq, (freq*0.12398),sqrt(p),sqrt(q),sqrt(r),sqrt(p+q+r)} ' ; done  > tmp.mode
+echo '#S-Au Stretch  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode
+sort -n tmp.mode  > SiSiSi.S-Au.Stretch.dat
+# S motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "S " | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Hmotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > SiSiSi.Smotion.Total.dat
+# C motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "C" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Hmotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > SiSiSi.Cmotion.Total.dat
+# H motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "H" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Hmotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > SiSiSi.Hmotion.Total.dat
+# Au motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "Au" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Aumotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > SiSiSi.Aumotion.Total.dat
+# Si motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "Si" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Si motion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > SiSiSi.Simotion.Total.dat
+# Si(central)motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file |  grep 'Si' | grep ' -0.01827975   -0.00194997   -0.02948960' | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#C motion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > SiSiSi.Si2motion.Total.dat
+# for more than 2 Si
+rm Si12.tmp.mode  Si23.tmp.mode Si13.tmp.mode
+for file in $(ls sl_*) 
+do 
+freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` 
+cat $file | grep "Si" | awk -v moden=${moden} -v freq=${freq}  'NR>1{print moden,freq, (freq*0.12398), $5-p, $6-q, $7-r , sqrt(   ($5-p)**2 + ($6-q)**2 + ( $7-r )**2 )  } {p=$5; q=$6; r=$7}' >> tmp.$file 
+cat $file | grep "Si"  | awk 'NR%2==1'| awk -v moden=${moden} -v freq=${freq}  'NR>1{print moden,freq, (freq*0.12398), $5-p, $6-q, $7-r , sqrt(   ($5-p)**2 + ($6-q)**2 + ( $7-r )**2 )  } {p=$5; q=$6; r=$7}' >> tmp.$file 
+head -1  tmp.$file >> Si12.tmp.mode 
+head -2  tmp.$file | tail -n 1 >> Si23.tmp.mode 
+tail -n 1 tmp.$file  >> Si13.tmp.mode; done 
+echo '#Si1-Si2 stretch motion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> Si12.tmp.mode 
+echo '#Si2-Si3 stretch motion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> Si23.tmp.mode 
+echo '#Si1-Si3 stretch motion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> Si13.tmp.mode 
+sort -n Si12.tmp.mode  > SiSiSi.Si12Stretch.Total.dat
+sort -n Si23.tmp.mode  > SiSiSi.Si23Stretch.Total.dat
+sort -n Si13.tmp.mode  > SiSiSi.Si13Stretch.Total.dat
+###########  Si4 Molecule ##############
+cd /Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/Si4/Phonons/
+# S Au stretch
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;   paste <(cat $file | grep Au | head -2 |  sort  -k4) <(cat  $file | grep "S " | sort  -k4 )  | awk -v moden=${moden} -v freq=${freq}  '{ p += ($5-$12)**2 ; q += ($6-$13)**2 ; r += ($7-$14)**2} END {print moden,freq, (freq*0.12398),sqrt(p),sqrt(q),sqrt(r),sqrt(p+q+r)} ' ; done  > tmp.mode
+echo '#S-Au Stretch  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode
+sort -n tmp.mode  > Si4.S-Au.Stretch.dat
+# S motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "S " | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Hmotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Si4.Smotion.Total.dat
+# C motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "C" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Hmotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Si4.Cmotion.Total.dat
+# H motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "H" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Hmotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Si4.Hmotion.Total.dat
+# Au motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "Au" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Aumotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Si4.Aumotion.Total.dat
+# Si motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "Si" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Si motion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > Si4.Simotion.Total.dat
+# for more than 2 Si
+rm Si12.tmp.mode  Si23.tmp.mode Si34.tmp.mode
+for file in $(ls sl_*) ; do rm tmp.$file  ; freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "Si" | awk -v moden=${moden} -v freq=${freq}  'NR>1{print moden,freq, (freq*0.12398), $5-p, $6-q, $7-r , sqrt(   ($5-p)**2 + ($6-q)**2 + ( $7-r )**2 )  } {p=$5; q=$6; r=$7}' >> tmp.$file ; head -1  tmp.$file >> Si12.tmp.mode ; head -2  tmp.$file | tail -n 1 >> Si23.tmp.mode ; tail -n 1 tmp.$file  >> Si34.tmp.mode; done 
+echo '#Si1-Si2 stretch motion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> Si12.tmp.mode 
+echo '#Si2-Si3 stretch motion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> Si23.tmp.mode 
+echo '#Si3-Si4 stretch motion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> Si34.tmp.mode 
+sort -n Si12.tmp.mode  > Si4.Si12Stretch.Total.dat
+sort -n Si23.tmp.mode  > Si4.Si23Stretch.Total.dat
+sort -n Si34.tmp.mode  > Si4.Si34Stretch.Total.dat
+########### SI - O - SI #############
+cd /Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/SiOSi/Phonons/
+# S Au stretch
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;   paste <(cat $file | grep Au | head -2 |  sort  -k4) <(cat  $file | grep "S " | sort  -k4 )  | awk -v moden=${moden} -v freq=${freq}  '{ p += ($5-$12)**2 ; q += ($6-$13)**2 ; r += ($7-$14)**2} END {print moden,freq, (freq*0.12398),sqrt(p),sqrt(q),sqrt(r),sqrt(p+q+r)} ' ; done  > tmp.mode
+echo '#S-Au Stretch  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode
+sort -n tmp.mode  > SiOSi.S-Au.Stretch.dat
+# S motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "S " | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Hmotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > SiOSi.Smotion.Total.dat
+# C motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "C" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Hmotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > SiOSi.Cmotion.Total.dat
+# H motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "H" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Hmotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > SiOSi.Hmotion.Total.dat
+# Au motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "Au" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Aumotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > SiOSi.Aumotion.Total.dat
+# Si motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "Si" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Si motion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > SiOSi.Simotion.Total.dat
+# O motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "O" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Si motion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > SiOSi.Omotion.Total.dat
+# for more than Si - O 
+rm Si1O.tmp.mode  Si2O.tmp.mode 
+for file in $(ls sl_*) 
+do  freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  
+cat $file | grep "Si" | head -1 > tmp.buff
+cat $file | grep "O"  >> tmp.buff
+cat tmp.buff |  awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' > tmp.$file
+cat $file | grep "O"  > tmp.buff  
+cat $file | grep "Si" | tail -n -1 >> tmp.buff
+cat tmp.buff |  awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' >> tmp.$file
+head -1  tmp.$file >>Si1O.tmp.mode ; 
+head -2  tmp.$file | tail -n 1 >> Si2O.tmp.mode ;  done 
+echo '#Si1-O stretch motion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> Si1O.tmp.mode 
+echo '#Si2-O stretch motion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> Si2O.tmp.mode 
+sort -n Si1O.tmp.mode  > SiOSi.Si1OStretch.Total.dat
+sort -n Si2O.tmp.mode  > SiOSi.Si2OStretch.Total.dat
+# for 2 si
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "Si" | awk -v moden=${moden} -v freq=${freq}  'NR>1{print moden,freq, (freq*0.12398), $5-p, $6-q, $7-r , sqrt(   ($5-p)**2 + ($6-q)**2 + ( $7-r )**2 )  } {p=$5; q=$6; r=$7}' ; done  > tmp.mode
+echo '#Si-Si stretch motion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > SiOSi.SiStretch.Total.dat
+########### SI - C - SI #############
+cd /Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/SiCSi/Phonons/
+# S Au stretch
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;   paste <(cat $file | grep Au | head -2 |  sort  -k4) <(cat  $file | grep "S " | sort  -k4 )  | awk -v moden=${moden} -v freq=${freq}  '{ p += ($5-$12)**2 ; q += ($6-$13)**2 ; r += ($7-$14)**2} END {print moden,freq, (freq*0.12398),sqrt(p),sqrt(q),sqrt(r),sqrt(p+q+r)} ' ; done  > tmp.mode
+echo '#S-Au Stretch  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode
+sort -n tmp.mode  > SiCSi.S-Au.Stretch.dat
+# S motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "S " | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Hmotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > SiCSi.Smotion.Total.dat
+# C motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "C" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Hmotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > SiCSi.Cmotion.Total.dat
+# H motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "H" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Hmotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > SiCSi.Hmotion.Total.dat
+# Au motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "Au" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Aumotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > SiCSi.Aumotion.Total.dat
+# Si motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "Si" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Si motion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > SiCSi.Simotion.Total.dat
+# C (central)motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file |  grep 'C' | grep ' -0.08715881    0.22621688    0.05914919' | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#C motion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > SiCSi.C0motion.Total.dat
+# for Si - C 
+rm Si1O.tmp.mode  Si2O.tmp.mode 
+for file in $(ls sl_*) 
+do  freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  
+cat $file | grep "Si" | head -1 > tmp.buff
+cat $file |  grep C | grep ' -0.08715881    0.22621688    0.05914919'  >> tmp.buff
+cat tmp.buff |  awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' > tmp.$file
+cat $file |  grep C | grep ' -0.08715881    0.22621688    0.05914919'  > tmp.buff  
+cat $file | grep "Si" | tail -n -1 >> tmp.buff
+cat tmp.buff |  awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' >> tmp.$file
+head -1  tmp.$file >>Si1O.tmp.mode ; 
+head -2  tmp.$file | tail -n 1 >> Si2O.tmp.mode ;  done 
+echo '#Si1-C stretch motion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> Si1O.tmp.mode 
+echo '#Si2-C stretch motion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> Si2O.tmp.mode 
+sort -n Si1O.tmp.mode  > SiCSi.Si1OStretch.Total.dat
+sort -n Si2O.tmp.mode  > SiCSi.Si2OStretch.Total.dat
+# for 2 si
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "Si" | awk -v moden=${moden} -v freq=${freq}  'NR>1{print moden,freq, (freq*0.12398), $5-p, $6-q, $7-r , sqrt(   ($5-p)**2 + ($6-q)**2 + ( $7-r )**2 )  } {p=$5; q=$6; r=$7}' ; done  > tmp.mode
+echo '#Si-Si stretch motion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > SiCSi.SiStretch.Total.dat
+########### SI - O - SI - Naphtalene#############
+cd /Users/pdarancet/DATA/DATA_FieldInducedBondBreaking/SiOSiNaphtalene/Phonons/
+# S Au stretch
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;   paste <(cat $file | grep Au | head -2 |  sort  -k4) <(cat  $file | grep "S " | sort  -k4 )  | awk -v moden=${moden} -v freq=${freq}  '{ p += ($5-$12)**2 ; q += ($6-$13)**2 ; r += ($7-$14)**2} END {print moden,freq, (freq*0.12398),sqrt(p),sqrt(q),sqrt(r),sqrt(p+q+r)} ' ; done  > tmp.mode
+echo '#S-Au Stretch  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode
+sort -n tmp.mode  > SiOSiNaphtalene.S-Au.Stretch.dat
+# S motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "S " | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Hmotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > SiOSiNaphtalene.Smotion.Total.dat
+# C motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "C" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Hmotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > SiOSiNaphtalene.Cmotion.Total.dat
+# H motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "H" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Hmotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > SiOSiNaphtalene.Hmotion.Total.dat
+# Au motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "Au" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Aumotion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > SiOSiNaphtalene.Aumotion.Total.dat
+# Si motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "Si" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Si motion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > SiOSiNaphtalene.Simotion.Total.dat
+# O motion
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "O" | awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' ; done  > tmp.mode
+echo '#Si motion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > SiOSiNaphtalene.Omotion.Total.dat
+# for more than Si - O 
+rm Si1O.tmp.mode  Si2O.tmp.mode 
+for file in $(ls sl_*) 
+do  freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  
+cat $file | grep "Si" | head -1 > tmp.buff
+cat $file | grep "O"  >> tmp.buff
+cat tmp.buff |  awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' > tmp.$file
+cat $file | grep "O"  > tmp.buff  
+cat $file | grep "Si" | tail -n -1 >> tmp.buff
+cat tmp.buff |  awk -v moden=${moden} -v freq=${freq}  '{p += ($5*$5) ; q += ($6*$6) ; r += ($7*$7)  } END { print moden,freq, (freq*0.12398), sqrt(p), sqrt(q), sqrt(r), sqrt( p+q+r)  }' >> tmp.$file
+head -1  tmp.$file >>Si1O.tmp.mode ; 
+head -2  tmp.$file | tail -n 1 >> Si2O.tmp.mode ;  done 
+echo '#Si1-O stretch motion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> Si1O.tmp.mode 
+echo '#Si2-O stretch motion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> Si2O.tmp.mode 
+sort -n Si1O.tmp.mode  > SiOSiNaphtalene.Si1OStretch.Total.dat
+sort -n Si2O.tmp.mode  > SiOSiNaphtalene.Si2OStretch.Total.dat
+# for 2 si
+for file in $(ls sl_*) ; do   freq=`echo ${file%.*} | cut -f3 -d '_'` ; moden=`echo ${file%.*} | cut -f2 -d '_'` ;  cat $file | grep "Si" | awk -v moden=${moden} -v freq=${freq}  'NR>1{print moden,freq, (freq*0.12398), $5-p, $6-q, $7-r , sqrt(   ($5-p)**2 + ($6-q)**2 + ( $7-r )**2 )  } {p=$5; q=$6; r=$7}' ; done  > tmp.mode
+echo '#Si-Si stretch motion  modenumber freq(cm-1) freq(meV) x(A) y(A) z(A) r(A)' >> tmp.mode 
+sort -n tmp.mode  > SiOSiNaphtalene.SiStretch.Total.dat

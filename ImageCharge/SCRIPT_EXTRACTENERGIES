@@ -1,0 +1,98 @@
+#!/bin/bash
+COMMAND="/global/home/users/pdarancet/IMAGECHARGE.exe"
+
+OUTFILE="$1"
+if [ -z "$2" ]; then
+	AuPerLayer="16"
+	echo "NUMBER OF Au ATOMS per LAYER (USING DEFAULT): $AuPerLayer"
+else
+	AuPerLayer="$2"	
+	echo "NUMBER OF Au ATOMS per LAYER (USING USER-PROVIDED VALUE): $AuPerLayer"
+
+fi
+if [ -z "$3" ]; then
+	NumberofLayer="6"
+	echo "NUMBER OF LAYERS (USING DEFAULT): $NumberofLayer"
+else
+	NumberofLayer="$3"
+	echo "NUMBER OF LAYERS (USING USER-PROVIDED VALUE): $NumberofLayer"
+
+fi
+
+
+
+
+echo "READING $OUTFILE"
+NUMBERELEC=`cat $OUTFILE | grep Qtot  | awk '{print $NF}'`
+echo "Number of valence electrons in the system: $NUMBERELEC"
+HOMO="$(echo "scale=0; $NUMBERELEC/2" | bc)"
+echo "HOMO IS LEVEL# $HOMO"
+
+LABEL=`cat $OUTFILE | grep SystemLabel | tail -n 1 | awk '{print $2}' ` 
+
+
+FILE=`echo "${LABEL}.EIG"`
+echo "LOOKING FOR FILE $FILE"
+
+if [ -e ./$FILE ] ; then 
+	echo 'PDOS File...'
+	FILEPDOS=`echo "$LABEL.PDOS"`
+	echo "... $FILEPDOS"
+	echo "$FILEPDOS">DATA.in
+	BIAS="0"
+	echo "$BIAS">>DATA.in
+
+	echo 'Number of energies ...'
+	NUMBEROFENERGYAUX=`sed -n '/<energy_values/,/<\/energy_values>/p' $FILEPDOS  | wc -l`
+	NUMBEROFENERGY="$(echo "scale=10; $NUMBEROFENERGYAUX - 2" | bc)"
+	echo $NUMBEROFENERGYAUX $NUMBEROFENERGY
+	echo "$NUMBEROFENERGY" >>DATA.in
+
+
+     
+	NUMBEROFORBITALS=`head -10 $FILEPDOS | grep '<norbitals>'  | awk '{print $2}' | sed 's#</norbitals># #g'`
+	echo  "$NUMBEROFORBITALS"  >>DATA.in
+	NUMBEROFATOMS=`cat $OUTFILE | grep NumberOfAtoms | head -1 | awk '{print $2}'`
+	echo  "$NUMBEROFATOMS"   >>DATA.in
+	LINENUMBER=`wc -l $FILE  | awk '{print $1}'`
+	LINENUMBERCORR="$(echo "scale=10; $LINENUMBER - 2" | bc)"
+
+	STRINGLEVEL=`tail -n $LINENUMBERCORR $FILE | sed 's/    1 /      /g' | tr "\\n" " "`
+
+	LEVEL="$(echo "scale=10; $HOMO " | bc)"
+	LEVELENERGY=`echo $STRINGLEVEL | awk -v level=$LEVEL '{print $level}'`
+	echo "$LEVELENERGY"    >>DATA.in
+	LEVEL="$(echo "scale=10; $HOMO + 1" | bc)"
+	LEVELENERGY=`echo $STRINGLEVEL | awk -v level=$LEVEL '{print $level}'`
+	echo "$LEVELENERGY"    >>DATA.in
+
+	dir=`pwd`
+	sourcedir=`echo ${dir%_MOL_PBE}`
+	sourcefile=`ls $sourcedir | grep "_2x2cold.xyz"`
+	tmp="$(echo "scale=0; 2 * $NumberofLayer * $AuPerLayer " | bc)"
+	AULeft=`cat $sourcedir/$sourcefile | sed 's/^ *//; s/ *$//; /^$/d' | tail -n $tmp | sed -n 1~2p | head -$AuPerLayer |  awk '{sum=sum+$4} END {print sum/NR}'`
+	echo "${AULeft}"    >>DATA.in
+	AURight=`cat $sourcedir/$sourcefile | sed 's/^ *//; s/ *$//; /^$/d' | tail -n $tmp | sed -n 2~2p |  head -$AuPerLayer | awk '{sum=sum+$4} END {print sum/NR}'`
+	echo "${AURight}"    >> DATA.in
+
+	POSITIONIMAGECHARGE="1.47"
+	echo "$POSITIONIMAGECHARGE"    >> DATA.in
+
+	cp $FILEPDOS ${FILEPDOS}.safe
+ 	sed ':a;N;$!ba;s/" \n/ " \n/g' $FILEPDOS > tmp.pdos ; mv tmp.pdos $FILEPDOS
+
+	$COMMAND
+
+	shiftmoFILE=`ls | grep "shift_mo"`
+	if [ -f ./$shiftmoFILE ]; then
+		sed "s/HOMOLEVEL/$HOMO/g" $shiftmoFILE > tmp.shift  ; mv tmp.shift $shiftmoFILE
+	fi
+	cat PDOS_perlevelmathematica.dat  | tr "\n"  " " | sed 's/};/};\n/g' > tmp.dat ; mv tmp.dat PDOS_perlevelmathematica.dat
+else 
+	echo "File $FILE not found"
+fi 
+
+#WORKDIR=`pwd` ; junctionlist="-1 0 1 2 3 4 5 6 7 8 9 10" ; for ij in $junctionlist ;  do echo "$ij"; cd   $WORKDIR/BP_J${ij}_TRIMTRIM_Junction_MOL_DELTASCF; ENEUTRAL=`cat Neutral.out | grep 'Convergence criterion met' | awk '{print $2}'`;EANION=`cat Anion.out | grep 'Convergence criterion met' | awk '{print $2}'` ; ECATION=`cat Cation.out | grep 'Convergence criterion met' | awk '{print $2}'` ;  LEVELH="$(echo "scale=10; ( - $ECATION + $ENEUTRAL )*27.21138505 " | bc)"; echo " HOMODELTASCF $LEVELH" ;   LEVELL="$(echo "scale=10; ( $EANION - $ENEUTRAL )*27.21138505 " | bc)"; echo " LUMODELTASCF $LEVELL" ;   cat $WORKDIR/BP_J${ij}_TRIMTRIM_Junction_MOL_PBE/0.DFT+S.shift_mo | sed "s/ICH\=/DeltaSCFH\= ${LEVELH} ICH\=/g"| sed "s/ICL\=/DeltaSCFL\= ${LEVELL} ICL\=/g" >  $WORKDIR/BP_J${ij}_TRIMTRIM_Junction_MOL_DELTASCF/0.DFT+S.shift_mo  ; TOTALHOMOCORR=`cat $WORKDIR/BP_J${ij}_TRIMTRIM_Junction_MOL_DELTASCF/0.DFT+S.shift_mo | grep TOTALHOMO | awk '{print $5-$3+$7}'` ; TOTALLUMOCORR=`cat $WORKDIR/BP_J${ij}_TRIMTRIM_Junction_MOL_DELTASCF/0.DFT+S.shift_mo | grep TOTALLUMO | awk '{print $5-$3+$7}'` ; cat $WORKDIR/BP_J${ij}_TRIMTRIM_Junction_MOL_DELTASCF/0.DFT+S.shift_mo |  sed "s/TOTALHOMO/${TOTALHOMOCORR}/g"| sed "s/TOTALLUMO/${TOTALLUMOCORR}/g" > $WORKDIR/BP_J${ij}_TRIMTRIM_Junction/0.DFT+S.shift_mo ; cp  $WORKDIR/BP_J${ij}_TRIMTRIM_Junction/0.DFT+S.shift_mo /clusterfs/vulcan/pscratch/pdarancet/BPJ${ij}TRIMTRIM_0/DFT+S.0.shift_mo;  done; cd $WORKDIR
+
+
+

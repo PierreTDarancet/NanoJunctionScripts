@@ -1,0 +1,285 @@
+!
+! Copyright (C) 2005 WanT Group
+!
+! This file is distributed under the terms of the
+! GNU General Public License. See the file `License\'
+! in the root directory of the present distribution,
+! or http://www.gnu.org/copyleft/gpl.txt .
+!
+!*********************************************
+   MODULE T_gamma_module
+!*********************************************
+   USE kinds,           ONLY : dbl
+   USE parameters,      ONLY : nstrx
+   USE constants,            ONLY : PI, ZERO, CZERO, CONE, CI, EPS_m5
+   USE T_control_module,     ONLY : dim_subspace
+   USE T_egrid_module,       ONLY : ne, emin, emax
+   USE iotk_module
+   USE files_module,         ONLY : file_open, file_close
+
+   IMPLICIT NONE
+   PRIVATE 
+   SAVE
+!
+! Contains transport hamiltonian data
+! 
+    ! 
+    !
+    COMPLEX(dbl), ALLOCATABLE :: sigma_L(:,:,:), sigma_R(:,:,:)
+    !
+    COMPLEX(dbl), ALLOCATABLE :: gamma_L_s(:,:,:), gamma_R_s(:,:,:)
+    !
+
+    !
+    LOGICAL :: alloc = .FALSE.
+
+
+!
+! end delcarations
+!
+
+   PUBLIC :: sigma_L, sigma_R, gamma_R_s, gamma_L_s
+   !
+   PUBLIC :: alloc
+   !
+   PUBLIC :: gamma_allocate
+   PUBLIC :: gamma_deallocate
+   PUBLIC :: gamma_L_read
+   PUBLIC :: gamma_R_read
+   PUBLIC :: sigma_L_read
+   PUBLIC :: sigma_R_read
+
+
+CONTAINS
+
+!
+! subroutines
+!
+
+!**********************************************************
+   SUBROUTINE gamma_allocate()
+   !**********************************************************
+   IMPLICIT NONE
+      CHARACTER(20)      :: subname="hamiltonian_allocate"
+      INTEGER  :: ierr
+
+      IF ( alloc )       CALL errore(subname,'already allocated', 1 )
+
+      !
+      !
+      ALLOCATE ( sigma_L(ne,dim_subspace,dim_subspace), STAT=ierr )
+           IF( ierr /=0 ) CALL errore(subname, ' allocating sigma_L', 1 )
+      ALLOCATE ( sigma_R(ne,dim_subspace,dim_subspace), STAT=ierr )
+           IF( ierr /=0 ) CALL errore(subname, ' allocating sigma_R', 1 )
+
+      ALLOCATE ( gamma_L_s(ne,dim_subspace,dim_subspace), STAT=ierr )
+           IF( ierr /=0 ) CALL errore(subname, ' allocating gamma_L_s', 1 )
+      ALLOCATE ( gamma_R_s(ne,dim_subspace,dim_subspace), STAT=ierr )
+           IF( ierr /=0 ) CALL errore(subname, ' allocating gamma_R_s', 1 )
+
+      !
+      !
+      sigma_L(:,:,:) = CZERO
+      sigma_R(:,:,:) = CZERO
+      !
+      gamma_L_s(:,:,:) = CZERO
+      gamma_R_s(:,:,:) = CZERO
+      !
+
+      alloc = .TRUE.
+      !
+   END SUBROUTINE gamma_allocate
+
+
+!**********************************************************
+   SUBROUTINE gamma_deallocate()
+   !**********************************************************
+   IMPLICIT NONE
+      CHARACTER(22)      :: subname="hamiltonian_deallocate"
+      INTEGER :: ierr
+
+      IF ( .NOT. alloc ) RETURN
+
+      DEALLOCATE ( sigma_L, STAT=ierr )
+           IF( ierr /=0 ) CALL errore(subname, 'deallocating sigma_L', 1 )
+      DEALLOCATE ( sigma_R, STAT=ierr )
+           IF( ierr /=0 ) CALL errore(subname, 'deallocating sigma_R', 1 )
+          !
+      DEALLOCATE ( gamma_L_s, STAT=ierr )
+           IF( ierr /=0 ) CALL errore(subname, 'deallocating gamma_L_s', 1 )
+      DEALLOCATE ( gamma_R_s, STAT=ierr )
+           IF( ierr /=0 ) CALL errore(subname, 'deallocating gamma_R_s', 1 )
+          !
+
+      alloc = .FALSE.   
+
+   END SUBROUTINE gamma_deallocate
+
+
+!**********************************************************
+   SUBROUTINE gamma_L_read(unit, name)
+   !**********************************************************
+   IMPLICIT NONE
+       INTEGER,         INTENT(in) :: unit
+       CHARACTER(*),    INTENT(in) :: name
+       CHARACTER(nstrx)   :: attr
+       CHARACTER(12)      :: subname="gamma_L_read"
+       INTEGER            :: ierr, ien, ne_
+       REAL(dbl)          :: emin_ , emax_
+ 
+       CALL file_open(unit,TRIM(name),PATH="/",ACTION="read", &
+                              FORM='formatted')
+
+!          CALL iotk_scan_empty(unit,"DATA",ATTR=attr)
+!          CALL iotk_scan_attr(attr,"nomega",ne_) 
+!          CALL iotk_scan_attr(attr,"emin",emin_) 
+!          CALL iotk_scan_attr(attr,"emax",emax_) 
+!    
+!          IF( ne_ /= ne )     CALL errore(subname, 'input and read ne   in gamma_L are different', 1 )
+!          IF( emin_ /= emin ) CALL errore(subname, 'input and read emin in gamma_L are different', 1 )
+!          IF( emax_ /= emax ) CALL errore(subname, 'input and read emax in gamma_L are different', 1 )
+
+       CALL iotk_scan_begin(unit,"gamma_L")
+
+       DO ien = 1, ne
+             !
+             CALL iotk_scan_dat(unit,"gamma"//TRIM(iotk_index(ien)), gamma_L_s(ien,:,:))
+       ENDDO
+
+
+       CALL iotk_scan_end(unit,"gamma_L")
+
+      CALL file_close(unit,PATH="/",ACTION="read")
+
+      !CALL ioname('matrix',filename,LPATH=.FALSE.)
+      !WRITE( stdout,"(/,' gamma_L read from file : ',5x,a)") TRIM(name)
+      ! End of right part
+
+   END SUBROUTINE gamma_L_read
+
+!**********************************************************
+   SUBROUTINE gamma_R_read(unit, name)
+   !**********************************************************
+   IMPLICIT NONE
+       INTEGER,         INTENT(in) :: unit
+       CHARACTER(*),    INTENT(in) :: name
+       CHARACTER(nstrx)   :: attr
+       CHARACTER(12)      :: subname="gamma_R_read"
+       INTEGER            :: ierr, ien, ne_
+       REAL(dbl)          :: emin_ , emax_
+
+       !
+       CALL file_open(unit,TRIM(name),PATH="/",ACTION="read", &
+                              FORM='formatted')
+       !
+
+!        CALL iotk_scan_empty(unit,"DATA",ATTR=attr)
+!        CALL iotk_scan_attr(attr,"nomega",ne_) 
+!        CALL iotk_scan_attr(attr,"emin",emin_) 
+!        CALL iotk_scan_attr(attr,"emax",emax_) 
+! 
+!        IF( ne_ /= ne )     CALL errore(subname, 'input and read ne   in gamma_R are different', 1 )
+!        IF( emin_ /= emin ) CALL errore(subname, 'input and read emin in gamma_R are different', 1 )
+!        IF( emax_ /= emax ) CALL errore(subname, 'input and read emax in gamma_R are different', 1 )
+
+       CALL iotk_scan_begin(unit,"gamma_R")
+
+       DO ien = 1, ne
+             !
+             CALL iotk_scan_dat(unit,"sigma"//TRIM(iotk_index(ien)), gamma_R_s(ien,:,:))
+       ENDDO
+
+
+       CALL iotk_scan_end(unit,"gamma_R")
+
+       CALL file_close(unit,PATH="/",ACTION="read")
+
+       !WRITE( stdout,"(/,' gamma_R read from file : ',5x,a)") TRIM(name)
+
+   END SUBROUTINE gamma_R_read
+
+
+!**********************************************************
+   SUBROUTINE sigma_L_read(unit, name)
+   !**********************************************************
+   IMPLICIT NONE
+       INTEGER,         INTENT(in) :: unit
+       CHARACTER(*),    INTENT(in) :: name
+       CHARACTER(nstrx)   :: attr
+       CHARACTER(12)      :: subname="sigma_L_read"
+       INTEGER            :: ierr, ien, ne_
+       REAL(dbl)          :: emin_ , emax_
+
+       !
+       CALL file_open(unit,TRIM(name),PATH="/",ACTION="read", &
+                              FORM='formatted')
+       !
+
+!        CALL iotk_scan_empty(unit,"DATA",ATTR=attr)
+!        CALL iotk_scan_attr(attr,"nomega",ne_) 
+!        CALL iotk_scan_attr(attr,"emin",emin_) 
+!        CALL iotk_scan_attr(attr,"emax",emax_) 
+! 
+!        IF( ne_ /= ne )     CALL errore(subname, 'input and read ne   in sigma_L are different', 1 )
+!        IF( emin_ /= emin ) CALL errore(subname, 'input and read emin in sigma_L are different', 1 )
+!        IF( emax_ /= emax ) CALL errore(subname, 'input and read emax in sigma_L are different', 1 )
+
+       CALL iotk_scan_begin(unit,"sigma_L")
+
+       DO ien = 1, ne
+             !
+             CALL iotk_scan_dat(unit,"sigma"//TRIM(iotk_index(ien)), sigma_L(ien,:,:))
+       ENDDO
+
+
+       CALL iotk_scan_end(unit,"sigma_L")
+
+       CALL file_close(unit,PATH="/",ACTION="read")
+
+       !WRITE( stdout,"(/,' sigma_L read from file : ',5x,a)") TRIM(name)
+
+   END SUBROUTINE sigma_L_read
+
+!**********************************************************
+   SUBROUTINE sigma_R_read(unit, name)
+   !**********************************************************
+   IMPLICIT NONE
+       INTEGER,         INTENT(in) :: unit
+       CHARACTER(*),    INTENT(in) :: name
+       CHARACTER(nstrx)   :: attr
+       CHARACTER(12)      :: subname="sigma_R_read"
+       INTEGER            :: ierr, ien, ne_
+       REAL(dbl)          :: emin_ , emax_
+
+       !
+       CALL file_open(unit,TRIM(name),PATH="/",ACTION="read", &
+                              FORM='formatted')
+       !
+
+!        CALL iotk_scan_empty(unit,"DATA",ATTR=attr)
+!        CALL iotk_scan_attr(attr,"nomega",ne_) 
+!        CALL iotk_scan_attr(attr,"emin",emin_) 
+!        CALL iotk_scan_attr(attr,"emax",emax_) 
+! 
+!        IF( ne_   /= ne )   CALL errore(subname, 'input and read ne   in sigma_R are different', 1 )
+!        IF( emin_ /= emin ) CALL errore(subname, 'input and read emin in sigma_R are different', 1 )
+!        IF( emax_ /= emax ) CALL errore(subname, 'input and read emax in sigma_R are different', 1 )
+
+       CALL iotk_scan_begin(unit,"sigma_R")
+
+       DO ien = 1, ne
+             !
+             CALL iotk_scan_dat(unit,"sigma"//TRIM(iotk_index(ien)), sigma_R(ien,:,:))
+       ENDDO
+
+
+       CALL iotk_scan_end(unit,"sigma_R")
+
+      CALL file_close(unit,PATH="/",ACTION="read")
+
+      !WRITE( stdout,"(/,' sigma_R read from file : ',5x,a)") TRIM(name)
+
+   END SUBROUTINE sigma_R_read
+
+END MODULE T_gamma_module
+

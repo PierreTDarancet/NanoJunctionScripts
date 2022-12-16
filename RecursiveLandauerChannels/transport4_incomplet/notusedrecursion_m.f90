@@ -1,0 +1,164 @@
+!
+! Copyright (C) 2006 LEPES-CNRS Grenoble
+!               2007 Institut Neel Grenoble
+! This file is distributed under the terms of the
+! GNU General Public License. See the file `License'
+! in the root directory of the present distribution,
+! or http://www.gnu.org/copyleft/gpl.txt .
+!
+! Contributors  : Pierre DARANCET
+ !*******************************************************************
+    SUBROUTINE recursion_loop(trial, nb_first, id_first, ene_first, ene_onsite, dim_recursion, nb_max_first, max_iter, rec_chain, var_summary)
+    !*******************************************************************
+   !
+   USE T_control_module,   ONLY : debug_mode, numerical_cut_off, conv_criterion
+   USE parameters,                ONLY : nstrx
+   USE kinds
+   USE constants,                 ONLY : ZERO, CZERO, CONE, ONE, EPS_m4, CI
+   USE recursion_function_module, ONLY :  calculate_A_matrix, calculate_recursion_state, &
+                                          normalize_recursion_state, calculate_variation
+   IMPLICIT NONE
+
+   !
+   ! Input variables
+   !
+   INTEGER,      INTENT(in)  ::  max_iter
+   INTEGER,      INTENT(in)  ::  dim_recursion
+   INTEGER,      INTENT(in)  ::  nb_max_first
+   INTEGER, INTENT(in) :: nb_first(dim_recursion)
+   INTEGER, INTENT(in) :: id_first(nb_max_first,dim_recursion)
+   COMPLEX(dbl), INTENT(in) :: ene_onsite(dim_recursion)
+   COMPLEX(dbl), INTENT(in) :: ene_first(nb_max_first,dim_recursion)
+   COMPLEX(dbl), INTENT(in)  ::  trial(dim_recursion)
+   !
+   ! Output variables
+   !
+   REAL(dbl),    INTENT(out) ::  var_summary(max_iter)
+   COMPLEX(dbl), INTENT(out) ::  rec_chain(2,max_iter)
+   !
+   ! Local  variables
+   !
+       ! Local  variables : General
+   CHARACTER(14)             :: subname="recursion_loop"
+   INTEGER                   :: ierr
+       ! Local  variables : loop
+   INTEGER                   :: iteration,jteration, ishift, jshift
+       ! Local  variables : test
+   REAL(dbl)                 :: variation
+   REAL(dbl)                 :: norm(max_iter+1)
+       ! Local  variables : auxiliary
+   COMPLEX(dbl)              :: aux1
+   COMPLEX(dbl)              :: aux2(dim_recursion)
+       ! Local  variables : Recursion
+   COMPLEX(dbl)              :: A_matrix(max_iter), B_matrix(max_iter)
+   COMPLEX(dbl)              :: recursion_state(max_iter+1, dim_recursion)
+   !
+   !  End of declarations
+   !
+
+!
+!--------------------------------------------
+! ... Startup
+!--------------------------------------------
+!
+
+  ! Main allocations
+
+    !
+
+   PRINT*, 'Entering recursion part'
+   ! Init Recursion local variables
+   recursion_state(:,:)= CZERO
+   recursion_state(1,:)= trial(:)
+   A_matrix(:)         = CZERO
+   B_matrix(:)         = CZERO
+   var_summary(:)      = CZERO
+   !
+
+   ! Init Auxiliary local variables
+!    ALLOCATE ( aux2(dim_recursion), STAT=ierr )
+!         IF( ierr /=0 ) CALL errore(subname, 'allocating aux2', ABS(ierr) )
+   !
+   aux1=CZERO
+   aux2(:)=CZERO
+   !
+
+
+
+   !
+   ! Recursion part
+   !
+   PRINT*, 'First iteration'
+
+      ! Recursion part : First iteration
+   CALL calculate_A_matrix(nb_max_first, nb_first(:), id_first(:,:), ene_onsite(:), ene_first(:,:), recursion_state(1,:), A_matrix(1), dim_recursion , debug_mode) 
+   !
+   CALL calculate_recursion_state(nb_max_first, nb_first(:), id_first(:,:), ene_onsite(:), ene_first(:,:), recursion_state(1,:), A_matrix(1), &
+                              aux1, aux2(:), recursion_state(2,:), dim_recursion , debug_mode)
+   !
+   CALL normalize_recursion_state( recursion_state(2,:), B_matrix(1), norm(2), numerical_cut_off, dim_recursion, debug_mode )
+   !
+   PRINT*, 'Enter recursion loop'
+      ! Recursion part : General loop
+   iteration_loop : &
+   DO iteration = 2, max_iter
+     ! real iteration indice
+      PRINT*, 'iter = ', iteration
+     !
+     CALL calculate_A_matrix(nb_max_first, nb_first(:), id_first(:,:), ene_onsite(:), ene_first(:,:), recursion_state(iteration,:) , A_matrix(iteration), dim_recursion, debug_mode ) 
+     !
+     CALL calculate_recursion_state(nb_max_first, nb_first(:), id_first(:,:), ene_onsite(:), ene_first(:,:), recursion_state(iteration,:), A_matrix(iteration), &
+                         B_matrix(iteration-1), recursion_state(iteration-1,:), recursion_state(iteration+1,:), dim_recursion, debug_mode )
+     !
+     CALL normalize_recursion_state(recursion_state(iteration+1,:), B_matrix(iteration), norm(iteration+1), numerical_cut_off, dim_recursion, debug_mode )
+     !
+     CALL calculate_variation( A_matrix(iteration), A_matrix(iteration-1), variation, debug_mode) 
+     !
+     var_summary(iteration) = variation
+     !
+   ENDDO iteration_loop
+
+   ! Tests
+   IF ( (ABS( variation ) >  conv_criterion) ) CALL errore(subname, 'recursion not converged', 1 )
+   IF ( (ABS(SUM( norm(:) ))  <   max_iter + 1.000 - EPS_m4) ) CALL errore(subname, 'problem with norm', INT(SUM(norm(:))) )
+
+
+   !
+   ! Final Process
+   rec_chain(:,:)=CZERO
+   DO iteration=1, max_iter
+      !
+      rec_chain(1,iteration)=A_matrix(iteration)
+      rec_chain(2,iteration)=B_matrix(iteration)
+      !
+   ENDDO
+
+
+  ! final Memory process
+!      IF ( ALLOCATED( aux2  ) ) THEN
+!            DEALLOCATE ( aux2 , STAT=ierr )
+!            IF( ierr /=0 ) CALL errore(subname, 'deallocating aux2', ABS(ierr) )
+!       ENDIF
+!      !
+!      IF ( ALLOCATED( A_matrix  ) ) THEN
+!            DEALLOCATE ( A_matrix , STAT=ierr )
+!            IF( ierr /=0 ) CALL errore(subname, 'deallocating A_matrix', ABS(ierr) )
+!       ENDIF
+!      !
+!      IF ( ALLOCATED( B_matrix  ) ) THEN
+!            DEALLOCATE ( B_matrix , STAT=ierr )
+!            IF( ierr /=0 ) CALL errore(subname, 'deallocating B_matrix', ABS(ierr) )
+!       ENDIF
+!      !
+!      IF ( ALLOCATED( recursion_state  ) ) THEN
+!            DEALLOCATE ( recursion_state, STAT=ierr )
+!            IF( ierr /=0 ) CALL errore(subname, 'deallocating recursion_state', ABS(ierr) )
+!       ENDIF
+!      !
+!      IF ( ALLOCATED( norm ) ) THEN
+!            DEALLOCATE ( norm, STAT=ierr )
+!            IF( ierr /=0 ) CALL errore(subname, 'deallocating norm', ABS(ierr) )
+!       ENDIF
+     !
+    !
+ END SUBROUTINE recursion_loop

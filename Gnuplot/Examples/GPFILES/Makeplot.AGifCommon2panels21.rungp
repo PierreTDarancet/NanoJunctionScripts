@@ -1,0 +1,16 @@
+PLOT_TYPE="Density&Potential2Panels"
+load "specs.ingp"
+
+load "AGif_small.setgp"
+
+load "4plots.2x2D_2xCt.setgp"
+
+load "setup+.rungp"
+load "iterate.4plots.2D2Pc.rungp"
+
+load "setup-.rungp"
+load "iterate.4plots.2D2Pc.rungp"
+
+load "close.rungp"
+
+

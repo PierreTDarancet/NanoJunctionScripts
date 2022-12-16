@@ -1,0 +1,827 @@
+#!/bin/bash
+
+# Copyright (C) 2012-2013 Columbia University
+#
+# This file is distributed under the terms of the
+# GNU General Public License. See the file `License'
+# in the root directory of the present distribution,
+# or http://www.gnu.org/copyleft/gpl.txt .
+#
+# Contributors  : Pierre Darancet
+# ***********************************************
+#
+# This program calls the Oneshot.General Script to launch 
+# a calculation on a given machine
+# ARGUMENTS  
+# $1 = JOBTYPE LIST
+# $2 = READMEINFO
+# $3 = OPTIONAL ARGUMENTS  
+
+
+##  ENV #####
+MYNAME="VASP.INPUT.GENERATOR" 
+MYVERSION="1.0"
+MACHINE=`hostname`
+WORKDIR=`pwd`
+CALCDOSINTERVAL="3.0" #eV
+CALCBANDSTRUCTUREINTERVAL="5.0" #eV
+CALCSCFINTERVAL="15.0" #eV
+SUPPORTEDGEOMETRYOPT="STATIC RELAX.IONS RELAX.CELL.AB RELAX.CELL.C RELAX.CELL HP.STATIC HP.RELAX.IONS HP.RELAX.CELL.AB HP.RELAX.CELL.C HP.RELAX.CELL"
+SUPPORTEDNSCF_TYPE="NONE BANDSTRUCTURE WANNIER WFWANNIER DOS OPTICALME"
+INPUTFILECHECKLIST="INPUT.POSCAR INPUT.POTCAR INPUT.KPOINTS"
+FILECHECKOUTPUT="CHG  CHGCAR   CONTCAR  DOSCAR  EIGENVAL IBZKPT INCAR KPOINTS LOCPOT OSZICAR OUTCAR PCDAT POSCAR POTCAR PROCAR  XDATCAR vasprun.xml WAVECAR wannier90.win wannier90.wout wannier90.eig wannier90.mmn wannier90.up.mmn wannier90.up.eig wannier90.dn.mmn wannier90.dn.eig"
+if [ -e /etc/profile ]; then
+	source /etc/profile
+fi
+if [ -e /etc/profile ]; then
+	source ~/.profile
+fi
+SCRIPTBEGINTIME=`date`
+##  \ENV #####
+
+
+
+
+echo '# *********************************************************#'
+echo '# *  Vasp INPUT GENERATOR: Version 0.1                    *#'
+echo '# *********************************************************#'
+echo '# Copyright (C) 2013 Colunbia University                   #'
+echo '#                                                          #'
+echo '# This file is distributed under the terms of the          #'
+echo '# GNU General Public License. See the file License         #'
+echo '# in the root directory of the present distribution,       #'
+echo '# or http://www.gnu.org/copyleft/gpl.txt .                 #'
+echo '#                                                          #'
+echo '# Contributors  : Pierre Darancet                          #'
+echo '# *********************************************************#'
+echo '#                                                          #'
+echo '# This program generates input for vasp a                  #'
+echo '# ARGUMENTS                                                #'
+echo '# $1 = JOBTYPE LIST                                        #'
+echo '# $2 = OPTIONAL ARGUMENTS                                  #'
+echo '# $3 = READMEINFO                                          #'
+echo '# INPUT FILES IN THE DIRECTORY:                            #'
+echo '# INPUT.POSCAR [Mandatory]                                 #'
+echo '# INPUT.POTCAR [Mandatory]                                 #'
+echo '# INPUT.KPOINTS [Mandatory for RELAX, STATIC, DOS, Wannier]#'
+echo '# INPUT.BANDSTRUCTURE.KPOINTS [Mandatory for B-structures] #'
+echo '# INPUT.MAGMOM [Mandatory for SCF Magnetic Calculations]   #'
+echo '# INPUT.DIPOL [Mandatory for DIPOLE CORRECTIONS]           #'
+echo '# *********************************************************#'
+##################################################
+echo "$MYNAME $MYVERSION beginning at" `date`  
+##################################################
+echo '# SCRIPT WAS CALLED BY: #'
+echo "${0} $@"
+echo '# This shell is running in the following directory:        #'
+echo "$WORKDIR"
+
+
+#####################################################
+###############MOVE WHAT was there###################
+#####################################################
+NOW=`date "+%Y-%m-%dT-%H%M%S"`
+MOVEDFILE=`echo "previous.$NOW.README" | tr -d ' '`
+mv  $WORKDIR/README  $WORKDIR/$MOVEDFILE
+#####################################################
+########PRINT HEADER of the README FILE##############
+#####################################################
+READMEINFO="$3"
+echo $READMEINFO > $WORKDIR/README
+echo `pwd` >> $WORKDIR/README
+echo "Job Type: $JOBTYPE" >> $WORKDIR/README
+echo "Job Running on Machine: $MACHINE" >> $WORKDIR/README 
+echo "Job ran by script ${0}" >> $WORKDIR/README 
+echo "Jobs ran by the same script: $JOBTYPELIST" >> $WORKDIR/README 
+echo "Job Parameters: Magnetic= $MAGNETIC" >> $WORKDIR/README
+echo "Job Parameters: LDA+U = $DFTU" >> $WORKDIR/README
+#####################################################
+for OUTPUTFILE in $FILECHECKOUTPUT
+do
+	MOVEDFILE=`echo "previous.$NOW.$OUTPUTFILE" | tr -d ' '`
+	if [ -e $WORKDIR/$OUTPUTFILE ] ; then
+		echo "Moving File $OUTPUTFILE to $MOVEDFILE"  >>$WORKDIR/README
+		mv  $WORKDIR/$OUTPUTFILE  $WORKDIR/$MOVEDFILE
+	else
+		echo "$OUTPUTFILE Not present in the DIR"  >>$WORKDIR/README
+	fi
+done
+#####################################################
+
+
+
+
+#####################################################
+############### CHECK INPUT       ###################
+#####################################################
+
+echo '# CHECKING INPUTS...                                       #'
+
+for INPUTFILECHECK in $INPUTFILECHECKLIST
+do
+	if [ -e $WORKDIR/$INPUTFILECHECK ] ; then
+		echo "$INPUTFILECHECK... OK  "
+	else
+		echo "$INPUTFILECHECK... NOT FOUND... EXITING NOW"
+		echo "$INPUTFILECHECK... NOT FOUND... EXITING NOW" >> $WORKDIR/README
+		rm -f $WORKDIR/INCAR  $WORKDIR/KPOINTS $WORKDIR/POSCAR $WORKDIR/POTCAR
+		exit
+	fi
+done
+echo '# *********************************************************#'
+
+##################################################
+###### CHECK ARGUMENTS MAKES SENSE ##############
+##################################################
+JOBTYPE="$1"
+echo "# Job type:   $JOBTYPE"
+OPTARG="$2"
+echo "# OPTIONAL ARGUMENTS: $OPTARG"
+
+##################################################
+######\CHECK IF THE ARG MAKES SENSE ##############
+##################################################
+
+
+
+
+##################################################
+#########        MAGNETIC        #################
+##################################################
+if [ "`pwd | grep "NONSPINPOLARIZED"`" = "`pwd`" ] ; then
+	MAGNETIC="NONSPINPOLARIZED"
+	echo $MAGNETIC
+elif [ "`pwd | grep "SPINORBIT"`" = "`pwd`" ] ; then
+	MAGNETIC="SPINORBIT"
+	echo $MAGNETIC
+else 
+	MAGNETIC="SPINPOLARIZED"
+	echo $MAGNETIC
+fi
+echo $MAGNETIC
+##################################################
+#########       \MAGNETIC        #################
+##################################################
+
+
+
+
+##################################################
+#########        +U              #################
+##################################################
+if [ "`pwd | grep "A+U"`" = "`pwd`" ] ; then
+	if [ "$MAGNETIC" = "NONSPINPOLARIZED" ] ; then
+		DFTU="LDAU"
+	elif [ "$MAGNETIC" = "SPINPOLARIZED" ] ; then
+		DFTU="LSDAU"
+	fi
+else 
+	DFTU=".FALSE."
+fi
+echo "LDA+U:  $DFTU"
+##################################################
+#########        \U              #################
+##################################################
+
+
+
+
+##################################################
+#########     POTCAR             #################
+##################################################
+if [ -e $WORKDIR/INPUT.POTCAR ] ; then
+	echo "TAKING POTCAR FROM $WORKDIR/INPUT.POTCAR"  >> $WORKDIR/README
+	cp $WORKDIR/INPUT.POTCAR $WORKDIR/POTCAR
+else
+	echo '#########################################'  >> $WORKDIR/README
+	echo '####        FATAL ERROR               ###'  >> $WORKDIR/README
+	echo '#########################################'  >> $WORKDIR/README
+	echo "POTCAR NOT FOUND"  >> $WORKDIR/README
+	echo '#########################################'  >> $WORKDIR/README
+	echo '#########################################'  >> $WORKDIR/README
+	echo "# Exiting at: `date` #"  >> $WORKDIR/README
+	echo '#########################################'  >> $WORKDIR/README
+	echo '#########################################'  >> $WORKDIR/README
+	mv $WORKDIR/POSCAR $WORKDIR/ERROR.$JOBTYPE.POSCAR
+	mv $WORKDIR/POTCAR $WORKDIR/ERROR.$JOBTYPE.POTCAR
+	mv $WORKDIR/KPOINTS $WORKDIR/ERROR.$JOBTYPE.KPOINTS
+	exit 
+
+fi
+##################################################
+#########     \POTCAR            #################
+##################################################
+
+
+
+
+
+
+
+
+################################################
+########### HEADER OF THE INCAR FILE ###########
+################################################
+rm -f  $WORKDIR/INCAR
+# INCAR ####### PRECISION ################
+echo "SYSTEM=`pwd`" | tr -d ' ' > $WORKDIR/INCAR
+echo "#Density Matrix Convergence" >> $WORKDIR/INCAR
+## ADD CASE FOR HP
+#if [ `echo $JOBTYPE | grep "WANNIER"` ] ; then
+#	echo "Using Normal Precision"  >> $WORKDIR/README
+#	echo "PREC = Normal" >> $WORKDIR/INCAR
+#else 
+	echo "Using High Precision"  >> $WORKDIR/README
+	echo "PREC = high" >> $WORKDIR/INCAR
+#fi
+echo "LVTOT=.TRUE." >> $WORKDIR/INCAR
+echo "LVHAR=.TRUE." >> $WORKDIR/INCAR
+echo "EDIFF=1.0e-07" >> $WORKDIR/INCAR
+
+
+
+
+
+# INCAR ########### ALGORITHM ################
+if [ -e $WORKDIR/INPUT.PARALLEL ]; then
+	TMP=`echo $OPTARG | grep "PARALLEL"`
+	if  [ "$TMP" = "$OPTARG" ]; then
+		echo "Using the config given in INPUT.PARALLEL"  >> $WORKDIR/README
+		cat  $WORKDIR/INPUT.PARALLEL >> $WORKDIR/README
+		cat  $WORKDIR/INPUT.PARALLEL >> $WORKDIR/INCAR
+		#echo "NELM = 120" >> $WORKDIR/INCAR
+	else
+		echo "Warning: INPUT.PARALLEL but PARALLEL OPTION NOT SPECIFIED"
+		echo "Using IALGO 38"  >> $WORKDIR/README
+		echo "IALGO = 38" >> $WORKDIR/INCAR
+	fi
+else
+
+	echo "Using IALGO 38"  >> $WORKDIR/README
+	echo "IALGO = 38" >> $WORKDIR/INCAR
+fi
+# INCAR ####### LDA+U  ################
+if [ "$DFTU" = "LSDAU" ] ; then
+	if [ -e $WORKDIR/INPUT.LSDAU ] ; then
+		echo "Using the config given in INPUT.LSDAU"  >> $WORKDIR/README
+		cat  $WORKDIR/INPUT.LSDAU >> $WORKDIR/README
+		cat  $WORKDIR/INPUT.LSDAU >> $WORKDIR/INCAR
+	else
+		echo "$WORKDIR/INPUT.LSDAU NOT FOUND"  >> $WORKDIR/README
+			mv $WORKDIR/INCAR $WORKDIR/ERROR.$JOBTYPE.INCAR
+			mv $WORKDIR/POSCAR $WORKDIR/ERROR.$JOBTYPE.POSCAR
+			mv $WORKDIR/POTCAR $WORKDIR/ERROR.$JOBTYPE.POTCAR
+			mv $WORKDIR/KPOINTS $WORKDIR/ERROR.$JOBTYPE.KPOINTS
+			exit 
+	fi 
+elif [ "$DFTU" = "LDAU" ] ; then
+	if [ -e $WORKDIR/INPUT.LDAU ] ; then
+		echo "Using the config given in INPUT.LDAU"  >> $WORKDIR/README
+		cat  $WORKDIR/INPUT.LDAU >> $WORKDIR/README
+		cat  $WORKDIR/INPUT.LDAU >> $WORKDIR/INCAR
+	else
+
+		echo '#########################################'  >> $WORKDIR/README
+		echo '####        FATAL ERROR               ###'  >> $WORKDIR/README
+		echo '#########################################'  >> $WORKDIR/README
+		echo "$WORKDIR/INPUT.LDAU NOT FOUND"  >> $WORKDIR/README
+		echo '#########################################'  >> $WORKDIR/README
+		echo '#########################################'  >> $WORKDIR/README
+		echo "# Exiting at: `date` #"  >> $WORKDIR/README
+		echo '#########################################'  >> $WORKDIR/README
+		echo '#########################################'  >> $WORKDIR/README
+		mv $WORKDIR/INCAR $WORKDIR/ERROR.$JOBTYPE.INCAR
+		mv $WORKDIR/POSCAR $WORKDIR/ERROR.$JOBTYPE.POSCAR
+		mv $WORKDIR/POTCAR $WORKDIR/ERROR.$JOBTYPE.POTCAR
+		mv $WORKDIR/KPOINTS $WORKDIR/ERROR.$JOBTYPE.KPOINTS
+		exit 
+
+	fi
+fi
+# INCAR ####### OUTPUT FILES ################
+echo "#Output Files" >> $WORKDIR/INCAR
+echo "LCHARG=T" >> $WORKDIR/INCAR 
+TMP=" "
+TMP=`echo $OPTARG | grep "LONG"`
+echo "Optional Argument Check [LONG]... ${TMP:-None}"
+if [ "$TMP" = "$OPTARG" ]; then
+	echo "PRINT WAVECAR FOR LONG CALCULATIONS" >> $WORKDIR/README
+	echo "LWAVE=T" >> $WORKDIR/INCAR #LONG CALCULATIONS PRINT WAVECAR
+else
+	echo "LWAVE=F" >> $WORKDIR/INCAR
+fi
+# INCAR ####### MAGNETIC ################
+if [ "$MAGNETIC" = "NONSPINPOLARIZED" ] ; then
+	echo "#Spin Polarization" >> $WORKDIR/INCAR
+	echo "ISPIN=1 set up"  >> $WORKDIR/README
+	echo "ISPIN=1" >> $WORKDIR/INCAR
+elif [  "$MAGNETIC" = "SPINPOLARIZED" ] ; then
+	echo "#Spin Polarization" >> $WORKDIR/INCAR
+	echo "ISPIN=2" >> $WORKDIR/INCAR
+	echo "ISPIN=2 set up"  >> $WORKDIR/README
+elif [  "$MAGNETIC" = "SPINORBIT" ] ; then
+	echo "#Spin Polarization" >> $WORKDIR/INCAR
+	echo "ISPIN=2" >> $WORKDIR/INCAR
+	echo "ISPIN=2 set up"  >> $WORKDIR/README
+	echo "LSORBIT=.TRUE." >> $WORKDIR/INCAR
+	echo "LNONCOLLINEAR= .TRUE." >> $WORKDIR/INCAR
+	echo "SAXIS =   0 0 1"  >> $WORKDIR/INCAR
+	echo "GGA_COMPAT = .FALSE."  >> $WORKDIR/INCAR
+fi
+# INCAR ####### DIPOL ################
+TMP=`echo $OPTARG | grep "NODIPOLCORR"`
+if [ "$TMP" = "$OPTARG"  ]; then
+	echo "NODIPOLCORR OPTION SELECTED: IGNORING $WORKDIR/INPUT.DIPOL"  >> $WORKDIR/README
+elif [ -e  $WORKDIR/INPUT.DIPOL ]; then
+	echo "TAKING DIPOLCORR FROM $WORKDIR/INPUT.DIPOL"  >> $WORKDIR/README
+	cat $WORKDIR/INPUT.DIPOL  >> $WORKDIR/README
+	cat $WORKDIR/INPUT.DIPOL  >> $WORKDIR/INCAR
+fi
+################################################
+######### \HEADER OF THE INCAR FILE ###########
+################################################
+
+
+
+
+
+################################################
+##### JOB SPECIFIC PART OF THE INCAR FILE ######
+################################################
+#BREAKDOWN Jobtype:
+
+if [ "`echo "$JOBTYPE" | grep "CALC"`" = "$JOBTYPE" ] ;  then
+	GEOMETRY_OPT=`echo "$JOBTYPE" | sed -re 's/^[A-Z]+.[A-Z]+.//g'` 
+	CALC_TYPE="NSCF"
+	NSCF_TYPE=`echo $JOBTYPE |  sed -re "s/.$GEOMETRY_OPT//g" | sed 's/CALC.//g'`
+else
+	GEOMETRY_OPT=`echo "$JOBTYPE"`
+	CALC_TYPE="SCF"
+	NSCF_TYPE="NONE"
+fi
+
+echo "ANALYZING JOB TYPE">> $WORKDIR/README
+echo ">> JOBTYPE=$JOBTYPE is $CALC_TYPE calculation;">> $WORKDIR/README
+echo ">> Geometry optimization scheme: $GEOMETRY_OPT;">> $WORKDIR/README
+echo ">> Non-selfconsistent calc type: $NSCF_TYPE;">> $WORKDIR/README
+
+
+# TEST TYPE NSCF AND GEOMETRY OPT
+
+#
+#SUPPORTEDGEOMETRYOPT="STATIC RELAX.IONS RELAX.CELL.AB RELAX.CELL"
+#SUPPORTEDNSCF_TYPE="BANDSTRUCTURE WANNIER WFWANNIER DOS"
+
+################################################
+##### CHECK IF JOBTYPE MAKES SENSE        ######
+################################################
+FOUND=".FALSE."
+for geomtmp in  $SUPPORTEDGEOMETRYOPT
+do
+	if [ "$geomtmp" = "$GEOMETRY_OPT" ] ; then
+		FOUND=".TRUE."
+	fi
+done
+if [ "$FOUND" = ".TRUE." ] ; then
+	echo "GEOMETRY OPTIMIZATION ${GEOMETRY_OPT}:  SUPPORTED"  >> $WORKDIR/README
+else
+	echo '#########################################'  >> $WORKDIR/README
+	echo '####        FATAL ERROR               ###'  >> $WORKDIR/README
+	echo '#########################################'  >> $WORKDIR/README
+	echo "GEOMETRY OPTIMIZATION ${GEOMETRY_OPT}: NOT SUPPORTED"  >> $WORKDIR/README
+	echo '#########################################'  >> $WORKDIR/README
+	echo '#########################################'  >> $WORKDIR/README
+	echo "# Exiting at: `date` #"  >> $WORKDIR/README
+	echo '#########################################'  >> $WORKDIR/README
+	echo '#########################################'  >> $WORKDIR/README
+	mv $WORKDIR/INCAR $WORKDIR/ERROR.$JOBTYPE.INCAR
+	mv $WORKDIR/POSCAR $WORKDIR/ERROR.$JOBTYPE.POSCAR
+	mv $WORKDIR/POTCAR $WORKDIR/ERROR.$JOBTYPE.POTCAR
+	mv $WORKDIR/KPOINTS $WORKDIR/ERROR.$JOBTYPE.KPOINTS
+	exit 
+fi
+
+FOUND=".FALSE."
+for nscftmp in  $SUPPORTEDNSCF_TYPE
+do
+	if [ "$nscftmp" = "$NSCF_TYPE" ] ; then
+		FOUND=".TRUE."
+	fi
+done
+if [ "$FOUND" = ".TRUE." ] ; then
+	echo "NSCF TYPE ${NSCF_TYPE}:  SUPPORTED"  >> $WORKDIR/README
+else
+	echo '#########################################'  >> $WORKDIR/README
+	echo '####        FATAL ERROR               ###'  >> $WORKDIR/README
+	echo '#########################################'  >> $WORKDIR/README
+	echo "NSCF TYPE ${NSCF_TYPE}: NOT SUPPORTED"    >> $WORKDIR/README
+	echo '#########################################'  >> $WORKDIR/README
+	echo '#########################################'  >> $WORKDIR/README
+	echo "# Exiting at: `date` #"  >> $WORKDIR/README
+	echo '#########################################'  >> $WORKDIR/README
+	echo '#########################################'  >> $WORKDIR/README
+	mv $WORKDIR/INCAR $WORKDIR/ERROR.$JOBTYPE.INCAR
+	mv $WORKDIR/POSCAR $WORKDIR/ERROR.$JOBTYPE.POSCAR
+	mv $WORKDIR/POTCAR $WORKDIR/ERROR.$JOBTYPE.POTCAR
+	mv $WORKDIR/KPOINTS $WORKDIR/ERROR.$JOBTYPE.KPOINTS
+	exit 
+fi
+
+
+
+########################
+# SYMMETRY AND SMEARING
+echo ">> JOBTYPE=$JOBTYPE is $CALC_TYPE calculation;">> $WORKDIR/README
+echo ">> Geometry optimization scheme: $GEOMETRY_OPT;">> $WORKDIR/README
+echo ">> Non-selfconsistent calc type: $NSCF_TYPE;">> $WORKDIR/README
+
+
+# SYMMETRY AND SMEARING
+if [ "$NSCF_TYPE" = "BANDSTRUCTURE" ] ;  then
+	echo "#Smearing" >> $WORKDIR/INCAR
+	echo "ISMEAR = 1" >> $WORKDIR/INCAR
+	echo "SIGMA = 0.001" >> $WORKDIR/INCAR
+	echo "#Symmetry" >> $WORKDIR/INCAR
+	echo "ISYM = 0" >> $WORKDIR/INCAR
+	echo "Not Using Symmetry"  >> $WORKDIR/README
+else 
+
+	if [ "`echo "$GEOM_OPT" | grep "RELAX"`" = "$GEOM_OPT" ] && [ "$CALC_TYPE" = "SCF" ]; then
+		#SYMMETRY 
+		echo "#Symmetry" >> $WORKDIR/INCAR
+		echo "ISYM = 0" >> $WORKDIR/INCAR
+		echo "Not Using Symmetry"  >> $WORKDIR/README
+		#SMEARING
+		if [ ! "`echo "$GEOM_OPT" | grep "HP.RELAX"`" = "$GEOM_OPT" ]; then
+			echo "#Smearing" >> $WORKDIR/INCAR
+			echo "ISMEAR = 1" >> $WORKDIR/INCAR
+			echo "SIGMA = 0.1" >> $WORKDIR/INCAR
+		else
+			echo "#Smearing" >> $WORKDIR/INCAR
+			echo "ISMEAR = -5" >> $WORKDIR/INCAR
+			echo "#SIGMA =" >> $WORKDIR/INCAR
+		fi
+
+	else 
+		#SYMMETRY 
+		echo "#Symmetry" >> $WORKDIR/INCAR
+		echo "ISYM = 2" >> $WORKDIR/INCAR
+		echo "Using Symmetry"  >> $WORKDIR/README
+		#SMEARING
+		echo "#Smearing" >> $WORKDIR/INCAR
+		echo "ISMEAR = -5" >> $WORKDIR/INCAR
+		echo "#SIGMA =" >> $WORKDIR/INCAR
+	fi
+fi
+
+
+if [ "$CALC_TYPE" = "SCF" ]; then
+	echo "SCF Calculation"  >> $WORKDIR/README
+	# CHGCAR FROM PREVIOUS CALCULATIONS
+	# CONTCAR FROM  PREVIOUS CALCULATIONS
+	# POSCAR
+	# 1) CHECK FOR CONTINUE
+	# 2) CHECK FOR RESTART
+	# 3) LOOK FOR INPUT/RELAX
+	if [ "`echo $OPTARG | grep "CONTINUE"`" = "$OPTARG" ]; then
+		FOUND=".FALSE."
+		echo "Continuing a previous unconverged calculation" >> $WORKDIR/README
+		if [ -e $WORKDIR/${GEOMETRY_OPT}.CONTCAR.NOTCONVERGED ] ; then
+			FOUND=".TRUE."
+			cp $WORKDIR/${GEOMETRY_OPT}.CONTCAR.NOTCONVERGED  $WORKDIR/POSCAR
+		elif [ -e $WORKDIR/${GEOMETRY_OPT}.POSCAR.NOTCONVERGED ] ; then
+			FOUND=".TRUE."
+			cp $WORKDIR/${GEOMETRY_OPT}.POSCAR.NOTCONVERGED  $WORKDIR/POSCAR
+		fi
+		if [ -e $WORKDIR/${GEOMETRY_OPT}.WAVECAR.NOTCONVERGED ] ; then
+			cp $WORKDIR/${GEOMETRY_OPT}.WAVECAR.NOTCONVERGED $WORKDIR/WAVECAR
+		fi
+		if [ -e $WORKDIR/${GEOMETRY_OPT}.CHGCAR.NOTCONVERGED ] ; then
+			cp $WORKDIR/${GEOMETRY_OPT}.CHGCAR.NOTCONVERGED  $WORKDIR/CHGCAR
+		fi
+		echo " ... LOADING FORMER README: ${GEOMETRY_OPT}.README.NOTCONVERGED" >> $WORKDIR/README
+		if [ -e $WORKDIR/${GEOMETRY_OPT}.OUTCAR.NOTCONVERGED ] ; then
+			PREVIOUSOUTCAR="${GEOMETRY_OPT}.OUTCAR.NOTCONVERGED"
+		fi
+
+		if [ "$FOUND" = ".TRUE." ] ; then
+			echo '#############BEGINNING PREVIOUS README####################' >> $WORKDIR/README
+			cat  $WORKDIR/${GEOMETRY_OPT}.README.NOTCONVERGED  >> $WORKDIR/README
+			echo '#############   END PREVIOUS README   ####################' >> $WORKDIR/README
+		else
+			echo '#########################################'  >> $WORKDIR/README
+			echo '####        FATAL ERROR               ###'  >> $WORKDIR/README
+			echo '#########################################'  >> $WORKDIR/README
+			echo "CANNOT CONTINUE UNCONVERGED CALCULATION, FILES NOT FOUND"    >> $WORKDIR/README
+			echo '#########################################'  >> $WORKDIR/README
+			echo '#########################################'  >> $WORKDIR/README
+			echo "# Exiting at: `date` #"  >> $WORKDIR/README
+			echo '#########################################'  >> $WORKDIR/README
+			echo '#########################################'  >> $WORKDIR/README
+			mv $WORKDIR/INCAR $WORKDIR/ERROR.$JOBTYPE.INCAR
+			mv $WORKDIR/POSCAR $WORKDIR/ERROR.$JOBTYPE.POSCAR
+			mv $WORKDIR/POTCAR $WORKDIR/ERROR.$JOBTYPE.POTCAR
+			mv $WORKDIR/KPOINTS $WORKDIR/ERROR.$JOBTYPE.KPOINTS
+			exit 
+		fi
+	elif [ "`echo $OPTARG | grep "RESTART"`" = "$OPTARG" ]; then
+		FOUND=".FALSE."
+		echo "Restarting a previous converged calculation" >> $WORKDIR/README
+		if [ -e $WORKDIR/${GEOMETRY_OPT}.WAVECAR ] ; then
+			cp $WORKDIR/${GEOMETRY_OPT}.WAVECAR $WORKDIR/WAVECAR
+		fi
+		if [ -e $WORKDIR/${GEOMETRY_OPT}.CHGCAR ] ; then
+			cp $WORKDIR/${GEOMETRY_OPT}.CHGCAR  $WORKDIR/CHGCAR
+		fi
+		echo " ... LOADING FORMER README: ${GEOMETRY_OPT}.README" >> $WORKDIR/README
+		if [ -e $WORKDIR/${GEOMETRY_OPT}.CONTCAR ] ; then
+			FOUND=".TRUE."
+			cp $WORKDIR/${GEOMETRY_OPT}.CONTCAR  $WORKDIR/POSCAR
+		elif [ -e $WORKDIR/${GEOMETRY_OPT}.POSCAR ] ; then
+			FOUND=".TRUE."
+			cp $WORKDIR/${GEOMETRY_OPT}.POSCAR  $WORKDIR/POSCAR
+		fi
+		if [ -e $WORKDIR/${GEOMETRY_OPT}.OUTCAR ] ; then
+			PREVIOUSOUTCAR="${GEOMETRY_OPT}.OUTCAR"
+		fi
+		if [ "$FOUND" = ".TRUE." ] ; then
+			echo '#############BEGINNING PREVIOUS README####################' >> $WORKDIR/README
+			cat  $WORKDIR/${GEOMETRY_OPT}.README  >> $WORKDIR/README
+			echo '#############   END PREVIOUS README   ####################' >> $WORKDIR/README
+		else
+			echo '#########################################'  >> $WORKDIR/README
+			echo '####        FATAL ERROR               ###'  >> $WORKDIR/README
+			echo '#########################################'  >> $WORKDIR/README
+			echo "CANNOT RESTART CONVERGED CALCULATION, FILES NOT FOUND"    >> $WORKDIR/README
+			echo '#########################################'  >> $WORKDIR/README
+			echo '#########################################'  >> $WORKDIR/README
+			echo "# Exiting at: `date` #"  >> $WORKDIR/README
+			echo '#########################################'  >> $WORKDIR/README
+			echo '#########################################'  >> $WORKDIR/README
+			mv $WORKDIR/INCAR $WORKDIR/ERROR.$JOBTYPE.INCAR
+			mv $WORKDIR/POSCAR $WORKDIR/ERROR.$JOBTYPE.POSCAR
+			mv $WORKDIR/POTCAR $WORKDIR/ERROR.$JOBTYPE.POTCAR
+			mv $WORKDIR/KPOINTS $WORKDIR/ERROR.$JOBTYPE.KPOINTS
+			exit 
+		fi
+	else 
+		# 3) LOOK FOR INPUT coordinates in the case of RELAXATION:
+		TMP=`echo "$GEOM_OPT" | sed 's/HP.//g'`
+		if [ -e $WORKDIR/INPUT.POSCAR.${GEOM_OPT} ]; then
+			cp $WORKDIR/INPUT.POSCAR.${GEOM_OPT} $WORKDIR/POSCAR
+			echo "Starting from POSCAR $WORKDIR/INPUT.POSCAR.${GEOM_OPT}"  >> $WORKDIR/README
+			PREVIOUSOUTCAR="NOFILETHERE.OUTCAR"
+		elif [ "`echo "$GEOM_OPT" | grep "HP.RELAX"`" = "$GEOM_OPT" ] && [ -e $WORKDIR/${GEOM_OPT}.CONTCAR ]; then 
+			cp $WORKDIR/${GEOM_OPT}.CONTCAR $WORKDIR/POSCAR
+			echo "Starting from POSCAR $WORKDIR/${GEOM_OPT}.CONTCAR"  >> $WORKDIR/README
+			PREVIOUSOUTCAR="${GEOM_OPT}.OUTCAR"			
+		elif [ "`echo "$GEOM_OPT" | grep "RELAX.CELL"`" = "$GEOM_OPT" ] && [ -e $WORKDIR/HP.RELAX.IONS.CONTCAR ]; then 
+			cp $WORKDIR/HP.RELAX.IONS.CONTCAR $WORKDIR/POSCAR
+			echo "Starting from POSCAR $WORKDIR/HP.RELAX.IONS.CONTCAR"  >> $WORKDIR/README		
+			PREVIOUSOUTCAR="HP.RELAX.IONS.OUTCAR"				
+		elif [ "`echo "$GEOM_OPT" | grep "RELAX.CELL"`" = "$GEOM_OPT" ] && [ -e $WORKDIR/RELAX.IONS.CONTCAR ]; then 
+			cp $WORKDIR/RELAX.IONS.CONTCAR $WORKDIR/POSCAR
+			echo "Starting from POSCAR $WORKDIR/RELAX.IONS.CONTCAR"  >> $WORKDIR/README	
+			PREVIOUSOUTCAR="RELAX.IONS.OUTCAR"						
+		else 
+			cp $WORKDIR/INPUT.POSCAR $WORKDIR/POSCAR
+			echo "Starting from POSCAR $WORKDIR/INPUT.POSCAR"  >> $WORKDIR/README			
+			PREVIOUSOUTCAR="NOFILETHERE.OUTCAR"
+		fi 
+
+	fi
+
+
+
+
+        ## KPOINTS
+	if [ -e $WORKDIR/INPUT.KPOINTS ] ; then
+		cp $WORKDIR/INPUT.KPOINTS $WORKDIR/KPOINTS
+	else 
+		echo '#########################################'  >> $WORKDIR/README
+		echo '####        FATAL ERROR               ###'  >> $WORKDIR/README
+		echo '#########################################'  >> $WORKDIR/README
+		echo " $WORKDIR/INPUT.KPOINTS NOT FOUND"   >> $WORKDIR/README
+		echo '#########################################'  >> $WORKDIR/README
+		echo '#########################################'  >> $WORKDIR/README
+		echo "# Exiting at: `date` #"  >> $WORKDIR/README
+		echo '#########################################'  >> $WORKDIR/README
+		echo '#########################################'  >> $WORKDIR/README
+		mv $WORKDIR/INCAR $WORKDIR/ERROR.$JOBTYPE.INCAR
+		mv $WORKDIR/POSCAR $WORKDIR/ERROR.$JOBTYPE.POSCAR
+		mv $WORKDIR/POTCAR $WORKDIR/ERROR.$JOBTYPE.POTCAR
+		mv $WORKDIR/KPOINTS $WORKDIR/ERROR.$JOBTYPE.KPOINTS
+		exit 
+	fi
+
+
+
+        ## RELAXATION
+	if [ "`echo "$GEOMETRY_OPT" | grep "RELAX.IONS"`" = "$GEOMETRY_OPT" ] ;  then
+		echo "# Relaxation" >> $WORKDIR/INCAR
+		echo "ISIF = 0" >> $WORKDIR/INCAR
+		echo "IBRION = 2" >> $WORKDIR/INCAR
+		echo "NSW = 100" >> $WORKDIR/INCAR
+		echo "POTIM = 0.2" >> $WORKDIR/INCAR
+	elif  [ "`echo "$GEOMETRY_OPT" | grep "RELAX.CELL"`" = "$GEOMETRY_OPT" ] ;  then
+		echo "# Relaxation" >> $WORKDIR/INCAR
+		echo "ISIF=3" >> $WORKDIR/INCAR
+		echo "IBRION = 2" >> $WORKDIR/INCAR
+		echo "NSW = 100" >> $WORKDIR/INCAR
+		echo "POTIM = 0.2" >> $WORKDIR/INCAR
+	fi
+
+
+        ## MAGNETIC STARTING POINT
+	if [  "$MAGNETIC" = "SPINPOLARIZED" ] ; then
+		if [ -e  $WORKDIR/INPUT.MAGMOM ]; then
+			echo "TAKING MAGMOM FROM $WORKDIR/INPUT.MAGMOM"  >> $WORKDIR/README
+			cat $WORKDIR/INPUT.MAGMOM  >> $WORKDIR/README
+			cat $WORKDIR/INPUT.MAGMOM  >> $WORKDIR/INCAR
+		else
+			echo '#########################################'  >> $WORKDIR/README
+			echo '####        FATAL ERROR               ###'  >> $WORKDIR/README
+			echo '#########################################'  >> $WORKDIR/README
+			echo "$WORKDIR/INPUT.MAGMOM NOT FOUND"  >> $WORKDIR/README
+			echo '#########################################'  >> $WORKDIR/README
+			echo '#########################################'  >> $WORKDIR/README
+			echo "# Exiting at: `date` #"  >> $WORKDIR/README
+			echo '#########################################'  >> $WORKDIR/README
+			echo '#########################################'  >> $WORKDIR/README
+			mv $WORKDIR/INCAR $WORKDIR/ERROR.$JOBTYPE.INCAR
+			mv $WORKDIR/POSCAR $WORKDIR/ERROR.$JOBTYPE.POSCAR
+			mv $WORKDIR/POTCAR $WORKDIR/ERROR.$JOBTYPE.POTCAR
+			mv $WORKDIR/KPOINTS $WORKDIR/ERROR.$JOBTYPE.KPOINTS
+			exit 
+		fi
+	fi
+
+	## DOS AND PDOS
+	if [ -e $WORKDIR/${PREVIOUSOUTCAR} ] ; then
+		FERMI=`cat $WORKDIR/${PREVIOUSOUTCAR} | grep fermi | tail -n 1 | awk '{print $3}'`
+	else 
+		FERMI="0.0"
+	fi
+	echo "#DOS Parameters" >> $WORKDIR/INCAR
+	MIN="$(echo "scale=10; $FERMI - ( $CALCSCFINTERVAL / 2.0 ) " | bc)"
+	MAX="$(echo "scale=10; $FERMI + ( $CALCSCFINTERVAL / 2.0 )" | bc)"
+	echo "EMIN=$MIN" >> $WORKDIR/INCAR
+	echo "EMAX=$MAX" >> $WORKDIR/INCAR
+	echo "NEDOS=1501" >> $WORKDIR/INCAR
+	echo "LORBIT=11" >> $WORKDIR/INCAR
+	echo "Setting up DOS parameters"  >> $WORKDIR/README
+
+
+elif [ "$CALC_TYPE" = "NSCF" ]; then
+	# CHGCAR FROM PREVIOUS CALCULATIONS
+	echo "NSCF Calculation"  >> $WORKDIR/README
+	if [ -e $WORKDIR/$GEOMETRY_OPT.CHGCAR ]; then
+		cp $WORKDIR/$GEOMETRY_OPT.CHGCAR $WORKDIR/CHGCAR
+		echo "#NSCF" >> $WORKDIR/INCAR
+		echo "ICHARG = 11" >> $WORKDIR/INCAR
+	else
+		echo '#########################################'  >> $WORKDIR/README
+		echo '####        FATAL ERROR               ###'  >> $WORKDIR/README
+		echo '#########################################'  >> $WORKDIR/README
+		echo " $WORKDIR/${GEOMETRY_OPT}.CHGCAR NOT FOUND"   >> $WORKDIR/README
+		echo '#########################################'  >> $WORKDIR/README
+		echo '#########################################'  >> $WORKDIR/README
+		echo "# Exiting at: `date` #"  >> $WORKDIR/README
+		echo '#########################################'  >> $WORKDIR/README
+		echo '#########################################'  >> $WORKDIR/README
+		mv $WORKDIR/INCAR $WORKDIR/ERROR.$JOBTYPE.INCAR
+		mv $WORKDIR/POSCAR $WORKDIR/ERROR.$JOBTYPE.POSCAR
+		mv $WORKDIR/POTCAR $WORKDIR/ERROR.$JOBTYPE.POTCAR
+		mv $WORKDIR/KPOINTS $WORKDIR/ERROR.$JOBTYPE.KPOINTS
+		exit 
+
+	fi
+
+	# CONTCAR FROM  PREVIOUS CALCULATIONS
+	if [ -e $WORKDIR/${GEOMETRY_OPT}.CONTCAR ]; then
+		cp $WORKDIR/${GEOMETRY_OPT}.CONTCAR $WORKDIR/POSCAR
+	else
+		echo '#########################################'  >> $WORKDIR/README
+		echo '####        FATAL ERROR               ###'  >> $WORKDIR/README
+		echo '#########################################'  >> $WORKDIR/README
+		echo " $WORKDIR/${GEOMETRY_OPT}.CONTCAR NOT FOUND"   >> $WORKDIR/README
+		echo '#########################################'  >> $WORKDIR/README
+		echo '#########################################'  >> $WORKDIR/README
+		echo "# Exiting at: `date` #"  >> $WORKDIR/README
+		echo '#########################################'  >> $WORKDIR/README
+		echo '#########################################'  >> $WORKDIR/README
+		mv $WORKDIR/INCAR $WORKDIR/ERROR.$JOBTYPE.INCAR
+		mv $WORKDIR/POSCAR $WORKDIR/ERROR.$JOBTYPE.POSCAR
+		mv $WORKDIR/POTCAR $WORKDIR/ERROR.$JOBTYPE.POTCAR
+		mv $WORKDIR/KPOINTS $WORKDIR/ERROR.$JOBTYPE.KPOINTS
+		exit 
+
+	fi
+
+
+
+        ## KPOINTS
+	if [ -e $WORKDIR/INPUT.${NSCF_TYPE}.KPOINTS ] ; then
+		cp $WORKDIR/INPUT.${NSCF_TYPE}.KPOINTS $WORKDIR/KPOINTS
+	else 
+		echo '#########################################'  >> $WORKDIR/README
+		echo '####        FATAL ERROR               ###'  >> $WORKDIR/README
+		echo '#########################################'  >> $WORKDIR/README
+		echo " $WORKDIR/INPUT.${NSCF_TYPE}.KPOINTS NOT FOUND"   >> $WORKDIR/README
+		echo '#########################################'  >> $WORKDIR/README
+		echo '#########################################'  >> $WORKDIR/README
+		echo "# Exiting at: `date` #"  >> $WORKDIR/README
+		echo '#########################################'  >> $WORKDIR/README
+		echo '#########################################'  >> $WORKDIR/README
+		mv $WORKDIR/INCAR $WORKDIR/ERROR.$JOBTYPE.INCAR
+		mv $WORKDIR/POSCAR $WORKDIR/ERROR.$JOBTYPE.POSCAR
+		mv $WORKDIR/POTCAR $WORKDIR/ERROR.$JOBTYPE.POTCAR
+		mv $WORKDIR/KPOINTS $WORKDIR/ERROR.$JOBTYPE.KPOINTS
+		exit 
+	fi
+	## DOS AND PDOS
+	if [ "$NSCF_TYPE" = "BANDSTRUCTURE" ] ;  then
+		echo "#DOS Parameters" >> $WORKDIR/INCAR
+		FERMI=`cat $WORKDIR/${GEOMETRY_OPT}.OUTCAR | grep fermi | tail -n 1 | awk '{print $3}'`
+		MIN="$(echo "scale=10; $FERMI - ( $CALCBANDSTRUCTUREINTERVAL / 2.0 ) " | bc)"
+		MAX="$(echo "scale=10; $FERMI + ( $CALCBANDSTRUCTUREINTERVAL / 2.0 )" | bc)"
+		echo "EMIN=$MIN" >> $WORKDIR/INCAR
+		echo "EMAX=$MAX" >> $WORKDIR/INCAR
+		echo "NEDOS=1501" >> $WORKDIR/INCAR
+		echo "LORBIT=11" >> $WORKDIR/INCAR
+		echo "Setting up DOS parameters"  >> $WORKDIR/README
+		echo "FERMI LEVEL=${FERMI}; MIN=$MIN : MAX=$MAX " >> $WORKDIR/README
+	elif [ "$NSCF_TYPE" = "DOS" ] ;  then
+		echo "#DOS Parameters" >> $WORKDIR/INCAR
+		FERMI=`cat $WORKDIR/${GEOMETRY_OPT}.OUTCAR | grep fermi | tail -n 1 | awk '{print $3}'`
+		MIN="$(echo "scale=10; $FERMI - ( $CALCDOSINTERVAL / 2.0 ) " | bc)"
+		MAX="$(echo "scale=10; $FERMI + ( $CALCDOSINTERVAL / 2.0 )" | bc)"
+		echo "EMIN=$MIN" >> $WORKDIR/INCAR
+		echo "EMAX=$MAX" >> $WORKDIR/INCAR
+		echo "NEDOS=1501" >> $WORKDIR/INCAR
+		echo "LORBIT=11" >> $WORKDIR/INCAR
+		echo "Setting up DOS parameters"  >> $WORKDIR/README
+		echo "FERMI LEVEL=${FERMI}; MIN=$MIN : MAX=$MAX " >> $WORKDIR/README
+	fi
+
+	## WANNIER
+	if [ "$NSCF_TYPE" = "WANNIER" ] ;  then
+		echo "#Wannier Parameters" >> $WORKDIR/INCAR
+		echo "LWANNIER90=.TRUE." >> $WORKDIR/INCAR
+	elif [ "$NSCF_TYPE" = "WFWANNIER" ] ;  then
+		echo "#Wannier Parameters" >> $WORKDIR/INCAR
+		echo "LWANNIER90=.TRUE." >> $WORKDIR/INCAR
+		echo "LWRITE_UNK=.TRUE." >> $WORKDIR/INCAR
+	fi
+
+else 
+	echo '#########################################'  >> $WORKDIR/README
+	echo '####        FATAL ERROR               ###'  >> $WORKDIR/README
+	echo '#########################################'  >> $WORKDIR/README
+	echo " Problem with Calculation type... $CALC_TYPE"   >> $WORKDIR/README
+	echo '#########################################'  >> $WORKDIR/README
+	echo '#########################################'  >> $WORKDIR/README
+	echo "# Exiting at: `date` #"  >> $WORKDIR/README
+	echo '#########################################'  >> $WORKDIR/README
+	echo '#########################################'  >> $WORKDIR/README
+	mv $WORKDIR/INCAR $WORKDIR/ERROR.$JOBTYPE.INCAR
+	mv $WORKDIR/POSCAR $WORKDIR/ERROR.$JOBTYPE.POSCAR
+	mv $WORKDIR/POTCAR $WORKDIR/ERROR.$JOBTYPE.POTCAR
+	mv $WORKDIR/KPOINTS $WORKDIR/ERROR.$JOBTYPE.KPOINTS
+	exit 
+
+fi
+
+################################################
+#### \JOB SPECIFIC PART OF THE INCAR FILE ######
+################################################
+
+
+
+############ VASP COMMAND  
+rm -f ./$WORKDIR/VASPEXE
+if [ "`echo "$GEOM_OPT" | grep "RELAX.CELL.AB"`" = "$GEOM_OPT"  ]; then 
+	COMMAND='/home/darancet/bin/vasp_relax_xy'
+elif [ "`echo "$GEOM_OPT" | grep "RELAX.CELL.C"`" = "$GEOM_OPT"  ]; then 
+	COMMAND='/home/darancet/bin/vasp_relax_z'
+else 
+	if [ "`echo "$NSCF_TYPE" | grep "WANNIER"`" = "$NSCF_TYPE" ]; then
+		COMMAND='/home/darancet/bin/vasp_hyowon'
+	else
+		COMMAND='/home/darancet/bin/vasp'
+
+	fi
+fi 
+echo "# USING EXE: $COMMAND"  >> $WORKDIR/README
+cp $COMMAND $WORKDIR/vaspexe
+
+##################################################
+# EXECUTION
+##################################################
+echo "$MYNAME: Execution ending at" `date`  >> $WORKDIR/README
+##################################################
+
+
+
+
+

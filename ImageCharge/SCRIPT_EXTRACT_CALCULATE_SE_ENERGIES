@@ -1,0 +1,388 @@
+#!/bin/bash
+IMAGECHARGECOMMAND="/global/home/users/pdarancet/IMAGECHARGE.exe"
+DIRLIST="$1"
+BIASLIST="$2"
+POSITIONIMAGECHARGE="1.47"
+EMAIL="pdarancet@lbl.gov"
+REFJUNCTIONLABELTERM="_2x2cold"
+
+
+echo "SCRIPT INPUT:"
+#### CHECK INPUT
+if [ -z "$3" ]; then
+	LINEARTERM=''
+	echo "...Not using linear correction for asymmetric molecules"
+else
+	LINEARTERM="$3"
+	echo "...Using linear correction for asymmetric molecules, not implemented yet"
+	exit
+fi
+
+if [ -z "$4" ]; then
+	AuPerLayer="16"
+	echo "...NUMBER OF Au ATOMS per LAYER (USING DEFAULT): $AuPerLayer"
+else
+	AuPerLayer="$4"	
+	echo "...NUMBER OF Au ATOMS per LAYER (USING USER-PROVIDED VALUE): $AuPerLayer"
+
+fi
+if [ -z "$5" ]; then
+	NumberofLayer="6"
+	echo "...NUMBER OF LAYERS (USING DEFAULT): $NumberofLayer"
+else
+	NumberofLayer="$5"
+	echo "...NUMBER OF LAYERS (USING USER-PROVIDED VALUE): $NumberofLayer"
+
+fi
+
+echo "SCRIPT MAIN BODY"
+
+
+echo "DIRLIST=${DIRLIST}"
+echo "BIASLIST=${BIASLIST}"
+WORKDIR=`pwd`
+cd $WORKDIR
+
+
+for bias in ${BIASLIST}
+do
+	echo "Setting up TARGET FILES:"
+
+	if [ "$bias" = "0" ] ; then
+		OUTPUTFILE_SIESTA="PDOS.out"
+	else
+		OUTPUTFILE_SIESTA="PDOS_${bias}.out"
+	fi
+	OUTPUTFILE_DELTASCF_C_app="Cation_${bias}.out"
+	OUTPUTFILE_DELTASCF_N_app="Neutral_${bias}.out"
+	OUTPUTFILE_DELTASCF_A_app="Anion_${bias}.out"
+
+	echo "...OUTPUTFILE SIESTA=$OUTPUTFILE_SIESTA"
+	echo "...OUTPUTFILE QCHEM C=$OUTPUTFILE_DELTASCF_C_app"
+	echo "...OUTPUTFILE QCHEM N=$OUTPUTFILE_DELTASCF_N_app"
+	echo "...OUTPUTFILE QCHEM A=$OUTPUTFILE_DELTASCF_A_app"
+
+	for gendir in ${DIRLIST}
+	do 
+
+		
+		echo $gendir
+		cd $WORKDIR/$gendir
+		echo "TARGET=$WORKDIR/$gendir"
+		pwd
+		if [ "$WORKDIR/$gendir" = `pwd` ]; then 
+			SEFILE="SummarySE.dat"
+
+			echo "Collecting Info for SE"
+			SHIFTMOFILE_DFT=`echo "DFT.${bias}.shift_mo"`
+			SHIFTMOFILE_DFTS=`echo "DFT+S.${bias}.shift_mo"`
+
+			sourcefile=`ls $WORKDIR/$gendir | grep "${REFJUNCTIONLABELTERM}.xyz"`
+			tmp=`cat $WORKDIR/$gendir/$sourcefile | sed 's/^ *//; s/ *$//; /^$/d'  | grep -v Au  | wc -l`
+			NATOMS="$(echo "scale=0; $tmp - 1 " | bc)"
+			echo "...NATOMS=$NATOMS from $WORKDIR/$gendir/$sourcefile"
+			tmp="$(echo "scale=0; $NATOMS + 2 " | bc)"
+			NSPECIES=`head -$tmp  $WORKDIR/$gendir/$sourcefile | tail -n $NATOMS |  awk '{print $1}' | sort -n | uniq | wc -l`
+			echo "...NATOMS=$NATOMS from $WORKDIR/$gendir/$sourcefile"
+			echo "...NSPECIES=$NSPECIES from $WORKDIR/$gendir/$sourcefile"
+
+			pbedir=`echo "${gendir}_MOL_PBE"`
+			echo "...PBE Directory $WORKDIR/$pbedir"
+
+			######### ENERGY AND WF OF GAS PHASE ORBITALS
+			if [ -d $WORKDIR/$pbedir ]; then 
+				echo "...READING $OUTPUTFILE_SIESTA"
+				NUMBERELEC=`cat $WORKDIR/$pbedir/$OUTPUTFILE_SIESTA | grep Qtot  | tail -n 1 | awk '{print $NF}'`	
+				echo "......NUMBER of ELECTRONS = $NUMBERELEC"
+				HOMO="$(echo "scale=0; $NUMBERELEC/2" | bc)"
+				echo "......HOMO IS LEVEL# $HOMO"
+				echo "......Looking for Gas Phase EIG and PDOS Files in file $WORKDIR/$pbedir/$OUTPUTFILE_SIESTA "
+				LABEL=`cat $WORKDIR/$pbedir/$OUTPUTFILE_SIESTA | grep SystemLabel | tail -n 1 | awk '{print $2}' ` 
+				FILEEIG=`echo "${LABEL}.EIG"`
+				FILEPDOS=`echo "$LABEL.PDOS"`
+				echo ".........$FILEEIG"
+				echo ".........$FILEPDOS"
+				if [ ! -e $WORKDIR/$pbedir/$FILEEIG ] ; then 
+					echo "Gas Phase Eigenvalues file not found... $WORKDIR/$pbedir/$FILEEIG"
+					exit
+				fi
+
+				if [ ! -e $WORKDIR/$pbedir/$FILEPDOS ] ; then 
+					echo "Gas Phase PDOS file not found... $WORKDIR/$pbedir/$FILEPDOS"
+					exit
+				fi
+			
+				echo "...Generating Input file for Image Charge code"
+
+				echo "$FILEPDOS">$WORKDIR/$pbedir/DATA.in
+				echo "$bias">>$WORKDIR/$pbedir/DATA.in
+				NUMBEROFENERGYAUX=`sed -n '/<energy_values/,/<\/energy_values>/p' $WORKDIR/$pbedir/$FILEPDOS  | wc -l`
+				NUMBEROFENERGY="$(echo "scale=10; $NUMBEROFENERGYAUX - 2" | bc)"
+				echo "......PDOS FILE: Number of energies ... $NUMBEROFENERGY"
+				echo "$NUMBEROFENERGY" >>$WORKDIR/$pbedir/DATA.in
+				NUMBEROFORBITALS=`head -10 $WORKDIR/$pbedir/$FILEPDOS | grep '<norbitals>'  | awk '{print $2}' | sed 's#</norbitals># #g'`
+				echo "......PDOS FILE: Number of orbitals ... $NUMBEROFORBITALS"
+				echo  "$NUMBEROFORBITALS"  >>$WORKDIR/$pbedir/DATA.in
+				NUMBEROFATOMS=`cat $WORKDIR/$pbedir/$OUTPUTFILE_SIESTA | grep NumberOfAtoms | head -1 | awk '{print $2}'`
+				if [ ! "$NATOMS" = "$NUMBEROFATOMS" ] ; then 
+					echo "Gas Phase PDOS and junctions atom numbers don't match $NATOMS /= $NUMBEROFATOMS"
+					exit
+				fi
+				echo  "$NUMBEROFATOMS"   >>$WORKDIR/$pbedir/DATA.in
+
+
+				###################################################################################
+				################  HOMO/LUMO ENERGY FOR PDOS EXTRACTION ############################
+				###################################################################################
+				echo "...Generating Input file for Image Charge code: GET HOMO/LUMO Energy"
+				LINENUMBER=`cat $WORKDIR/$pbedir/$FILEEIG | wc -l`
+				echo "......Number of lines in the EIG file: $LINENUMBER"				
+				LINENUMBERCORR="$(echo "scale=0; $LINENUMBER - 2" | bc)"
+				echo "......Corrected number of lines in the EIG file: $LINENUMBERCORR"				
+
+				############## STRINGLEVEL CONTAINS ALL THE INFORMATION IN EIG FILE IN ONE LINE. ALLOWS ACCESS TO SPECIFIC LEVEL
+				STRINGLEVEL=`tail -n $LINENUMBERCORR $WORKDIR/$pbedir/$FILEEIG  | sed 's/    1 /      /g' | tr "\\n" " "`
+				echo "......Transforming EIG file in a single line"
+				echo "$STRINGLEVEL"
+				###############     HOMO #################
+				############## LEVELINDEX CONTAINS the INDEX of the level to access column in stringlevel
+				LEVELINDEX="$(echo "scale=0; $HOMO " | bc)"
+				echo "......LEVEL INDEX=$LEVELINDEX"
+				############## LEVELENERGY CONTAINS the ENERGY
+				LEVELENERGY=`echo $STRINGLEVEL | awk -v level=$LEVELINDEX '{print $level}'`
+				echo "......LEVEL ENERGY=$LEVELENERGY"
+				echo "$LEVELENERGY"    >>$WORKDIR/$pbedir/DATA.in
+				###############     LUMO #################
+				############## LEVELINDEX CONTAINS the INDEX of the level to access column in stringlevel
+				LEVELINDEX="$(echo "scale=0; $HOMO + 1" | bc)"
+				echo "......LEVEL INDEX=$LEVELINDEX"
+				############## LEVELENERGY CONTAINS the ENERGY
+				LEVELENERGY=`echo $STRINGLEVEL | awk -v level=$LEVELINDEX '{print $level}'`
+				echo "$LEVELENERGY"    >>$WORKDIR/$pbedir/DATA.in
+				echo "......LEVEL ENERGY=$LEVELENERGY"
+
+				###################################################################################
+				################  IMAGE PLANE POSITION FOR SE CALC     ############################
+				###################################################################################
+				echo "...Generating Input file for Image Charge code: GET Image Plane Position"
+
+				sourcefile=`ls $WORKDIR/$gendir | grep "_2x2cold.xyz"`
+				tmp="$(echo "scale=0; 2 * $NumberofLayer * $AuPerLayer " | bc)"
+				AULeft=`cat $WORKDIR/$gendir/$sourcefile | sed 's/^ *//; s/ *$//; /^$/d' | tail -n $tmp | sed -n 1~2p | head -$AuPerLayer |  awk '{sum=sum+$4} END {print sum/NR}'`
+				echo "${AULeft}"    >>$WORKDIR/$pbedir/DATA.in
+				AURight=`cat $WORKDIR/$gendir/$sourcefile | sed 's/^ *//; s/ *$//; /^$/d' | tail -n $tmp | sed -n 2~2p |  head -$AuPerLayer | awk '{sum=sum+$4} END {print sum/NR}'`
+				echo "${AURight}"    >> $WORKDIR/$pbedir/DATA.in
+				echo "$POSITIONIMAGECHARGE"    >> $WORKDIR/$pbedir/DATA.in
+				echo "......POSITION LEFT: ${AULeft}  RIGHT: ${AURight}"
+				cp $WORKDIR/$pbedir/$FILEPDOS $WORKDIR/$pbedir/${FILEPDOS}.safe
+			 	sed ':a;N;$!ba;s/" \n/ " \n/g' $WORKDIR/$pbedir/$FILEPDOS > $WORKDIR/$pbedir/tmp.pdos ; mv $WORKDIR/$pbedir/tmp.pdos $WORKDIR/$pbedir/$FILEPDOS
+				###################################################################################
+				################                   EXE                       ######################
+				###################################################################################
+				echo "...Executing Image Charge code: "
+				cd $WORKDIR/$pbedir
+				$IMAGECHARGECOMMAND > $WORKDIR/$gendir/$shiftmoFILE\.calc.out
+				cd $WORKDIR/$gendir
+				echo "...Executing Image Charge code: ... Done!"
+				###################################################################################
+				################                   \EXE                       #####################
+				###################################################################################
+				echo "...... MOVING OUTPUT"
+				shiftmoFILE="${bias}.IC.shift_mo"
+				if [ -f $WORKDIR/$pbedir/$shiftmoFILE ]; then
+					sed "s/HOMOLEVEL/$HOMO/g" $WORKDIR/$pbedir/$shiftmoFILE > $WORKDIR/$pbedir/$SHIFTMOFILE_DFTS
+					cat $WORKDIR/$pbedir/$SHIFTMOFILE_DFTS > $WORKDIR/$gendir/$SHIFTMOFILE_DFTS
+				else
+					echo "Output file $WORKDIR/$pbedir/$shiftmoFILE  NOT FOUND"
+					exit
+				fi
+				cat $WORKDIR/$pbedir/PDOS_perlevelmathematica.dat  | tr "\n"  " " | sed 's/};/};\n/g' > $WORKDIR/$pbedir/tmp.dat ; mv $WORKDIR/$pbedir/tmp.dat $WORKDIR/$pbedir/$shiftmoFILE.PDOS_perlevelmathematica.dat
+				echo "... Done!"
+
+			fi
+			######### \ENERGY AND WF OF GAS PHASE ORBITALS
+
+
+			deltascfdir=`echo "${gendir}_MOL_DELTASCF"`
+			echo "DELTASCF Directory $WORKDIR/$deltascfdir"
+			######### ENERGY of DELTA SCF CALCULATIONS
+			if [ -d $WORKDIR/$deltascfdir ]; then 
+				###################################################################################
+				################              GET ENERGIES                   ######################
+				###################################################################################
+				echo "DELTASCF REFERENCE ENERGIES: "
+				ENEUTRALHa=''
+				EANIONHa=''
+				ECATIONHa=''
+				ENEUTRALHa=`cat $WORKDIR/$deltascfdir/$OUTPUTFILE_DELTASCF_N_app | grep 'Convergence criterion met' | awk '{print $2}'`
+				EANIONHa=`cat $WORKDIR/$deltascfdir/$OUTPUTFILE_DELTASCF_A_app | grep 'Convergence criterion met' | awk '{print $2}'` 
+				ECATIONHa=`cat $WORKDIR/$deltascfdir/$OUTPUTFILE_DELTASCF_C_app | grep 'Convergence criterion met' | awk '{print $2}'`  
+				if [ -z "$ENEUTRALHa"  ] ; then 
+					echo "$WORKDIR/$deltascfdir/$OUTPUTFILE_DELTASCF_N_app energy not found"
+					exit
+				elif [ -z "$EANIONHa" ] ; then
+					echo "$WORKDIR/$deltascfdir/$OUTPUTFILE_DELTASCF_A_app energy not found"
+					exit
+				elif [ -z "$ECATIONHa" ] ; then
+					echo "$WORKDIR/$deltascfdir/$OUTPUTFILE_DELTASCF_C_app energy not found"
+					exit
+				else 
+					echo "...DELTASCF REFERENCE ENERGIES: FOUND"
+				fi
+
+				echo "# GAS PHASE SELF ENERGY CORRECTIONS" > $WORKDIR/$deltascfdir/$SHIFTMOFILE_DFTS
+				echo "# READ FROM FILES: $WORKDIR/$deltascfdir/$OUTPUTFILE_DELTASCF_N_app" >> $WORKDIR/$deltascfdir/$SHIFTMOFILE_DFTS
+				echo "#              ... $WORKDIR/$deltascfdir/$OUTPUTFILE_DELTASCF_A_app" >> $WORKDIR/$deltascfdir/$SHIFTMOFILE_DFTS
+				echo "#              ... $WORKDIR/$deltascfdir/$OUTPUTFILE_DELTASCF_C_app" >> $WORKDIR/$deltascfdir/$SHIFTMOFILE_DFTS
+				echo "# Energy at bias $bias mV ; Neutral $ENEUTRALHa [Ha]; Anion $EANIONHa [Ha]; Cation $ECATIONHa [Ha]" >> $WORKDIR/$deltascfdir/$SHIFTMOFILE_DFTS
+
+				ENEUTRAL="$(echo "scale=10;  $ENEUTRALHa * 27.21138505 " | bc)"
+				EANION="$(echo "scale=10;  $EANIONHa * 27.21138505 " | bc)"
+				ECATION="$(echo "scale=10;  $ECATIONHa * 27.21138505 " | bc)"
+				echo "# Energy at bias $bias mV ; Neutral $ENEUTRAL [eV]; Anion $EANION [eV]; Cation $ECATION [eV]" >> $WORKDIR/$deltascfdir/$SHIFTMOFILE_DFTS
+
+
+				if [ "$bias" = "0" ] ; then
+					EANION_CORR="$EANION"
+					ECATION_CORR="$ECATION"
+
+				else 
+					echo "...DELTASCF REFERENCE ENERGIES: LOOKING FOR MONOPOLE CORRECTIONS"
+					# MONOPOLE CORRECTIONS
+					#WARNING: VALUES IN HARTREE
+					echo "......GETTING ANION -1"
+					EANION_m1=`cat $WORKDIR/$deltascfdir/Anion_-1.out | grep 'Convergence criterion met' | awk '{print $2}'` 
+					echo "......GETTING CATION -1"
+					ECATION_m1=`cat $WORKDIR/$deltascfdir/Cation_-1.out | grep 'Convergence criterion met' | awk '{print $2}'`  
+					echo "......GETTING ANION 1"
+					EANION_1=`cat $WORKDIR/$deltascfdir/Anion_1.out | grep 'Convergence criterion met' | awk '{print $2}'` 
+					echo "......GETTING CATION 1"
+					ECATION_1=`cat $WORKDIR/$deltascfdir/Cation_1.out | grep 'Convergence criterion met' | awk '{print $2}'`  
+					echo "......GETTING ANION -2"
+					EANION_m2=`cat $WORKDIR/$deltascfdir/Anion_-2.out | grep 'Convergence criterion met' | awk '{print $2}'` 
+					echo "......GETTING CATION -2"
+					ECATION_m2=`cat $WORKDIR/$deltascfdir/Cation_-2.out | grep 'Convergence criterion met' | awk '{print $2}'`  
+					echo "......GETTING ANION 2"
+					EANION_2=`cat $WORKDIR/$deltascfdir/Anion_2.out | grep 'Convergence criterion met' | awk '{print $2}'` 
+					echo "......GETTING CATION 2"
+					ECATION_2=`cat $WORKDIR/$deltascfdir/Cation_2.out | grep 'Convergence criterion met' | awk '{print $2}'`  
+					echo "......GETTING ANION 0"
+					EANION_0=`cat $WORKDIR/$deltascfdir/Anion_0.out | grep 'Convergence criterion met' | awk '{print $2}'` 
+					echo "......GETTING CATION 0"
+					ECATION_0=`cat $WORKDIR/$deltascfdir/Cation_0.out | grep 'Convergence criterion met' | awk '{print $2}'`  
+					echo "...DELTASCF REFERENCE ENERGIES: Done!"
+					# PASSED THIS POINT, EVENERGY SHOULD BE IN eV or eV/mV
+					## LINEAR CORRECTION IN eV per mV
+					echo "...DELTASCF REFERENCE ENERGIES: Calculating MONOPOLE CORRECTIONS"
+					echo "...... LINEAR CATION"
+					LINEARCATION="$(echo "scale=10; ( ( $ECATION_1  - $ECATION_m1 ) * 27.21138505 / 2.0 ) " | bc)"
+					echo "...... LINEAR ANION"
+					LINEARANION="$(echo "scale=10; ( ( $EANION_1  - $EANION_m1 ) * 27.21138505 / 2.0  ) " | bc)"
+					##AVERAGE in eV
+					echo "...... AVG CATION"
+					ORIGINCATION="$(echo "scale=10; ( ( $ECATION_1  + $ECATION_m1 ) * 27.21138505 / 2.0 ) " | bc)"
+					echo "...... AVG ANION"
+					ORIGINANION="$(echo "scale=10; ( ( $EANION_1  + $EANION_m1 ) * 27.21138505 / 2.0 ) " | bc)"
+					echo "...DELTASCF REFERENCE ENERGIES: Done!"
+
+					#### TEST
+					## HIGHER ORDER ERROR in eV or in %
+					echo "...DELTASCF MONOPOLE CORRECTIONS: Checking Deviations"
+					echo ".....Cation"
+					ERROR_CATION_2="$(echo "scale=10; ( ( ( $LINEARCATION * 2.0 )  + $ORIGINCATION  )  -  ( $ECATION_2  *27.21138505 ) ) * 50.0 / $LINEARCATION " | bc)"
+					ERROR_CATION_m2="$(echo "scale=10; ( ( ( -1.0 * $LINEARCATION * 2.0 )  +  $ORIGINCATION )  - ( $ECATION_m2  *27.21138505 ) ) * 50.0 / $LINEARCATION " | bc)"
+					ERROR_CATION_0="$(echo "scale=10; ( $ORIGINCATION   -  ( $ECATION_0 * 27.21138505 ) ) " | bc)"
+					echo ".....Anion"
+					ERROR_ANION_2="$(echo "scale=10; ( ( ( $LINEARANION * 2.0 )  +   $ORIGINANION  )  - ( $EANION_2 * 27.21138505 ) ) * 50.0 / $LINEARANION " | bc)"
+					ERROR_ANION_m2="$(echo "scale=10; ( ( ( -1.0 * $LINEARANION * 2.0 )  +  $ORIGINANION )  - ( $EANION_m2 * 27.21138505 ) ) * 50.0 / $LINEARANION " | bc)"
+					ERROR_ANION_0="$(echo "scale=10; ( $ORIGINANION   - (  $EANION_0 * 27.21138505 ) ) " | bc)"
+					echo "...DELTASCF MONOPOLE CORRECTIONS: Done!"
+					echo "# Monopole corr at bias $bias mV ; Linear term Anion $LINEARANION [eV/mV]; Linear term Cation $LINEARCATION [eV/mV] " >> $WORKDIR/$deltascfdir/$SHIFTMOFILE_DFTS
+					echo "# ERROR in Monopole Corr: ...Deviation from Origin Error: Anion $ERROR_ANION_0 [eV]; Cation $ERROR_CATION_0 [eV]">>  $WORKDIR/$deltascfdir/$SHIFTMOFILE_DFTS
+					echo "#                        ...Deviation at  2mV:  Anion $ERROR_ANION_2 [%]; Cation $ERROR_CATION_2 [%]">>  $WORKDIR/$deltascfdir/$SHIFTMOFILE_DFTS
+					echo "#                        ...Deviation at -2mV:  Anion $ERROR_ANION_m2 [%]; Cation $ERROR_CATION_m2 [%]">>  $WORKDIR/$deltascfdir/$SHIFTMOFILE_DFTS
+
+					### WITHDRAW LINEAR TERM
+					echo "...DELTASCF MONOPOLE CORRECTIONS: SUBSTRACT LINEAR TERM"
+					ECATION_CORR="$(echo "scale=10; (  $ECATION  - ( $LINEARCATION * $bias ) ) " | bc)" 
+					EANION_CORR="$(echo "scale=10; (   $EANION  - ( $LINEARANION * $bias ) ) " | bc)" 
+					echo "...DELTASCF MONOPOLE CORRECTIONS: Done!"
+				fi
+
+				echo "# Energy w/ Monopole corr at bias $bias mV; Neutral $ENEUTRAL [eV]; Anion $EANION_CORR [eV]; Cation $ECATION_CORR [eV]" >> $WORKDIR/$deltascfdir/$SHIFTMOFILE_DFTS
+
+				DELTASCF_LEVELH="$(echo "scale=10; ( - $ECATION_CORR + $ENEUTRAL ) " | bc)"
+				echo "... HOMODELTASCF $DELTASCF_LEVELH"  
+				echo "# HOMODELTASCF $bias mV; $DELTASCF_LEVELH [eV]" >> $WORKDIR/$deltascfdir/$SHIFTMOFILE_DFTS
+				DELTASCF_LEVELL="$(echo "scale=10; ( $EANION_CORR - $ENEUTRAL ) " | bc)" 
+				echo "... LUMODELTASCF $DELTASCF_LEVELL"  
+				echo "# LUMODELTASCF $bias mV; $DELTASCF_LEVELL [eV]" >> $WORKDIR/$deltascfdir/$SHIFTMOFILE_DFTS
+
+				# ADD THE CORR TO THE SE FILE in gen dir and calculate total correction 
+				cat  $WORKDIR/$gendir/$SHIFTMOFILE_DFTS  | sed "s/ICH\=/DeltaSCFH\= ${DELTASCF_LEVELH} ICH\=/g" | sed "s/ICL\=/DeltaSCFL\= ${DELTASCF_LEVELL} ICL\=/g" > $WORKDIR/$deltascfdir/$shiftmoFILE
+				cp $WORKDIR/$deltascfdir/$shiftmoFILE  $WORKDIR/$gendir/$SHIFTMOFILE_DFTS
+
+			else 
+				echo "$WORKDIR/$deltascfdir not found"
+				exit
+
+			fi
+
+			#####LINEAR CHANGE FROM THE JUNCTION CALCULATION
+			#if [ -z $LINEARTERM ]; then
+			#	echo "Linear correction NOT IMPLEMENTED YET"
+			#	exit
+			#fi 
+			########### NOT IMPLEMENTED YET
+
+
+			########### PRINT TOTAL CORRECTIONS: think about modifying 
+			echo "PRINTING TOTAL CORRECTIONS in SHIFT_MO"
+			# MODIFY WITH LINEAR TERM
+			HOMO_IC=`cat $WORKDIR/$gendir/$SHIFTMOFILE_DFTS | grep TOTALHOMO | awk '{print $7}'` 
+			LUMO_IC=`cat $WORKDIR/$gendir/$SHIFTMOFILE_DFTS | grep TOTALLUMO | awk '{print $7}'`
+			# + LINEAR TERM
+			# + LINEAR TERM
+			TOTALHOMOCORR=`cat $WORKDIR/$gendir/$SHIFTMOFILE_DFTS | grep TOTALHOMO  | awk '{print $5-$3+$7}'`
+			echo "Total HOMO Correction=$TOTALHOMOCORR" 
+			TOTALLUMOCORR=`cat $WORKDIR/$gendir/$SHIFTMOFILE_DFTS | grep TOTALLUMO | awk '{print $5-$3+$7}'`
+			echo "Total LUMO Correction=$TOTALLUMOCORR" 
+			cat $WORKDIR/$gendir/${SHIFTMOFILE_DFTS} |  sed "s/TOTALHOMO/0.0/g"| sed "s/TOTALLUMO/0.0/g" > $WORKDIR/$gendir/${SHIFTMOFILE_DFT}
+			cat $WORKDIR/$gendir/$SHIFTMOFILE_DFTS |  sed "s/TOTALHOMO/${TOTALHOMOCORR}/g"| sed "s/TOTALLUMO/${TOTALLUMOCORR}/g" > $WORKDIR/$gendir/${SHIFTMOFILE_DFTS}.tmp 
+			cp $WORKDIR/$gendir/${SHIFTMOFILE_DFTS}.tmp   $WORKDIR/$gendir/${SHIFTMOFILE_DFTS}
+
+			##################################### DONE
+			echo "...Done!"
+			echo "PRINTING TOTAL CORRECTIONS in SUMMARY"			
+			### PRINT SUMMARY IN SUMMARY FILE
+			# GREP DIPOLES IN SIESTA IN QCHEM
+			echo "...GETTING BIASED SYSTEM DIPOLE FROM SIESTA"			
+			DIPOLESIESTA=`cat $WORKDIR/$pbedir/$OUTPUTFILE_SIESTA  | grep "dipole" | grep Debye | tail -n 1 | awk '{print $NF}'`
+			echo "...GETTING  BIASED SYSTEM  DIPOLE FROM QCHEM"
+			DIPOLEQCHEM=`cat  $WORKDIR/$deltascfdir/$OUTPUTFILE_DELTASCF_N_app | grep -A 1 "Dipole" | tail -n 1 | awk '{print $NF}'`
+			# DIPOLE AT 0 BIAS IN SIESTA AND QCHEM
+			echo "...GETTING GROUND STATE DIPOLE FROM SIESTA"			
+			DIPOLESIESTA_ref=`cat $WORKDIR/$pbedir/PDOS.out  | grep "dipole" | grep Debye | tail -n 1 | awk '{print $NF}'`
+			echo "...GETTING GROUND STATE DIPOLE FROM QCHEM"
+			DIPOLEQCHEM_ref=`cat $WORKDIR/$deltascfdir/Neutral_0.out | grep -A 1 "Dipole" | tail -n 1 | awk '{print $NF}'`
+
+			############## LEVELINDEX CONTAINS the INDEX of the level to access column in stringlevel
+			echo "...GETTING HOMO ENERGY FROM SIESTA"			
+			HOMOINDEX="$(echo "scale=10; $HOMO " | bc)"
+			HOMOENERGY=`echo $STRINGLEVEL | awk -v level=$HOMOINDEX '{print $level}'`
+			echo "...GETTING LUMO ENERGY FROM SIESTA"			
+			LUMOINDEX="$(echo "scale=10; $HOMO + 1" | bc)"
+			LUMOENERGY=`echo $STRINGLEVEL | awk -v level=$LUMOINDEX '{print $level}'`
+			echo "...GETTING IC TERM FROM shift_mo"			
+			## IC
+
+
+			echo "2BIAS_3DipoleSiesta[D]_4DipoleSiesta0[D]_5DipoleQchem[D]_6DipoleQchem0[D]_7HOMOPBE[eV]_8LUMOPBE[eV]_9HOMODSCF[eV]_10LUMODSCF[eV]_11HOMOIC[eV]_12LUMOIC[eV] $bias $DIPOLESIESTA $DIPOLESIESTA_ref $DIPOLEQCHEM $DIPOLEQCHEM_ref  $HOMOENERGY $LUMOENERGY  ${DELTASCF_LEVELH}  ${DELTASCF_LEVELL} $HOMO_IC $LUMO_IC">>$WORKDIR/$gendir/$SEFILE
+			echo "...Done!"
+
+		fi
+		echo "END OF BIAS AND MOLECULE SPECIFIC PART"
+	done 
+done
+echo "THIS SCRIPT WILL NOW END"
+

@@ -1,0 +1,6 @@
+current.o : ../libs/kind.o
+current.o : ../libs/parameters.o
+currentSmall.o : ../libs/kind.o
+currentSmall.o : ../libs/parameters.o
+
+

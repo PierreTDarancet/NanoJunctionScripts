@@ -1,0 +1,35 @@
+
+SPACE="    "
+
+transmissionDFT(x)= (fitlambda_DFT * fitgamma_DFT* fitgamma_DFT) / ( ( (x-fitenergy_DFT)*(x-fitenergy_DFT)) + (fitgamma_DFT* fitgamma_DFT*(1+fitlambda_DFT)*(1+fitlambda_DFT)/4) )
+seebeckcoefficientDFT(x) = 2* S0 * (x-fitenergy_DFT) * transmissionDFT(x) / (fitlambda_DFT * fitgamma_DFT* fitgamma_DFT)
+ZTKDFT(x) = 4*S0 *S0 * G0 * transmissionDFT(x) * transmissionDFT(x)  * transmissionDFT(x) * (x-fitenergy_DFT) * (x-fitenergy_DFT)  / ((fitlambda_DFT * fitgamma_DFT* fitgamma_DFT) * (fitlambda_DFT * fitgamma_DFT* fitgamma_DFT))
+
+OUTPUT_NAME=sprintf("%s%s.Transmission.DFT.gp.dat",GENERIC_NAME,PLOT_TYPE);
+set table OUTPUT_NAME
+plot transmissionDFT(x)
+OUTPUT_NAME=sprintf("%s%s.Seebeck.DFT.gp.dat",GENERIC_NAME,PLOT_TYPE);
+set table OUTPUT_NAME
+plot seebeckcoefficientDFT(x)
+OUTPUT_NAME=sprintf("%s%s.ZTK.DFT.gp.dat",GENERIC_NAME,PLOT_TYPE);
+set table OUTPUT_NAME
+plot ZTKDFT(x)
+
+
+
+transmissionDFTS(x) = (fitlambda_DFTS * fitgamma_DFTS* fitgamma_DFTS) / ( ( (x-fitenergy_DFTS)*(x-fitenergy_DFTS)) + (fitgamma_DFTS* fitgamma_DFTS*(1+fitlambda_DFTS)*(1+fitlambda_DFTS)/4) )
+seebeckcoefficientDFTS(x) = 2*S0 * (x-fitenergy_DFTS) * transmissionDFTS(x) / (fitlambda_DFTS * fitgamma_DFTS* fitgamma_DFTS)
+ZTKDFTS(x) = 4*S0 *S0 * G0 * transmissionDFTS(x) * transmissionDFTS(x)  * transmissionDFTS(x) * (x-fitenergy_DFTS) * (x-fitenergy_DFTS)  / ((fitlambda_DFTS * fitgamma_DFTS* fitgamma_DFTS) * (fitlambda_DFTS * fitgamma_DFTS* fitgamma_DFTS))
+
+OUTPUT_NAME=sprintf("%s%s.Transmission.DFT+S.gp.dat",GENERIC_NAME,PLOT_TYPE);
+set table OUTPUT_NAME
+plot transmissionDFTS(x)
+OUTPUT_NAME=sprintf("%s%s.Seebeck.DFT+S.gp.dat",GENERIC_NAME,PLOT_TYPE);
+set table OUTPUT_NAME
+plot seebeckcoefficientDFTS(x)
+OUTPUT_NAME=sprintf("%s%s.ZTK.DFT+S.gp.dat",GENERIC_NAME,PLOT_TYPE);
+set table OUTPUT_NAME
+plot ZTKDFTS(x)
+
+PART="Results T-S-ZTK"
+print PART,  SPACE,GENERIC_NAME, SPACE, transmissionDFT(0),SPACE, seebeckcoefficientDFT(0), SPACE, ZTKDFT(0), SPACE, transmissionDFTS(0),SPACE, seebeckcoefficientDFTS(0), SPACE, ZTKDFTS(0)

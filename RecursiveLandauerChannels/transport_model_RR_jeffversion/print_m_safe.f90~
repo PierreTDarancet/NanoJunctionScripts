@@ -1,0 +1,242 @@
+!
+! Copyright (C) 2009 Molecular Foundry Berkeley
+!
+! This file is distributed under the terms of the
+! GNU General Public License. See the file `License'
+! in the root directory of the present distribution,
+! or http://www.gnu.org/copyleft/gpl.txt .
+!
+! Contributors  : Pierre DARANCET
+!***********************************************
+   MODULE print_module
+   !***********************************************
+  USE kinds, ONLY : dbl
+  USE constants, ONLY : ZERO, ONE, CZERO, CONE, CI,PI
+   IMPLICIT NONE 
+   PRIVATE 
+   SAVE
+!
+
+
+   ! Public
+    ! Private
+ 
+   ! Public variables
+   ! Public routines:
+   PUBLIC                 :: print_PDOS
+   PUBLIC                 :: print_transmission
+ 
+   CONTAINS 
+!***********************************************
+   SUBROUTINE print_transmission(Fil, transmission, egrid, ne, filename)
+   !***********************************************
+   IMPLICIT NONE
+       INTEGER, INTENT(in)  :: Fil
+       INTEGER, INTENT(in)  :: ne
+       REAL(dbl), INTENT(in)  :: egrid(ne)
+       REAL(dbl), INTENT(in)  :: transmission(ne)
+       CHARACTER(100), INTENT(in)  :: filename
+
+       CHARACTER(18)      :: subname="print_transmission"
+       INTEGER  :: ierr, ie
+       !
+
+       IF( ne <= 0 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Error in ne definition", " ne ", ne
+            STOP
+         ENDIF 
+
+
+	 OPEN ( Fil, FILE=TRIM(filename), FORM='formatted' )
+           DO ie = 1, ne
+              WRITE (Fil, '(3(f15.9))' ) egrid(ie) , transmission(ie)
+	   ENDDO
+        CLOSE( Fil )
+
+
+
+   END SUBROUTINE print_transmission
+!***********************************************
+   SUBROUTINE print_PDOS(Fil, h_C,  gammaL,  gammaR, f_L, f_R, dosL, dosR, dimC, ne, egrid, outputfile_name)
+   !***********************************************
+       
+   IMPLICIT NONE
+
+       INTEGER, INTENT(in)  :: Fil
+       INTEGER, INTENT(in)  :: ne
+       INTEGER, INTENT(in)  :: dimC
+       REAL(dbl), INTENT(in)  :: egrid(ne)
+       REAL(dbl), INTENT(in)  :: dosL(ne)  
+       REAL(dbl), INTENT(in)  :: dosR(ne)
+       REAL(dbl), INTENT(in)  :: f_L(ne)  
+       REAL(dbl), INTENT(in)  :: f_R(ne)
+       COMPLEX(dbl), INTENT(in)  :: gammaL(ne,dimC,dimC)  
+       COMPLEX(dbl), INTENT(in)  :: gammaR(ne,dimC,dimC)
+       COMPLEX(dbl), INTENT(in)  :: h_C(dimC,dimC)
+       CHARACTER(100), INTENT(in)  :: outputfile_name
+       ! Output
+       REAL(dbl), PARAMETER :: Gridmax=10.0 * ONE
+       REAL(dbl), PARAMETER :: Gridmin=ZERO
+       REAL(dbl), PARAMETER :: Leadsize=1.5* ONE
+       REAL(dbl), PARAMETER :: deltagraph=0.2
+       INTEGER, PARAMETER :: nspatialgrid=50
+       INTEGER, PARAMETER :: negridout=1001
+       REAL(dbl) :: egridout(negridout)
+       REAL(dbl) :: Spatial_grid(nspatialgrid) 
+       REAL(dbl) :: dspace, x_aux, x_aux2, deout
+       REAL(dbl)  :: PDOS_out_aux(nspatialgrid,ne)
+       REAL(dbl)  :: PDOS_out(nspatialgrid,negridout)
+       REAL(dbl)  :: eigenval(dimC)
+       ! Local
+       CHARACTER(10)      :: subname="print_PDOS"
+       INTEGER  :: ierr, ie, i_dim, igrid
+
+
+       IF( ne <= 0 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Error in ne definition", " ne ", ne
+            STOP
+         ENDIF 
+
+
+       IF( dimC <= 0 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Error in ne definition", " dimC ", dimC
+            STOP
+         ENDIF 
+
+
+      DO i_dim=1, dimC
+            !
+            eigenval(i_dim) = REAL ( h_C(i_dim,i_dim) )
+            !
+      ENDDO
+
+       
+   ! Define spatial grid
+      dspace = (Gridmax - Gridmin) / REAL(nspatialgrid -1)
+      DO igrid = 1, nspatialgrid
+        Spatial_grid(igrid) = Gridmin + REAL(igrid -1) * dspace
+      ENDDO 
+   ! Define out energy grid
+      deout = (egrid(ne) - egrid(1)) / REAL(negridout -1)
+      DO igrid = 1, negridout
+        egridout(negridout) = egrid(1) + REAL(igrid -1) *  deout
+      ENDDO 
+
+ 
+      PDOS_out(:,:)= ZERO
+      IF ( dimC == 1) THEN
+	   DO ie = 1, ne
+	       DO igrid = 1, nspatialgrid
+		      IF (  (Spatial_grid(igrid) >= Gridmin ) .AND. (Spatial_grid(igrid) <= (Gridmin + Leadsize) )) THEN
+		           PDOS_out_aux(igrid,ie)= dosL(ie)  * f_L(ie)
+		         ELSE IF  ((Spatial_grid(igrid) >= (Gridmax- Leadsize) ) .AND. (Spatial_grid(igrid) <= Gridmax ) ) THEN
+		           PDOS_out_aux(igrid,ie)= dosR(ie)* f_R(ie)
+		         ELSE
+		           PDOS_out_aux(igrid,ie)= gammaL(ie,1,1)*gammaR(ie,1,1) *  ONE  /( (egrid(ie) - eigenval(1) )**(2) + ( ( gammaL(ie,1,1)+gammaR(ie,1,1) )**2)/2.0 )
+		           !PDOS_out(igrid,ie)=  ONE  /( (egrid(ie) - eigenval(1) )**(2) + ( ( gammaL(ie,1,1)+gammaR(ie,1,1) )**2)/2.0 )
+		      ENDIF 
+	       ENDDO
+	   ENDDO
+      ELSE IF  ( dimC == 2 ) THEN 
+           x_aux =  (Gridmin + Gridmax)/2.00
+	   DO ie = 1, ne
+	       DO igrid = 1, nspatialgrid
+		      IF (  (Spatial_grid(igrid) >= Gridmin ) .AND. (Spatial_grid(igrid) <= (Gridmin + Leadsize - deltagraph) )) THEN
+		           PDOS_out(igrid,ie)= dosL(ie)* f_L(ie)
+		         ELSE IF  ((Spatial_grid(igrid) >= (Gridmax- Leadsize + deltagraph) ) .AND. (Spatial_grid(igrid) <= Gridmax ) ) THEN
+		           PDOS_out(igrid,ie)= dosR(ie)* f_R(ie)
+		         ELSE IF  ( ( Spatial_grid(igrid) > (Gridmin + Leadsize+ deltagraph) ) .AND. ( Spatial_grid(igrid) <= x_aux - deltagraph )) THEN
+		           PDOS_out(igrid,ie)=gammaL(ie,1,1)*gammaR(ie,1,1) *  ONE /( (egrid(ie) - eigenval(1) )**(2) + ( ( gammaL(ie,1,1)+gammaR(ie,1,1) )**2)/2.0 )
+		           !PDOS_out(igrid,ie)= ONE /( (egrid(ie) - eigenval(1) )**(2) + ( ( gammaL(ie,1,1)+gammaR(ie,1,1) )**2)/2.0 )
+		         ELSE IF  ( ( Spatial_grid(igrid) > x_aux+ deltagraph ) .AND. ( Spatial_grid(igrid) < (Gridmax- Leadsize - deltagraph) )) THEN
+		           PDOS_out(igrid,ie)= gammaL(ie,2,2)*gammaR(ie,2,2) * ONE /( (egrid(ie) - eigenval(2) )**(2) + ( ( gammaL(ie,2,2)+gammaR(ie,2,2) )**2)/2.0 )
+		           !PDOS_out(igrid,ie)= ONE /( (egrid(ie) - eigenval(2) )**(2) + ( ( gammaL(ie,2,2)+gammaR(ie,2,2) )**2)/2.0 )
+		      ENDIF 
+	       ENDDO
+	   ENDDO
+
+ 
+     ELSE IF  ( dimC == 3 ) THEN 
+           x_aux = Gridmin + Leadsize +  ((Gridmax - Gridmin - 2.0*Leadsize)/3.00)
+           x_aux2 =  Gridmin + Leadsize + 2.0*((Gridmax - Gridmin - 2.0*Leadsize)/3.00)
+	   DO ie = 1, ne
+	       DO igrid = 1, nspatialgrid
+		      IF (  (Spatial_grid(igrid) >= Gridmin ) .AND. (Spatial_grid(igrid) <= (Gridmin + Leadsize - deltagraph) )) THEN
+		           PDOS_out(igrid,ie)= dosL(ie)* f_L(ie)
+		         ELSE IF  ((Spatial_grid(igrid) >= (Gridmax- Leadsize+ deltagraph) ) .AND. (Spatial_grid(igrid) <= Gridmax ) ) THEN
+		           PDOS_out(igrid,ie)= dosR(ie)* f_R(ie)
+		         ELSE IF  ( ( Spatial_grid(igrid) > (Gridmin + Leadsize + deltagraph) ) .AND. ( Spatial_grid(igrid) <= x_aux  - deltagraph)) THEN
+		           PDOS_out(igrid,ie)= gammaL(ie,1,1)*gammaR(ie,1,1)* ONE /( (egrid(ie) - eigenval(1) )**(2) + ( ( gammaL(ie,1,1)+gammaR(ie,1,1) )**2)/2.0 )
+		           !PDOS_out(igrid,ie)= ONE /( (egrid(ie) - eigenval(1) )**(2) + ( ( gammaL(ie,1,1)+gammaR(ie,1,1) )**2)/2.0 )
+		         ELSE IF  ( ( Spatial_grid(igrid) > x_aux+ deltagraph ) .AND. ( Spatial_grid(igrid) < x_aux2 - deltagraph ) ) THEN
+		           PDOS_out(igrid,ie)= gammaL(ie,2,2) * gammaR(ie,2,2) * ONE /( (egrid(ie) - eigenval(2) )**(2) + ( ( gammaL(ie,2,2)+gammaR(ie,2,2) )**2)/2.0 )
+		           !PDOS_out(igrid,ie)= ONE /( (egrid(ie) - eigenval(2) )**(2) + ( ( gammaL(ie,2,2)+gammaR(ie,2,2) )**2)/2.0 )
+		         ELSE IF  ( ( Spatial_grid(igrid) > x_aux2 + deltagraph) .AND. ( Spatial_grid(igrid) < (Gridmax- Leadsize - deltagraph) ) ) THEN
+		           PDOS_out(igrid,ie)= gammaL(ie,3,3) * gammaR(ie,3,3) * ONE /( (egrid(ie) - eigenval(3) )**(3) + ( ( gammaL(ie,3,3)+gammaR(ie,3,3) )**2)/2.0 )
+		           !PDOS_out(igrid,ie)= ONE /( (egrid(ie) - eigenval(3) )**(3) + ( ( gammaL(ie,3,3)+gammaR(ie,3,3) )**2)/2.0 )
+		      ENDIF 
+	       ENDDO
+	   ENDDO
+
+      ELSE IF  ( dimC == 4 ) THEN 
+          x_aux =  (Gridmin + Gridmax)/2.00
+	   DO ie = 1, ne
+	       DO igrid = 1, nspatialgrid
+		      IF (  (Spatial_grid(igrid) >= Gridmin ) .AND. (Spatial_grid(igrid) <= (Gridmin + Leadsize - deltagraph) )) THEN
+		           PDOS_out(igrid,ie)= dosL(ie)* f_L(ie)
+		         ELSE IF  ((Spatial_grid(igrid) >= (Gridmax- Leadsize+ deltagraph) ) .AND. (Spatial_grid(igrid) <= Gridmax ) ) THEN
+		           PDOS_out(igrid,ie)= dosR(ie)* f_R(ie)
+		         ELSE IF  ( ( Spatial_grid(igrid) > (Gridmin + Leadsize+ deltagraph) ) .AND. ( Spatial_grid(igrid) <= x_aux - deltagraph )) THEN
+		           PDOS_out(igrid,ie)=  gammaL(ie,1,1) * gammaR(ie,1,1) * ONE /( (egrid(ie) - eigenval(1) )**(2) + ( ( gammaL(ie,1,1)+gammaR(ie,1,1) )**2)/2.0 ) + gammaL(ie,2,2) * gammaR(ie,2,2) * ONE /( (egrid(ie) - eigenval(2) )**(2) + ( ( gammaL(ie,2,2)+gammaR(ie,2,2) )**2)/2.0 )
+		           !PDOS_out(igrid,ie)= ONE /( (egrid(ie) - eigenval(1) )**(2) + ( ( gammaL(ie,1,1)+gammaR(ie,1,1) )**2)/2.0 ) + ONE /( (egrid(ie) - eigenval(2) )**(2) + ( ( gammaL(ie,2,2)+gammaR(ie,2,2) )**2)/2.0 )
+		         ELSE IF  ( ( Spatial_grid(igrid) > x_aux + deltagraph) .AND. ( Spatial_grid(igrid) < (Gridmax- Leadsize - deltagraph) )) THEN
+		           PDOS_out(igrid,ie)=  gammaL(ie,3,3)*gammaR(ie,3,3)* ONE /( (egrid(ie) - eigenval(3) )**(2) + ( ( gammaL(ie,3,3)+gammaR(ie,3,3) )**2)/2.0 ) + gammaL(ie,4,4)*gammaR(ie,4,4)*ONE /( (egrid(ie) - eigenval(4) )**(2) + ( ( gammaL(ie,4,4)+gammaR(ie,4,4) )**2)/2.0 )
+		      ENDIF 
+	       ENDDO
+	   ENDDO
+
+
+      ELSE
+           x_aux = Gridmin + Leadsize +  ((Gridmax - Gridmin - 2.0*Leadsize)/3.00)
+           x_aux2 =  Gridmin + Leadsize + 2.0*((Gridmax - Gridmin - 2.0*Leadsize)/3.00)
+	   DO ie = 1, ne
+	       DO igrid = 1, nspatialgrid
+		      IF (  (Spatial_grid(igrid) >= Gridmin ) .AND. (Spatial_grid(igrid) <= (Gridmin + Leadsize - deltagraph) )) THEN
+		           PDOS_out(igrid,ie)= dosL(ie)* f_L(ie)
+		         ELSE IF  ((Spatial_grid(igrid) >= (Gridmax- Leadsize+ deltagraph) ) .AND. (Spatial_grid(igrid) <= Gridmax ) ) THEN
+		           PDOS_out(igrid,ie)= dosR(ie)* f_R(ie)
+		         ELSE IF  ( ( Spatial_grid(igrid) > (Gridmin + Leadsize+ deltagraph) ) .AND. ( Spatial_grid(igrid) <= x_aux  - deltagraph)) THEN
+		           PDOS_out(igrid,ie)= gammaL(ie,1,1)*gammaR(ie,1,1)  * ONE /( (egrid(ie) - eigenval(1) )**(2) + ( ( gammaL(ie,1,1)+gammaR(ie,1,1) )**2)/2.0 ) + gammaL(ie,2,2)*gammaR(ie,2,2)*ONE /( (egrid(ie) - eigenval(2) )**(2) + ( ( gammaL(ie,2,2)+gammaR(ie,2,2) )**2)/2.0 )
+		           !PDOS_out(igrid,ie)= ONE /( (egrid(ie) - eigenval(1) )**(2) + ( ( gammaL(ie,1,1)+gammaR(ie,1,1) )**2)/2.0 ) + ONE /( (egrid(ie) - eigenval(2) )**(2) + ( ( gammaL(ie,2,2)+gammaR(ie,2,2) )**2)/2.0 )
+		         ELSE IF  ( ( Spatial_grid(igrid) > x_aux + deltagraph) .AND. ( Spatial_grid(igrid) < x_aux2 - deltagraph ) )THEN
+                           DO i_dim=1, dimC-2
+   			           PDOS_out(igrid,ie)= PDOS_out(igrid,ie) + ONE /( (egrid(ie) - eigenval(i_dim) )**(2) + ( ( gammaL(ie,i_dim,i_dim)+gammaR(ie,i_dim,i_dim) )**2)/2.0 )
+                           ENDDO
+		         ELSE IF  ( ( Spatial_grid(igrid) > x_aux2 + deltagraph ) .AND. ( Spatial_grid(igrid) < (Gridmax- Leadsize - deltagraph) ) ) THEN
+		           PDOS_out(igrid,ie)= gammaL(ie,dimC,dimC) * gammaR(ie,dimC,dimC)  * ONE /( (egrid(ie) - eigenval(dimC) )**(2) + ( ( gammaL(ie,dimC,dimC)+gammaR(ie,dimC,dimC) )**2)/2.0 ) +  gammaL(ie,(dimC-1),(dimC-1)) * gammaR(ie,(dimC-1),(dimC-1)) * ONE /( (egrid(ie) - eigenval((dimC-1)) )**(2) + ( ( gammaL(ie,(dimC-1),(dimC-1))+gammaR(ie,(dimC-1),(dimC-1)) )**2)/2.0 )
+
+		           !PDOS_out(igrid,ie)= ONE /( (egrid(ie) - eigenval(dimC) )**(2) + ( ( gammaL(ie,dimC,dimC)+gammaR(ie,dimC,dimC) )**2)/2.0 ) + ONE /( (egrid(ie) - eigenval((dimC-1)) )**(2) + ( ( gammaL(ie,(dimC-1),(dimC-1))+gammaR(ie,(dimC-1),(dimC-1)) )**2)/2.0 )
+		      ENDIF 
+	       ENDDO
+	   ENDDO
+      ENDIF
+
+     
+ !!!!!!OUt
+   OPEN ( Fil, FILE=TRIM(outputfile_name), FORM='formatted' )
+   DO ie = 1, ne
+       DO igrid = 1, nspatialgrid
+                 WRITE (Fil, '(3(f15.9))' ) egrid(ie) , Spatial_grid(igrid),   (PDOS_out(igrid,ie) )
+       ENDDO
+       WRITE (Fil, '(2(e15.9))' )
+   ENDDO
+   CLOSE( Fil )
+
+   END SUBROUTINE print_PDOS
+
+  END  MODULE print_module
+
+ 

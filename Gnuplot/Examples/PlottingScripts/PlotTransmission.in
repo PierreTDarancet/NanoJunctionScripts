@@ -1,0 +1,465 @@
+#!/bin/bash
+
+HOMETEST=`pwd`
+echo HOMETEST
+echo $HOMETEST
+
+mkdir $HOMETEST/PlotsFigureTransmission
+rm $HOMETEST/PlotsFigureTransmission/Transmission.Results.dat 
+mkdir $HOMETEST/temp/
+cd  $HOMETEST/temp/
+
+
+LOCALDIR="DASTRIMAD"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+echo "DASTRIMAD"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+ln -s $HOMETEST/GPFILES/*.setgp  $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp  $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt  $HOMETEST/$LOCALDIR/
+
+cp $HOMETEST/SPECSFILES/DASTRIMAD.ingp  $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Transmission"
+nohup gnuplot Makeplot.TransmissionV.rungp  > Transmission.Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Transmission.Gnuplot.out >> $HOMETEST/PlotsFigureTransmission/Transmission.Results.dat  
+echo "É É Done"
+
+cp   $HOMETEST/$LOCALDIR/*.ps  $HOMETEST/$LOCALDIR/*.gif  $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsFigureTransmission/
+cd $HOMETEST/temp/
+
+LOCALDIR="DASADAD"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+cd $HOMETEST/$LOCALDIR
+echo "DASADAD"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/DASADAD.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Transmission"
+nohup gnuplot Makeplot.TransmissionV.rungp  > Transmission.Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Transmission.Gnuplot.out >> $HOMETEST/PlotsFigureTransmission/Transmission.Results.dat 
+echo "É É Done"
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif  $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsFigureTransmission/
+cd $HOMETEST/temp/
+
+LOCALDIR="DASTRIMTRIM"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+
+pwd
+
+cd $HOMETEST/$LOCALDIR
+echo "DASTRIMTRIM"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/DASTRIMTRIM.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Transmission"
+nohup gnuplot Makeplot.TransmissionV.rungp  > Transmission.Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Transmission.Gnuplot.out >> $HOMETEST/PlotsFigureTransmission/Transmission.Results.dat 
+echo "É É Done"
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif  $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsFigureTransmission/
+cd $HOMETEST/temp/
+#######################################################################
+LOCALDIR="BAPATRIMAD"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+cd $HOMETEST/$LOCALDIR
+echo "BAPATRIMAD"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/BAPATRIMAD.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Transmission"
+nohup gnuplot Makeplot.TransmissionV.rungp  > Transmission.Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Transmission.Gnuplot.out >> $HOMETEST/PlotsFigureTransmission/Transmission.Results.dat 
+echo "É É Done"
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsFigureTransmission/
+cd $HOMETEST/temp/
+#######################################################################
+LOCALDIR="BAPAADAD"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+cd $HOMETEST/$LOCALDIR
+echo "BAPAADAD"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/BAPAADAD.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+
+echo "É Transmission"
+nohup gnuplot Makeplot.TransmissionV.rungp  > Transmission.Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Transmission.Gnuplot.out >> $HOMETEST/PlotsFigureTransmission/Transmission.Results.dat 
+echo "É É Done"
+
+cp  $HOMETEST/BAPAADAD/*.ps $HOMETEST/BAPAADAD/*.gif $HOMETEST/BAPAADAD/*.png $HOMETEST/PlotsFigureTransmission/
+cd $HOMETEST/temp/
+#######################################################################
+LOCALDIR="BAPATRIMTRIM"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+cd $HOMETEST/$LOCALDIR
+echo "BAPATRIMTRIM"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+
+cp $HOMETEST/SPECSFILES/BAPATRIMTRIM.ingp  $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Transmission"
+nohup gnuplot Makeplot.TransmissionV.rungp  > Transmission.Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Transmission.Gnuplot.out >> $HOMETEST/PlotsFigureTransmission/Transmission.Results.dat 
+echo "É É Done"
+
+
+cp   $HOMETEST/$LOCALDIR/*.ps  $HOMETEST/$LOCALDIR/*.gif  $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsFigureTransmission/
+cd $HOMETEST/temp/
+
+
+LOCALDIR="HDATRIMTRIM"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+cd $HOMETEST/$LOCALDIR
+echo "HDATRIMTRIM"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/HDATRIMTRIM.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Transmission"
+nohup gnuplot Makeplot.TransmissionV.rungp  > Transmission.Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Transmission.Gnuplot.out >> $HOMETEST/PlotsFigureTransmission/Transmission.Results.dat 
+echo "É É Done"
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif $HOMETEST/PlotsFigureTransmission/
+cd $HOMETEST/temp/
+
+LOCALDIR="HDATRIMAD"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+cd $HOMETEST/$LOCALDIR
+echo "HDATRIMAD"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/HDATRIMAD.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Transmission"
+nohup gnuplot Makeplot.TransmissionV.rungp  > Transmission.Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Transmission.Gnuplot.out >> $HOMETEST/PlotsFigureTransmission/Transmission.Results.dat 
+echo "É É Done"
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsFigureTransmission/
+cd $HOMETEST/temp/
+
+LOCALDIR="HDAADAD"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+
+cd $HOMETEST/$LOCALDIR
+echo "HDAADAD"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+ 
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/HDAADAD.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Transmission"
+nohup gnuplot Makeplot.TransmissionV.rungp  > Transmission.Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Transmission.Gnuplot.out >> $HOMETEST/PlotsFigureTransmission/Transmission.Results.dat 
+echo "É É Done"
+
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsFigureTransmission/
+cd $HOMETEST/temp/
+
+LOCALDIR="BPTRIMTRIM"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+
+cd $HOMETEST/$LOCALDIR
+echo "BPTRIMTRIM"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+ 
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/BPTRIMTRIM.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Transmission"
+nohup gnuplot Makeplot.TransmissionV.rungp  > Transmission.Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Transmission.Gnuplot.out >> $HOMETEST/PlotsFigureTransmission/Transmission.Results.dat 
+echo "É É Done"
+
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsFigureTransmission/
+cd $HOMETEST/temp/
+
+LOCALDIR="BPTRIMAD"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+cd $HOMETEST/$LOCALDIR
+echo "BPTRIMAD"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/BPTRIMAD.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Transmission"
+nohup gnuplot Makeplot.TransmissionV.rungp  > Transmission.Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Transmission.Gnuplot.out >> $HOMETEST/PlotsFigureTransmission/Transmission.Results.dat 
+echo "É É Done"
+
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsFigureTransmission/
+cd $HOMETEST/temp/
+
+LOCALDIR="BPADAD"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+cd $HOMETEST/$LOCALDIR
+echo "BPADAD"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/BPADAD.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Transmission"
+nohup gnuplot Makeplot.TransmissionV.rungp  > Transmission.Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Transmission.Gnuplot.out >> $HOMETEST/PlotsFigureTransmission/Transmission.Results.dat 
+echo "É É Done"
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsFigureTransmission/
+cd $HOMETEST/temp/
+
+LOCALDIR="BPADAD_re"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+cd $HOMETEST/$LOCALDIR
+echo "BPADAD_re"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/BPADAD_re.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Transmission"
+nohup gnuplot Makeplot.TransmissionV.rungp  > Transmission.Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Transmission.Gnuplot.out >> $HOMETEST/PlotsFigureTransmission/Transmission.Results.dat 
+echo "É É Done"
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsFigureTransmission/
+cd $HOMETEST/temp/
+
+LOCALDIR="BPLOWGTRIMTRIM"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+cd $HOMETEST/$LOCALDIR
+echo "BPLOWGTRIMTRIM"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/BPLOWGTRIMTRIM.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Transmission"
+nohup gnuplot Makeplot.TransmissionV.rungp  > Transmission.Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Transmission.Gnuplot.out >> $HOMETEST/PlotsFigureTransmission/Transmission.Results.dat 
+echo "É É Done"
+
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif  $HOMETEST/$LOCALDIR/*.png  $HOMETEST/PlotsFigureTransmission/
+cd $HOMETEST/temp/
+
+LOCALDIR="BPLOWGTRIMAD"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+cd $HOMETEST/$LOCALDIR
+echo "BPLOWGTRIMAD"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/BPLOWGTRIMAD.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Transmission"
+nohup gnuplot Makeplot.TransmissionV.rungp  > Transmission.Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Transmission.Gnuplot.out >> $HOMETEST/PlotsFigureTransmission/Transmission.Results.dat 
+echo "É É Done"
+
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif $HOMETEST/PlotsFigureTransmission/
+cd $HOMETEST/temp/
+
+LOCALDIR="BPLOWGADAD"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+cd $HOMETEST/$LOCALDIR
+echo "BPLOWGADAD"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/BPLOWGADAD.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Transmission"
+nohup gnuplot Makeplot.TransmissionV.rungp  > Transmission.Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Transmission.Gnuplot.out >> $HOMETEST/PlotsFigureTransmission/Transmission.Results.dat 
+echo "É É Done"
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsFigureTransmission/
+cd $HOMETEST/temp/
+
+LOCALDIR="BPVHGTRIMAD"
+cd $HOMETEST/$LOCALDIR/
+echo $HOMETEST/$LOCALDIR
+pwd
+
+cd $HOMETEST/$LOCALDIR
+echo "BPVHGTRIMAD"
+rm $HOMETEST/$LOCALDIR/*.setgp
+rm $HOMETEST/$LOCALDIR/*.rungp
+rm $HOMETEST/$LOCALDIR/*.plt 
+rm $HOMETEST/$LOCALDIR/*.gif
+rm $HOMETEST/$LOCALDIR/*.ps
+
+ln -s $HOMETEST/GPFILES/*.setgp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.rungp $HOMETEST/$LOCALDIR/
+ln -s $HOMETEST/GPFILES/*.plt $HOMETEST/$LOCALDIR/
+cp $HOMETEST/SPECSFILES/BPVHGTRIMAD.ingp $HOMETEST/$LOCALDIR/specs.ingp
+cp $HOMETEST/SPECSFILES/common.ingp  $HOMETEST/$LOCALDIR/common.ingp
+echo "É Transmission"
+nohup gnuplot Makeplot.TransmissionV21.rungp  > Transmission.Gnuplot.out
+grep "Results T-S-ZTK" $HOMETEST/$LOCALDIR/Transmission.Gnuplot.out >> $HOMETEST/PlotsFigureTransmission/Transmission.Results.dat 
+echo "É É Done"
+
+
+cp  $HOMETEST/$LOCALDIR/*.ps $HOMETEST/$LOCALDIR/*.gif  $HOMETEST/$LOCALDIR/*.png $HOMETEST/PlotsFigureTransmission/
+cd $HOMETEST/temp/
+
+

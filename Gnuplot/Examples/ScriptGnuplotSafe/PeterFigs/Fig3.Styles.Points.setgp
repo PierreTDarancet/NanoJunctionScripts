@@ -1,0 +1,15 @@
+set pointsize 3
+set style line 1  ps 2 pt 1 lc palette
+set style line 2  ps 2 pt 2 lc palette
+set style line 3  ps 2 pt 3 lc palette
+set style line 4  ps 2 pt 4 lc palette
+set style line 5  ps 2 pt 5 lc palette
+set style line 6  ps 2 pt 6 lc palette
+set style line 7  ps 2 pt 7 lc palette
+set style line 8  ps 2 pt 8 lc palette
+set style line 9  ps 2 pt 9 lc palette
+set style line 10  ps 2 pt 10 lc palette
+set style line 11  ps 2 pt 11 lc palette
+set style line 12  ps 2 pt 12 lc palette
+set style line 13  ps 2 pt 13 lc palette
+set style line 14  lt 3 lw 3 

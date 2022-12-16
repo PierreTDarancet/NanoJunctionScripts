@@ -1,0 +1,178 @@
+!
+! Copyright (C) 2009 Molecular Foundry Berkeley
+!
+! This file is distributed under the terms of the
+! GNU General Public License. See the file `License'
+! in the root directory of the present distribution,
+! or http://www.gnu.org/copyleft/gpl.txt .
+!
+! Contributors  : Pierre DARANCET
+!***********************************************
+   MODULE T_green_operation_module
+   !***********************************************
+  USE kinds, ONLY : dbl
+  USE constants, ONLY : ZERO, ONE, CZERO, CONE, CI,PI, EPS_m3, EPS_m5
+  USE util_module,          ONLY : mat_mul, mat_sv
+   IMPLICIT NONE
+   PRIVATE 
+   SAVE
+!
+
+
+   ! Public
+   ! Private
+   REAL(dbl), PARAMETER :: delta_lead =  EPS_m5
+   ! Public variables
+
+   ! Public routines:
+   PUBLIC                 :: lead_green_function
+   PUBLIC                 :: calcul_gamma
+   PUBLIC                 :: calcul_g_C
+			 
+   CONTAINS 
+!***********************************************
+   SUBROUTINE lead_green_function(  g_lead, h00, h01, ene, dimx)
+   !***********************************************
+   ! Calculate the surface green function associated with a 1D semi infinite and periodic chain
+  IMPLICIT NONE
+      INTEGER, INTENT(in)   :: dimx
+
+      COMPLEX(dbl), INTENT(out) ::  g_lead(dimx,dimx) 
+      COMPLEX(dbl), INTENT(in) ::  h00(dimx,dimx) 
+      COMPLEX(dbl), INTENT(in) ::  h01(dimx,dimx) 
+      REAL(dbl), INTENT(in) ::  ene 
+      ! Local
+       CHARACTER(19)      :: subname="lead_green_function"
+       INTEGER :: ierr, ie
+       REAL(dbl)              :: spectra_min, spectra_max
+       COMPLEX(dbl)           :: delta_spectra     ! discriminant
+       COMPLEX(dbl)           :: enework, work_scal
+
+        IF( dimx < 1 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Error in Lead dimension", " dim Lead = ", dimx
+            STOP
+         ENDIF 
+
+
+        g_lead(:,:) = CZERO
+
+        IF (dimx == 1) THEN 
+           enework = ene + (delta_lead*CI)
+           spectra_min= h00(1,1) - 2 * ABS (h01(1,1))
+           spectra_max= h00(1,1) + 2 * ABS (h01(1,1))
+           !
+           
+           IF ( ( ene <= spectra_max ) .AND. ( ene >=  spectra_min )) THEN
+                ! b² - 4ac
+                delta_spectra = (h00(1,1) - enework )**2 - (4 * (h01(1,1))**2)
+                IF ( REAL(delta_spectra) > ZERO )  THEN 
+		    PRINT*, "Error in Routine ",  TRIM(subname) 
+		    PRINT*, "Positive discriminant in the spectra", " Energy= ", ene, " Discriminant", REAL(delta_spectra)
+		    STOP
+                ENDIF
+                work_scal = (  -(h00(1,1)- ene) - CI* SQRT ( -delta_spectra ) ) / (2* (h01(1,1)**2))
+                g_lead(1,1) = CONE / (ene - h00(1,1) - ((h01(1,1) **2) * work_scal))
+            ELSE 
+                ! OUtside spectra
+                g_lead(1,1) = CZERO
+                !
+            ENDIF
+        !
+        ELSE IF( dimx > 1 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Method for dealing with dim > 1 Leads not yet implemented", " dim_Lead = ", dimx
+            STOP
+       !
+        ELSE
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Problem with Lead dimension", " dim_Lead = ", dimx
+            STOP
+         ENDIF 
+       !
+    END SUBROUTINE lead_green_function
+!***********************************************
+   SUBROUTINE calcul_gamma( gamma_lead, sigma_lead ,  g_lead, h_lead_C, h_C_lead, dimx, dimC )
+   !***********************************************
+  IMPLICIT NONE
+      INTEGER, INTENT(in)   :: dimx
+      INTEGER, INTENT(in)   :: dimC
+      COMPLEX(dbl), INTENT(out) ::  gamma_lead(dimC,dimC) 
+      COMPLEX(dbl), INTENT(out) ::  sigma_lead(dimC,dimC) 
+      COMPLEX(dbl), INTENT(in) ::  g_lead(dimx,dimx) 
+      COMPLEX(dbl), INTENT(in) ::  h_lead_C(dimx,dimC) 
+      COMPLEX(dbl), INTENT(in) ::  h_C_lead(dimC,dimx) 
+      ! Local
+       CHARACTER(12)      :: subname="calcul_gamma"
+       INTEGER :: ierr
+     COMPLEX(dbl)  ::  work(dimC,dimx) 
+ 
+      IF( dimx < 1 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Error in Lead dimension", " dim Lead = ", dimx
+            STOP
+         ENDIF 
+      IF( dimC < 1 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Error in Conductor dimension", " dim C = ", dimC
+            STOP
+         ENDIF 
+
+          !
+          sigma_lead(:,:) = CZERO
+          ! 
+          gamma_lead(:,:) = CZERO
+          !
+          CALL mat_mul(work, h_C_lead , 'N', g_lead, 'N', dimC, dimx, dimx)
+          CALL mat_mul(sigma_lead, work, 'N', h_lead_C, 'N', dimC, dimC, dimx) 
+          !
+          ! gamma_L and gamma_R
+          !
+          gamma_lead(:,:) = CI * (  sigma_lead(:,:) - CONJG( TRANSPOSE(sigma_lead(:,:)) )   )
+
+    END SUBROUTINE calcul_gamma
+!***********************************************
+   SUBROUTINE calcul_g_C( gC , h00, sigma_l , sigma_r, ene, dimC)
+   !***********************************************
+  IMPLICIT NONE
+      INTEGER, INTENT(in)   :: dimC
+      COMPLEX(dbl), INTENT(out) ::  gC(dimC,dimC) 
+      COMPLEX(dbl), INTENT(in) ::  h00(dimC,dimC) 
+      COMPLEX(dbl), INTENT(in) ::  sigma_l(dimC,dimC) 
+      COMPLEX(dbl), INTENT(in) ::  sigma_r(dimC,dimC) 
+      COMPLEX(dbl), INTENT(in) ::  ene
+
+      ! Local
+       CHARACTER(10)      :: subname="calcul_g_C"
+       INTEGER :: ierr, idiag
+       COMPLEX(dbl) ::  work1(dimC,dimC)
+       COMPLEX(dbl) ::  work2(dimC,dimC)
+         !
+         IF( dimC < 1 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Error in Conductor dimension", " dim C = ", dimC
+            STOP
+         ENDIF 
+         !
+         work1(:,:)= CZERO
+         work2(:,:)= CZERO
+         gC(:,:)= CZERO
+         !
+         DO idiag = 1, dimC
+             work1(idiag,idiag)= CONE * ene
+             gC(idiag,idiag)= CONE 
+         ENDDO
+         !
+         work2(:,:) = work1(:,:) - h00(:,:) -  sigma_l(:,:) - sigma_r(:,:)
+         !
+         CALL mat_sv(dimC,dimC, work2, gC)
+         !
+    END SUBROUTINE calcul_g_C
+
+  END  MODULE T_green_operation_module
+
+ 
+
+ 
+
+

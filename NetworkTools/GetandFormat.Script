@@ -1,0 +1,77 @@
+#!/bin/bash
+SCRATCHDIRECTORY=`pwd`
+JOBSDIRECTORY="jobsout"
+
+JUNCTIONLIST="UDOAKBEN00 UDOAKBEN30 UDOAKBEN90 UDOAKDUR DOAKBEN00 DOAKBEN30 PPV1TRIMTRIM PPV2TRIMTRIM PPV3TRIMTRIM PPV4TRIMTRIM PPV5TRIMTRIM"
+BIASLIST="-100 -50 0 50 100"
+mkdir $SCRATCHDIRECTORY/temp
+mkdir $SCRATCHDIRECTORY/$JOBSDIRECTORY/
+#############################################
+#############################################
+#############################################
+#LOOP for LOCAL_M in 1 2 3 4 5
+for LOCALDIR in $JUNCTIONLIST
+do
+cd $SCRATCHDIRECTORY/temp
+mkdir  $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/
+echo "Launching Junction: " $LOCALDIR
+#############################################
+#############################################
+# BIAS LOOP
+for BIAS  in  $BIASLIST
+do
+echo "Launching Junction: " $LOCALDIR" at bias " $BIAS
+cd  $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS
+echo "Source Target Directory: "  $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS
+echo "Source Actual Directory: " `pwd`
+############################################
+echo $LOCALDIR $BIAS
+cd  $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/
+pwd
+cp $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/Main_Transmission_DFT_Large.out      $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/$BIAS\.DFT.Large
+cp $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/Main_Transmission_DFT_Small.out      $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/$BIAS\.DFT.Small
+cp $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/Main_Transmission_DFT+S_Large.out    $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/$BIAS\.DFT+S.Large
+cp $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/Main_Transmission_DFT+S_Small.out    $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/$BIAS\.DFT+S.Small
+cp $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/Molecular_orbitals.dat               $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/$BIAS\.States
+grep -A 100 '#  E(eV)   avg(Sum T(E,1->2))    avg(Sum T(E,1->2))  avg(nchannel1(E))  avg(nchannel2(E))'  $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/$BIAS\.DFT.Large   | awk '{print $1,$2}' > $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/$BIAS\.DFT.Large.gp 
+grep -A 100 '#  E(eV)   avg(Sum T(E,1->2))    avg(Sum T(E,1->2))  avg(nchannel1(E))  avg(nchannel2(E))'  $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/$BIAS\.DFT+S.Large | awk '{print $1,$2}' > $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/$BIAS\.DFT+S.Large.gp 
+grep -A 100 '#  E(eV)   avg(Sum T(E,1->2))    avg(Sum T(E,1->2))  avg(nchannel1(E))  avg(nchannel2(E))'  $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/$BIAS\.DFT.Small   | awk '{print $1,$2}' > $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/$BIAS\.DFT.Small.gp 
+grep -A 100 '#  E(eV)   avg(Sum T(E,1->2))    avg(Sum T(E,1->2))  avg(nchannel1(E))  avg(nchannel2(E))'  $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/$BIAS\.DFT+S.Small | awk '{print $1,$2}' > $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/$BIAS\.DFT+S.Small.gp 
+grep -A 1000 'Molecular energy levels' $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/$BIAS\.States | grep -B 1000 'th mo is homo' | awk '{print $2,1.000}' > $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/$BIAS\.States.gp
+grep "# bias =" $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/$BIAS\.DFT.Small  | awk '{print $4,$9 }'   >> $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/IVDFT.dat
+grep "# bias =" $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/$BIAS\.DFT+S.Small  | awk '{print $4,$9 }' >> $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/IVDFT+S.dat
+cp $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/main.RHO                                  $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/$BIAS\.RHO
+cp $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/main.DRHO                                 $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/$BIAS\.DRHO
+cp $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/Vscf3D_af_Laplace_correction.out          $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/$BIAS\.VT
+cp $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/Vhartree3D_af_Laplace_correction.out      $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/$BIAS\.VH
+cp $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/Vhartree03D_af_Laplace_correction.out     $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/$BIAS\.VH0
+cp $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/main.DM                                   $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/$BIAS\.DM
+#############################################
+if [ "$BIAS" = "0" ]; then
+cp $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/main.xyz                                  $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/main.xyz     
+fi
+mkdir $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/IO_$BIAS
+cd    $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/IO_$BIAS
+cp $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/*.fdf                                     $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/IO_$BIAS/
+cp $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/*.lattice                                 $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/IO_$BIAS/
+cp $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/*.shift_mo                                $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/IO_$BIAS/
+cp $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/*.output                                  $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/IO_$BIAS/
+cp $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/*.grid                                    $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/IO_$BIAS/
+cp $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/*.precision                               $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/IO_$BIAS/
+cp $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/*coord                                    $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/IO_$BIAS/
+cp $SCRATCHDIRECTORY/$LOCALDIR\_$BIAS/run*                                      $SCRATCHDIRECTORY/$JOBSDIRECTORY/$LOCALDIR/IO_$BIAS/
+
+
+done
+echo "Completed for Junction: "  $LOCALDIR
+cd $SCRATCHDIRECTORY/temp
+done
+
+echo "Done"
+
+
+
+
+
+
+

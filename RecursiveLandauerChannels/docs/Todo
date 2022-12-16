@@ -1,0 +1,18 @@
+
+*************************************
+  List of needed changes
+*************************************
+
+* plot.x: USPP features not fully implemented.
+
+* disentangle + wannier: 
+     - wfc stored in a k-indip array (waste small mem but
+       increase performance)
+     - scalar products in projections and overlaps by BLAS
+               
+* eigenchannel in transport calculation
+* direct calculation of current
+
+* coherent units everywhere (bohr and bohr^-1)
+
+

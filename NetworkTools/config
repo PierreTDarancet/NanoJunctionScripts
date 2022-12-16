@@ -1,0 +1,13 @@
+Host Silicon
+    Hostname localhost
+    User pdarancet
+    Port 3340
+    ForwardX11 yes
+
+
+Host ANLGateway
+    Hostname mega.cnm.anl.gov
+    User pdarancet
+    Port 22
+    ForwardX11 yes
+

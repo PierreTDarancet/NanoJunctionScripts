@@ -1,0 +1,17 @@
+############ GIF ############# 
+DELAYTIME = 400 
+SIZE_X =2400
+SIZE_Y =800
+SIZE_RATIO = SIZE_Y/SIZE_X
+OUTPUT_NAME=sprintf("%s%s.gif",GENERIC_NAME,PLOT_TYPE);
+#############################
+
+set termoption enhanced
+set term gif animate transparent opt delay DELAYTIME size SIZE_X,SIZE_Y x000000  
+set pm3d map
+set output OUTPUT_NAME
+set size ratio SIZE_RATIO
+
+
+
+

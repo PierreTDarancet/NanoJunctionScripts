@@ -1,0 +1,36 @@
+#set palette defined ( 0 '#ffffff',\
+#                      0.5 '#90ff70',\
+#                      1 '#0fffee',\
+#                      2 '#0090ff',\
+#                      3 '#000fff',\
+#                      4 '#000090')
+
+#set palette defined ( 0 '#ffffff',\
+#                      1 '#000fff',\
+#                      2 '#0090ff',\
+#                      3 '#0fffee',\
+#                      4 '#90ff70',\
+#                      5 '#ffee00',\
+#                      6 '#ff7000',\
+#                      7 '#ee0000',\
+#                      8 '#7f0000')
+set palette defined ( 0 '#ffffff',\
+                      1 '#000fff',\
+                      2 '#0090ff',\
+                      3 '#0fffee',\
+                      4 '#90ff70',\
+                      5 '#ffee00',\
+                      6 '#ff7000',\
+                      7 '#ee0000',\
+                      8 '#7f0000')
+
+
+
+#set palette rgbformulae 23,28,3
+#set palette negative
+#set style line  8 lc rgb '#90ff70' lw slw lt 1 # Light Green
+#set style line  9 lc rgb '#ffee00' lw slw lt 1 # yellow
+#set style line 10 lc rgb '#ff7000' lw slw lt 1 # Orange
+#set style line  5 lc rgb '#000fff' lw slw lt 1 # Blue
+#set style line  6 lc rgb '#0090ff' lw slw lt 1 # Light Blue
+#set style line  7 lc rgb '#0fffee' lw slw lt 1 # Cyan

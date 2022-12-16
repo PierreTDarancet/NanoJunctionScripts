@@ -1,0 +1,12 @@
+set pointsize 1
+set style line 1  lt  rgb "cyan" lw 3 #pt 12
+set style line 2  lt   rgb "blue" lw 3 #pt 12
+set style line 3  lt  rgb "red"  lw 3 pt 12
+set style line 4  lt  rgb "dark-red" lw 3 pt 12
+set style line 5  lt  rgb "black" lw 3 pt 12
+set style line 6  lt 1 lw 3 pt 12
+set pointsize 1
+set style line 11  lt  rgb "orange" lw 3 pt 12
+set style line 12  lt  rgb "purple" lw 3 pt 12
+set style line 13  lt  rgb "dark-orange lw 5 pt 12
+set style line 14  lt  rgb "black" lw 3 pt 12

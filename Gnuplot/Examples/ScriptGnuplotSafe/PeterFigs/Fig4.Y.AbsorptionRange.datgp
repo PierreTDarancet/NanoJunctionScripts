@@ -1,0 +1,6 @@
+#in a u 
+YMIN=0.0
+YMAX=1.0
+YTICS=0.2
+YLABEL = 'Absorption [a.u.]'
+

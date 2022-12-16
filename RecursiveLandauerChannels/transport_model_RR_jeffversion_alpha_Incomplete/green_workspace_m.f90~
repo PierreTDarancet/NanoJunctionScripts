@@ -1,0 +1,256 @@
+!
+! Copyright (C) 2009 Molecular Foundry Berkeley
+!
+! This file is distributed under the terms of the
+! GNU General Public License. See the file `License'
+! in the root directory of the present distribution,
+! or http://www.gnu.org/copyleft/gpl.txt .
+!
+! Contributors  : Pierre DARANCET
+!***********************************************
+   MODULE  green_workspace_module
+   !***********************************************
+  USE kinds, ONLY : dbl
+  USE constants, ONLY : ZERO, ONE, CZERO, CONE, CI,PI
+   IMPLICIT NONE
+   PRIVATE 
+   SAVE
+
+
+
+   ! Public
+!
+! Contains green functions data
+! 
+   
+   COMPLEX(dbl), ALLOCATABLE :: gC(:,:,:)
+   COMPLEX(dbl), ALLOCATABLE :: gR(:,:)
+   COMPLEX(dbl), ALLOCATABLE :: gL(:,:)
+   COMPLEX(dbl), ALLOCATABLE :: gamma_L(:,:,:)
+   COMPLEX(dbl), ALLOCATABLE :: gamma_R(:,:,:)
+   COMPLEX(dbl), ALLOCATABLE :: sigma_L(:,:)
+   COMPLEX(dbl), ALLOCATABLE :: sigma_R(:,:)
+   REAL(dbl), ALLOCATABLE :: dos_L(:)
+   REAL(dbl), ALLOCATABLE :: dos_R(:)
+   ! Private
+   LOGICAL :: alloc = .FALSE.
+
+
+   ! Public variables
+   PUBLIC :: gC
+   PUBLIC :: gR
+   PUBLIC :: gL
+   PUBLIC :: gamma_L
+   PUBLIC :: gamma_R
+   PUBLIC :: sigma_L
+   PUBLIC :: sigma_R
+   PUBLIC :: dos_L
+   PUBLIC :: dos_R
+!
+! PUBLIC ROUTINES
+! 
+
+   PUBLIC :: green_allocate
+   PUBLIC :: green_deallocate
+
+ CONTAINS 
+
+!***********************************************
+   SUBROUTINE green_allocate(ne, dimC, dimL, dimR)
+    !***********************************************
+   IMPLICIT NONE
+      INTEGER, INTENT(in)   :: ne
+      INTEGER, INTENT(in)   :: dimL
+      INTEGER, INTENT(in)   :: dimR
+      INTEGER, INTENT(in)   :: dimC
+      ! Local
+       CHARACTER(14)      :: subname="green_allocate"
+       INTEGER  :: ierr
+       !
+        IF( alloc ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Already allocated"
+            STOP
+         ENDIF 
+
+        IF( ne <= 0 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Error in ne definition", " ne = ", ne
+            STOP
+         ENDIF 
+
+        IF( dimC <= 0 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Error in dimC definition", " dimC = ", dimC
+            STOP
+         ENDIF 
+
+        IF( dimL <= 0 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Error in dimL definition", " dimL = ", dimL
+            STOP
+         ENDIF 
+
+        IF( dimR <= 0 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Error in dimR definition", " dimR = ", dimR
+            STOP
+         ENDIF 
+
+       ALLOCATE( gC(ne,dimC,dimC)  , STAT=ierr )
+       IF( ierr /=0 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Error allocating gC"
+            STOP
+       ENDIF 
+
+       ALLOCATE( gR(dimR,dimR)  , STAT=ierr )
+       IF( ierr /=0 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Error allocating gR"
+            STOP
+       ENDIF 
+       ALLOCATE( gL(dimL,dimL)  , STAT=ierr )
+       IF( ierr /=0 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Error allocating gL"
+            STOP
+       ENDIF 
+       ALLOCATE( gamma_L(ne,dimC,dimC)  , STAT=ierr )
+       IF( ierr /=0 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Error allocating gamma_L"
+            STOP
+       ENDIF 
+
+       ALLOCATE( gamma_R(ne,dimC,dimC)  , STAT=ierr )
+       IF( ierr /=0 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Error allocating gamma_R"
+            STOP
+       ENDIF 
+
+       ALLOCATE( sigma_R(dimC,dimC)  , STAT=ierr )
+       IF( ierr /=0 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Error allocating sigma_R"
+            STOP
+       ENDIF 
+
+       ALLOCATE( sigma_L(dimC,dimC)  , STAT=ierr )
+       IF( ierr /=0 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Error allocating sigma_L"
+            STOP
+       ENDIF 
+
+     ALLOCATE( dos_R(ne)  , STAT=ierr )
+       IF( ierr /=0 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Error allocating dos_R"
+            STOP
+       ENDIF 
+     
+     ALLOCATE( dos_L(ne)  , STAT=ierr )
+       IF( ierr /=0 ) THEN 
+            PRINT*, "Error in Routine ",  TRIM(subname) 
+            PRINT*, "Error allocating dos_L"
+            STOP
+       ENDIF 
+     
+       gC(:,:,:) = CZERO
+       gR(:,:) = CZERO
+       gL(:,:) = CZERO
+       gamma_L(:,:,:) = CZERO
+       gamma_R(:,:,:) = CZERO
+       sigma_L(:,:) = CZERO
+       sigma_R(:,:) = CZERO
+       dos_L(:) = ZERO
+       dos_R(:) = ZERO
+       alloc = .TRUE.
+
+   END SUBROUTINE green_allocate
+
+!***********************************************
+   SUBROUTINE green_deallocate
+   !***********************************************
+      CHARACTER(17)      :: subname="green_deallocate"
+       INTEGER :: ierr
+
+
+       IF ( ALLOCATED( gC ) ) THEN
+            DEALLOCATE( gC , STAT=ierr)
+            IF( ierr /=0 ) THEN 
+               PRINT*, "Error in Routine ",  TRIM(subname) 
+               PRINT*, "Error deallocating gC "
+               STOP
+           ENDIF 
+       ENDIF
+
+       IF ( ALLOCATED( gR ) ) THEN
+            DEALLOCATE( gR , STAT=ierr)
+            IF( ierr /=0 ) THEN 
+               PRINT*, "Error in Routine ",  TRIM(subname) 
+               PRINT*, "Error deallocating gR"
+               STOP
+           ENDIF 
+       ENDIF
+
+       IF ( ALLOCATED( gL   ) ) THEN
+            DEALLOCATE( gL   , STAT=ierr)
+            IF( ierr /=0 ) THEN 
+               PRINT*, "Error in Routine ",  TRIM(subname) 
+               PRINT*, "Error deallocating  gL "
+               STOP
+           ENDIF 
+       ENDIF
+
+       IF ( ALLOCATED( sigma_L ) ) THEN
+            DEALLOCATE( sigma_L, STAT=ierr)
+            IF( ierr /=0 ) THEN 
+               PRINT*, "Error in Routine ",  TRIM(subname) 
+               PRINT*, "Error deallocating sigma_L"
+               STOP
+           ENDIF 
+       ENDIF
+
+       IF ( ALLOCATED( sigma_R ) ) THEN
+            DEALLOCATE( sigma_R , STAT=ierr)
+            IF( ierr /=0 ) THEN 
+               PRINT*, "Error in Routine ",  TRIM(subname) 
+               PRINT*, "Error deallocating sigma_R "
+               STOP
+           ENDIF 
+       ENDIF
+
+       IF ( ALLOCATED( gamma_L ) ) THEN
+            DEALLOCATE( gamma_L, STAT=ierr)
+            IF( ierr /=0 ) THEN 
+               PRINT*, "Error in Routine ",  TRIM(subname) 
+               PRINT*, "Error deallocating gamma_L"
+               STOP
+           ENDIF 
+       ENDIF
+
+       IF ( ALLOCATED( gamma_R ) ) THEN
+            DEALLOCATE( gamma_R, STAT=ierr)
+            IF( ierr /=0 ) THEN 
+               PRINT*, "Error in Routine ",  TRIM(subname) 
+               PRINT*, "Error deallocating gamma_R"
+               STOP
+           ENDIF 
+       ENDIF
+     IF ( ALLOCATED( dos_R ) ) THEN
+            DEALLOCATE( dos_R, STAT=ierr)
+            IF( ierr /=0 ) THEN 
+               PRINT*, "Error in Routine ",  TRIM(subname) 
+               PRINT*, "Error deallocating dos_R"
+               STOP
+           ENDIF 
+       ENDIF
+
+       alloc = .FALSE.
+   
+   END SUBROUTINE green_deallocate
+
+END MODULE green_workspace_module

@@ -1,0 +1,3 @@
+reset
+set term pop
+set output 'else'

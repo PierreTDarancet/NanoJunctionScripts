@@ -1,0 +1,129 @@
+print(it);
+set multiplot
+
+LMARGIN = LMARGIN_1 
+RMARGIN = RMARGIN_1 
+TMARGIN = TMARGIN_1 
+BMARGIN = BMARGIN_1 
+INPUT_FILE=sprintf("%s%d.gp", Filename_1,it);
+Scaling_factor_X = Scaling_factor_X_1
+XMAX   = XMAX_1
+XMIN   =  XMIN_1
+XTICS  = XTICS_1 
+SETXLABEL = SETXLABEL1
+XLABEL = XLABEL_1 
+Scaling_factor_Y = Scaling_factor_Y_1
+YMAX    = YMAX_1
+YMIN    = YMIN_1
+YTICS   = YTICS_1
+SETYLABEL = SETYLABEL1
+YLABEL  = YLABEL_1
+Scaling_factor_Z = Scaling_factor_Z_1
+CBMIN   =  CBMIN_1
+CBMAX   =  CBMAX_1
+CBTICS  =  CBTICS_1 
+SETCBLABEL = SETCBLABEL1
+CBLABEL =  CBLABEL_1
+ZMIN    = ZMIN_1
+ZMAX    = ZMAX_1
+
+load "plotdensity.plt"
+
+LMARGIN = LMARGIN_2 
+RMARGIN = RMARGIN_2 
+TMARGIN = TMARGIN_2 
+BMARGIN = BMARGIN_2
+INPUT_FILE=sprintf("%s%d.gp", Filename_2,it);
+Scaling_factor_X = Scaling_factor_X_1
+XMAX   = XMAX_2
+XMIN   =  XMIN_2
+XTICS  = XTICS_2
+SETXLABEL = SETXLABEL2
+XLABEL = XLABEL_2
+Scaling_factor_Y = Scaling_factor_Y_2
+YMAX    = YMAX_2
+YMIN    = YMIN_2
+YTICS   = YTICS_2
+SETYLABEL = SETYLABEL2
+YLABEL  = YLABEL_2
+Scaling_factor_Z = Scaling_factor_Z_2
+CBMIN   =  CBMIN_2
+CBMAX   =  CBMAX_2
+CBTICS  =  CBTICS_2
+SETCBLABEL = SETCBLABEL2
+CBLABEL =  CBLABEL_2
+ZMIN    = ZMIN_2
+ZMAX    = ZMAX_2
+
+load "plotdensity.plt"
+
+LMARGIN = LMARGIN_3 
+RMARGIN = RMARGIN_3 
+TMARGIN = TMARGIN_3 
+BMARGIN = BMARGIN_3
+INPUT_FILE=sprintf("%s%d.gp", Filename_3,it);
+Scaling_factor_X = Scaling_factor_X_3
+XMAX   = XMAX_3
+XMIN   =  XMIN_3
+XTICS  = XTICS_3
+SETXLABEL = SETXLABEL3
+XLABEL = XLABEL_3 
+Scaling_factor_Y = Scaling_factor_Y_3
+YMAX    = YMAX_3
+YMIN    = YMIN_3
+YTICS   = YTICS_3
+SETYLABEL = SETYLABEL3
+YLABEL  = YLABEL_3
+Scaling_factor_Z = Scaling_factor_Z_3
+CBMIN   =  CBMIN_3
+CBMAX   =  CBMAX_3
+CBTICS  =  CBTICS_3
+SETCBLABEL = SETCBLABEL3
+CBLABEL =  CBLABEL_3
+ZMIN    = ZMIN_3
+ZMAX    = ZMAX_3
+
+
+load "plotpotential.plt"
+
+LMARGIN = LMARGIN_4 
+RMARGIN = RMARGIN_4 
+TMARGIN = TMARGIN_4 
+BMARGIN = BMARGIN_4
+INPUT_FILE=sprintf("%s%d.gp", Filename_4,it);
+Scaling_factor_X = Scaling_factor_X_4
+XMAX   = XMAX_4
+XMIN   =  XMIN_4
+XTICS  = XTICS_4
+SETXLABEL = SETXLABEL4
+XLABEL = XLABEL_4
+Scaling_factor_Y = Scaling_factor_Y_4
+YMAX    = YMAX_4
+YMIN    = YMIN_4
+YTICS   = YTICS_4
+SETYLABEL = SETYLABEL4
+YLABEL  = YLABEL_4
+Scaling_factor_Z = Scaling_factor_Z_4
+CBMIN   =  CBMIN_4
+CBMAX   =  CBMAX_4
+CBTICS  =  CBTICS_4
+SETCBLABEL = SETCBLABEL4
+CBLABEL =  CBLABEL_4
+ZMIN    = ZMIN_4
+ZMAX    = ZMAX_4
+
+
+load "plotpotential.plt"
+unset multiplot
+
+
+########################################
+
+it=it+Gif_Diffinput
+if (!(it == itend)) 	reread
+
+
+
+
+
+

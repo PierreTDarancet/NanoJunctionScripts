@@ -1,0 +1,266 @@
+!
+! Copyright (C) 2006 LEPES-CNRS Grenoble
+!               2007 Institut Neel Grenoble
+! This file is distributed under the terms of the
+! GNU General Public License. See the file `License'
+! in the root directory of the present distribution,
+! or http://www.gnu.org/copyleft/gpl.txt .
+!
+! Contributors  : Pierre DARANCET
+!*********************************************
+   MODULE recursion_function_module
+!*********************************************
+   USE parameters,      ONLY : nstrx
+   USE kinds
+   USE constants,            ONLY : ZERO, CZERO, CONE, ONE,  EPS_m4, EPS_m7, EPS_m10, EPS_m14
+  ! USE iotk_module
+
+   IMPLICIT NONE
+   PRIVATE 
+   SAVE
+
+   ! general functions
+
+    PUBLIC :: calculate_variation
+    PUBLIC :: calculate_recursion_state
+    PUBLIC :: calculate_A_matrix
+    PUBLIC :: normalize_recursion_state
+
+
+CONTAINS
+
+ !*******************************************************************
+    SUBROUTINE calculate_variation(A_new, A_old, variation, debug_m)
+    !*******************************************************************
+   !  Input variables
+        COMPLEX(dbl), INTENT(in) :: A_new
+        COMPLEX(dbl), INTENT(in) :: A_old
+        LOGICAL,      INTENT(in) :: debug_m
+   ! output variables
+       REAL(dbl), INTENT(out) :: variation
+    ! local variables
+    CHARACTER(19) :: subname="calculate_variation"
+    INTEGER       :: ierr
+
+     !CALL timing('mat_hdiag', OPR='stop')
+
+     !
+         variation = ABS(A_new - A_old)
+        !
+ 
+    END SUBROUTINE calculate_variation
+
+
+ !*******************************************************************
+    SUBROUTINE calculate_recursion_state(nb_max_first, nb_first, id_first, ene_onsite, ene_first, state, A_matrix, B_matrix, state_old, state_new, dim_recursion, debug_m )
+    !*******************************************************************
+  ! input variables
+      INTEGER,      INTENT(in) :: dim_recursion
+      INTEGER,      INTENT(in) :: nb_max_first
+      INTEGER, INTENT(in)      :: nb_first(dim_recursion)
+      INTEGER, INTENT(in)      :: id_first(nb_max_first, dim_recursion)
+      COMPLEX(dbl), INTENT(in) :: ene_onsite(dim_recursion)
+      COMPLEX(dbl), INTENT(in) :: ene_first(nb_max_first,dim_recursion)
+
+      COMPLEX(dbl), INTENT(in) :: state(dim_recursion)
+      COMPLEX(dbl), INTENT(in) :: A_matrix
+      COMPLEX(dbl), INTENT(in) :: B_matrix
+      COMPLEX(dbl), INTENT(in) :: state_old(dim_recursion)
+      LOGICAL,      INTENT(in) :: debug_m
+   ! output variables
+       !
+      COMPLEX(dbl), INTENT(out) :: state_new(dim_recursion)
+    !
+   ! local variables
+    CHARACTER(25) :: subname="calculate_recursion_state"
+    INTEGER       :: ierr, i_recur, i_neig
+    INTEGER       :: dim_vect=1
+    COMPLEX(dbl)  :: state_new_aux(dim_recursion)
+    COMPLEX(dbl)  :: state_new_aux2(dim_recursion)
+    REAL(dbl)   ::  test_orthogo
+
+
+
+     !state_new_aux(:) = matmul(Hamiltonian, state(:))
+     state_new_aux(:) =CZERO
+     !
+     DO i_recur=1, dim_recursion
+           !
+           state_new_aux(i_recur) = state_new_aux(i_recur)   +  ene_onsite(i_recur) * state(i_recur)
+           !
+           DO i_neig=1, nb_first(i_recur)
+               !
+               state_new_aux(id_first(i_neig,i_recur)) = state_new_aux(id_first(i_neig,i_recur)) + state(i_recur) * ene_first(i_neig,i_recur)
+               !
+           ENDDO
+           !
+     ENDDO
+     !state_new_aux(i_sub,:) = matmul(Hamiltonian, state(i_sub,:))
+
+     ! 
+     state_new_aux2(:)  = state_new_aux(:) 
+     !
+     DO i_recur=1, dim_recursion
+         !
+         state_new_aux2( i_recur )  = state_new_aux2( i_recur) - A_matrix *state(i_recur)
+         !
+     ENDDO
+
+     state_new(:)  = state_new_aux2(:) 
+     DO i_recur=1, dim_recursion
+          state_new(i_recur)  = state_new(i_recur)    -  B_matrix * state_old(i_recur)
+     ENDDO
+
+    test_orthogo=ZERO
+    ! test the new states
+    test_orthogo = ABS(dot_product(state_new(:) , state_old(:)))
+    !
+    IF ( (test_orthogo >= EPS_m4).OR.( test_orthogo <= - EPS_m4) ) THEN
+        IF (debug_m) THEN
+            CALL errore(subname,'new vectors not orthogonal to n-1 states',-100.00)
+        ELSE
+            CALL errore(subname,'new vectors not orthogonal to n-1 states',1)
+        ENDIF
+    ENDIF
+    !
+
+    test_orthogo=ZERO
+    !
+    test_orthogo = ABS(dot_product(state_new(:) , state(:)))
+    !
+    IF ( (test_orthogo >= EPS_m4).OR.( test_orthogo <= - EPS_m4) ) THEN
+        IF (debug_m) THEN
+            CALL errore(subname,'new vectors not orthogonal to n states',-100.00)
+        ELSE
+            CALL errore(subname,'new vectors not orthogonal to n states',2)
+
+        ENDIF
+    ENDIF
+    !
+
+    END SUBROUTINE  calculate_recursion_state
+ !*******************************************************************
+    SUBROUTINE normalize_recursion_state( state, B_matrix, test_norm , cut_off, dim_recursion, debug_m)
+    !*******************************************************************
+    !
+    !input variables
+      INTEGER,      INTENT(in)    :: dim_recursion
+      LOGICAL,      INTENT(in)    :: debug_m 
+      REAL(dbl),    INTENT(in)    :: cut_off
+    !input/output variables
+      COMPLEX(dbl), INTENT(inout) :: state(dim_recursion)
+    ! output variables
+      COMPLEX(dbl), INTENT(out)   :: B_matrix
+      REAL(dbl), INTENT(out)      :: test_norm
+
+    ! local variables
+    CHARACTER(25) :: subname="normalize_recursion_state"
+    COMPLEX(dbl)  :: aux_state(dim_recursion)
+    INTEGER       :: ierr, i_recur
+    REAL(dbl)     :: real_part, norm
+    !
+
+    !
+   ! Initialize local variables
+   B_matrix= CZERO
+   !
+   aux_state(:)=state(:)
+   !
+   ! normalization
+   norm = sqrt(dot_product( state(:) , state(:) ))
+   state(:)=   state(:) / norm
+   !
+   ! calculation of the real part
+   real_part = ZERO
+   ! numerical cut-off
+   DO i_recur=1, dim_recursion
+
+   ENDDO 
+   DO i_recur=1, dim_recursion
+       IF (ABS(state(i_recur)) < cut_off ) THEN
+               state(i_recur) = CZERO
+       ENDIF
+       real_part = REAL(state(i_recur)) + real_part
+   ENDDO 
+   !
+   IF (real_part < ZERO ) THEN
+       !
+       state(:) =  - state(:)
+       !
+   ENDIF
+
+  !
+  ! calculate B_matrix
+  !
+   B_matrix = dot_product( state(:) , aux_state(:) )
+  !
+
+  ! test normalisation :
+  !
+  test_norm = ZERO
+  !
+  test_norm = ABS(dot_product(state(:) , state(:)))
+   IF ( (test_norm >= ONE + EPS_m4).OR.( test_norm <= ONE - EPS_m4) ) THEN
+       IF (debug_m) THEN
+          CALL errore(subname,'problem in normalization ',-100)
+       ELSE
+          CALL errore(subname,'problem in normalization ',1)
+       ENDIF
+   ENDIF
+   !
+ 
+    END SUBROUTINE  normalize_recursion_state
+
+
+ !*******************************************************************
+    SUBROUTINE calculate_A_matrix(nb_max_first, nb_first, id_first, ene_onsite, ene_first, state, A_matrix, dim_recursion, debug_m)
+    !*******************************************************************
+   !
+      INTEGER,      INTENT(in) :: dim_recursion
+      INTEGER,      INTENT(in) :: nb_max_first
+      INTEGER, INTENT(in)      :: nb_first(dim_recursion)
+      INTEGER, INTENT(in)      :: id_first(nb_max_first, dim_recursion)
+      COMPLEX(dbl), INTENT(in) :: ene_onsite(dim_recursion)
+      COMPLEX(dbl), INTENT(in) :: ene_first(nb_max_first,dim_recursion)
+
+
+
+
+      COMPLEX(dbl), INTENT(in) :: state(dim_recursion)
+      LOGICAL,      INTENT(in) :: debug_m
+   ! output variables
+      COMPLEX(dbl), INTENT(out) :: A_matrix
+   !
+   ! local variables
+      COMPLEX(dbl) :: state_new(dim_recursion)
+    CHARACTER(18) :: subname="calculate_A_matrix"
+    INTEGER       :: ierr, i_recur, i_neig
+
+     !
+     !state_new(:) = matmul(Hamiltonian , state(:))
+      state_new(:) =CZERO
+
+      !
+      DO i_recur=1, dim_recursion
+           !
+           state_new(i_recur) = state_new(i_recur)   +  ene_onsite(i_recur) * state(i_recur)
+           !
+           DO i_neig=1, nb_first(i_recur)
+               !
+               state_new(id_first(i_neig,i_recur)) = state_new(id_first(i_neig,i_recur)) + state(i_recur) * ene_first(i_neig,i_recur)
+               !
+           ENDDO
+           !
+      ENDDO
+      !
+
+     !
+     A_matrix = CZERO
+     !
+     A_matrix = dot_product(state(:), state_new(:))
+     !
+
+ END SUBROUTINE calculate_A_matrix
+END MODULE recursion_function_module
+
+

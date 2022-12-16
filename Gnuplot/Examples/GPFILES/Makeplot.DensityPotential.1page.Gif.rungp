@@ -1,0 +1,21 @@
+PLOT_TYPE="Density"
+load "specs.ingp"
+
+load "Gif.setgp"
+
+load "16plots.2columns.setgp"
+
+
+OUTPUT_NAME=sprintf("%s%s.gif", GENERIC_NAME,PLOT_TYPE);
+set output OUTPUT_NAME
+
+load "setupBiases.rungp"
+ishift=0
+
+set multiplot
+load "iterate.4plots.DensityPotential.2columns.rungp"
+unset multiplot
+
+load "close.rungp"
+
+

@@ -1,0 +1,766 @@
+#SiOSiNaphTRIMTRIM
+## DIFFERENT SCRIPT ONE MORE SPECIES
+ATOMNUMBER=37
+S_NUMBER=2
+C_NUMBER=14
+Si_NUMBER=2
+O_NUMBER=1
+H_NUMBER=18
+sourcefdf="SiOSiNaphsinglepointCharge.fdf"
+rootdir=`pwd`
+# For charge only
+#for dir in  SiOSi ; do
+dir=SiOSiNaphtalene
+cd ${rootdir}/${dir}
+rm -fr Phonons
+mkdir Phonons; cd Phonons; pwd
+# siesta.cor
+grep -A $ATOMNUMBER 'Relaxed' ../Relax.out | tail -n $ATOMNUMBER | awk '{print $1,$2,$3,$4,$6,$5}'  > tmp 
+echo "H " $H_NUMBER > siesta.cor
+grep 'H' ./tmp  >> siesta.cor
+echo "S " $S_NUMBER >> siesta.cor
+grep 'S ' ./tmp  >> siesta.cor
+echo "C" $C_NUMBER >> siesta.cor
+grep 'C' ./tmp  >> siesta.cor
+echo "Si " $Si_NUMBER >> siesta.cor
+grep 'Si ' ./tmp  >> siesta.cor
+echo "O" $O_NUMBER >> siesta.cor
+grep 'O' ./tmp  >> siesta.cor
+# static.atoms
+touch static.atoms
+# psf
+cp ../../PhononsInputFiles/*.psf ./
+# fdf
+#Chargetmp=`echo $(pwd | cut -d '/' -f 5 | cut -d '_' -f 3 | tr  'm' '-')".0"`
+#echo $Chargetmp
+#CHARGE=`echo "scale=2;  $Chargetmp / 10000.0 " | bc `
+#echo $CHARGE
+CHARGE=0
+sed "s#NETCHARGE#$CHARGE#g" ../../PhononsInputFiles/$sourcefdf > singlepoint.fdf
+#pbsscript
+cp ../../PhononsInputFiles/pbsscript ./
+# generate
+# NSPECIES
+~/SRC/ScriptsSiesta/Raman/genconstr.exe 5 $ATOMNUMBER
+# setup directories
+#Name=`pwd | cut -d '/' -f 5 | tr -d '_' | tr -d 'harged' | tr -d 'Fil'`
+Name=`pwd | cut -d '/' -f 5 | tr -d '_' `
+sourcedir=`pwd` ; for dir in $(ls Plus_* Minus_* ) ; do mkdir tmp_${dir} ; cd ${sourcedir}/tmp_${dir} ; pwd ; cp   ${sourcedir}/*.psf  ${sourcedir}/tmp_${dir}/ ;  cp   ${sourcedir}/pbsscript   ${sourcedir}/tmp_${dir}/ ; sed -i "s/BASH_SUB/${Name}$dir/g" pbsscript ; cp   ${sourcedir}/singlepoint.fdf  ${sourcedir}/tmp_${dir}/ ; cat  ${sourcedir}/${dir} >>  ${sourcedir}/tmp_${dir}/singlepoint.fdf ; echo '%endblock' >>  ${sourcedir}/tmp_${dir}/singlepoint.fdf ; cd  ${sourcedir}  ;  done
+sourcedir=`pwd` ; for dir in $(ls Plus_* Minus_* ) ; do cd ${sourcedir}/tmp_${dir} ; qsub pbsscript ; done
+done
+################
+
+
+
+################
+#SiOSiNaphTRIMTRIM
+################
+
+## DIFFERENT SCRIPT ONE MORE SPECIES
+ATOMNUMBER=233
+StaticAtoms=160
+Au_NUMBER=38
+S_NUMBER=2
+C_NUMBER=14
+Si_NUMBER=2
+H_NUMBER=16
+O_NUMBER=1
+sourcefdf="SiOSiNaphsinglepointCharge.fdf"
+rootdir=`pwd`
+# For charge only
+dir=Si2Naphtalene
+cd ${rootdir}/${dir}
+rm -fr Phonons
+mkdir Phonons; cd Phonons; pwd
+# siesta.cor
+grep -A $ATOMNUMBER 'Relaxed' ../Relax.out | tail -n $ATOMNUMBER | awk '{print $1,$2,$3,$4,$6,$5}'  > tmp 
+head -80 tmp | tail -n 48 > static.atoms
+tail -n 80 tmp | head -48 >> static.atoms
+NUM1=$(echo "scale=0; $ATOMNUMBER - $StaticAtoms / 2.0 "| bc )
+NUM2=$(echo "scale=0; $ATOMNUMBER - $StaticAtoms " | bc )
+
+head -${NUM1} tmp | tail -n $NUM2 > tmp2
+
+mv ./tmp2 ./tmp
+
+echo "Au" $Au_NUMBER > siesta.cor
+grep 'Au' ./tmp  >> siesta.cor
+
+echo "H " $H_NUMBER >> siesta.cor
+grep 'H' ./tmp  >> siesta.cor
+echo "S " $S_NUMBER >> siesta.cor
+grep 'S ' ./tmp  >> siesta.cor
+echo "C" $C_NUMBER >> siesta.cor
+grep 'C' ./tmp  >> siesta.cor
+echo "Si " $Si_NUMBER >> siesta.cor
+grep 'Si ' ./tmp  >> siesta.cor
+# static.atoms
+touch static.atoms
+# psf
+cp ../../PhononsInputFiles/*.psf ./
+# fdf
+#Chargetmp=`echo $(pwd | cut -d '/' -f 5 | cut -d '_' -f 3 | tr  'm' '-')".0"`
+#echo $Chargetmp
+#CHARGE=`echo "scale=2;  $Chargetmp / 10000.0 " | bc `
+#echo $CHARGE
+CHARGE=0
+sed "s#NETCHARGE#$CHARGE#g" ../../PhononsInputFiles/$sourcefdf > singlepoint.fdf
+#pbsscript
+cp ../../PhononsInputFiles/pbsscript ./
+# generate
+# NSPECIES
+~/SRC/ScriptsSiesta/Raman/genconstr.exe 5 $ATOMNUMBER
+# setup directories
+#Name=`pwd | cut -d '/' -f 5 | tr -d '_' | tr -d 'harged' | tr -d 'Fil'`
+Name=`pwd | cut -d '/' -f 5 | tr -d '_' `
+sourcedir=`pwd` ; for dir in $(ls Plus_* Minus_* ) ; do mkdir tmp_${dir} ; cd ${sourcedir}/tmp_${dir} ; pwd ; cp   ${sourcedir}/*.psf  ${sourcedir}/tmp_${dir}/ ;  cp   ${sourcedir}/pbsscript   ${sourcedir}/tmp_${dir}/ ; sed -i "s/BASH_SUB/${Name}$dir/g" pbsscript ; cp   ${sourcedir}/singlepoint.fdf  ${sourcedir}/tmp_${dir}/ ; cat  ${sourcedir}/${dir} >>  ${sourcedir}/tmp_${dir}/singlepoint.fdf ; cat  ${sourcedir}/static.atoms >>  ${sourcedir}/tmp_${dir}/singlepoint.fdf ; 
+ echo '%endblock' >>  ${sourcedir}/tmp_${dir}/singlepoint.fdf ; cd  ${sourcedir}  ;  done
+cd 
+sourcedir=`pwd` ; dir='Plus_0'
+#for dir in $(ls Plus_* Minus_* ) 
+do cd ${sourcedir}/tmp_${dir} ; qsub pbsscript ; 
+#done
+
+################
+
+
+
+#Si2NaphTRIMTRIM
+## DIFFERENT SCRIPT ONE MORE SPECIES
+ATOMNUMBER=232
+StaticAtoms=160
+Au_NUMBER=38
+S_NUMBER=2
+C_NUMBER=14
+Si_NUMBER=2
+H_NUMBER=16
+sourcefdf="Si2NaphsinglepointCharge.fdf"
+rootdir=`pwd`
+# For charge only
+dir=Si2Naphtalene
+cd ${rootdir}/${dir}
+rm -fr Phonons
+mkdir Phonons; cd Phonons; pwd
+# siesta.cor
+grep -A $ATOMNUMBER 'Relaxed' ../Relax.out | tail -n $ATOMNUMBER | awk '{print $1,$2,$3,$4,$6,$5}'  > tmp 
+head -80 tmp | tail -n 48 > static.atoms
+tail -n 80 tmp | head -48 >> static.atoms
+NUM1=$(echo "scale=0; $ATOMNUMBER - $StaticAtoms / 2.0 "| bc )
+NUM2=$(echo "scale=0; $ATOMNUMBER - $StaticAtoms " | bc )
+
+head -${NUM1} tmp | tail -n $NUM2 > tmp2
+
+mv ./tmp2 ./tmp
+
+echo "Au" $Au_NUMBER > siesta.cor
+grep 'Au' ./tmp  >> siesta.cor
+
+echo "H " $H_NUMBER >> siesta.cor
+grep 'H' ./tmp  >> siesta.cor
+echo "S " $S_NUMBER >> siesta.cor
+grep 'S ' ./tmp  >> siesta.cor
+echo "C" $C_NUMBER >> siesta.cor
+grep 'C' ./tmp  >> siesta.cor
+echo "Si " $Si_NUMBER >> siesta.cor
+grep 'Si ' ./tmp  >> siesta.cor
+# static.atoms
+touch static.atoms
+# psf
+cp ../../PhononsInputFiles/*.psf ./
+# fdf
+#Chargetmp=`echo $(pwd | cut -d '/' -f 5 | cut -d '_' -f 3 | tr  'm' '-')".0"`
+#echo $Chargetmp
+#CHARGE=`echo "scale=2;  $Chargetmp / 10000.0 " | bc `
+#echo $CHARGE
+CHARGE=0
+sed "s#NETCHARGE#$CHARGE#g" ../../PhononsInputFiles/$sourcefdf > singlepoint.fdf
+#pbsscript
+cp ../../PhononsInputFiles/pbsscript ./
+# generate
+# NSPECIES
+~/SRC/ScriptsSiesta/Raman/genconstr.exe 5 $ATOMNUMBER
+# setup directories
+#Name=`pwd | cut -d '/' -f 5 | tr -d '_' | tr -d 'harged' | tr -d 'Fil'`
+Name=`pwd | cut -d '/' -f 5 | tr -d '_' `
+sourcedir=`pwd` ; for dir in $(ls Plus_* Minus_* ) ; do mkdir tmp_${dir} ; cd ${sourcedir}/tmp_${dir} ; pwd ; cp   ${sourcedir}/*.psf  ${sourcedir}/tmp_${dir}/ ;  cp   ${sourcedir}/pbsscript   ${sourcedir}/tmp_${dir}/ ; sed -i "s/BASH_SUB/${Name}$dir/g" pbsscript ; cp   ${sourcedir}/singlepoint.fdf  ${sourcedir}/tmp_${dir}/ ; cat  ${sourcedir}/${dir} >>  ${sourcedir}/tmp_${dir}/singlepoint.fdf ; cat  ${sourcedir}/static.atoms >>  ${sourcedir}/tmp_${dir}/singlepoint.fdf ; 
+ echo '%endblock' >>  ${sourcedir}/tmp_${dir}/singlepoint.fdf ; cd  ${sourcedir}  ;  done
+cd 
+sourcedir=`pwd` ; dir='Plus_0'
+#for dir in $(ls Plus_* Minus_* ) 
+do cd ${sourcedir}/tmp_${dir} ; qsub pbsscript ; 
+#done
+
+
+
+#once done
+
+list=`ls | grep tmp_Plus` ; for dir in $list ; do tmpvar=`echo ${dir} |  cut -d "_" -f3` ; echo ${tmpvar} ; cp ./${dir}/scf.out  ./plus.out${tmpvar} ; done 
+
+cp plus.out0 minus.out0
+
+list=`ls | grep tmp_Minus` ; for dir in $list ; do tmpvar=`echo ${dir} |  cut -d "_" -f3` ; echo ${tmpvar} ; cp ./${dir}/scf.out  ./minus.out${tmpvar} ; done 
+
+
+# Molecule EField
+EField="2V"
+/home/pdarancet/SRC/ScriptsSiesta/Raman/extract.sh 36 108
+cp forces_plus cut_plus
+cp forces_minus cut_minus
+../../PhononsInputFiles/vwhole_junct_NMD.exe  4  36 36  108  108  0.015 0.015 0.015
+tail -n 102 out.dat | awk '{print $2, "1.0"}' > phononsDos.dat
+~/SRC/ScriptsSiesta/Raman/linei.exe phononsDos.dat 102 phononstmp 3200
+~/SRC/ScriptsSiesta/Raman/smear.exe phononstmp 3199 phononsDos.Smeared.dat 10.0
+cp ./phononsDos.Smeared.dat ./Si2Naphthalene.Molecule.EField_${EField}.Phonons.DoS.dat
+head -1 out.dat > Si2Naphthalene.Molecule.EField_${EField}.Phonons.Frequencies.dat
+tail -n 102 out.dat | awk '{printf "%i %4.8f %4.8f %4.8f %4.8f \n", $6,$2,$3,$4,$5}' >>Si2Naphthalene.Molecule.EField_${EField}.Phonons.Frequencies.dat
+
+
+
+
+list=`ls | grep tmp_Plus` ; for dir in $list ; do tmpvar=`echo ${dir} |  cut -d "_" -f3` ; echo ${tmpvar} ; cp ./${dir}/scf.out  ./plus.out${tmpvar} ; done 
+
+cp plus.out0 minus.out0
+
+list=`ls | grep tmp_Minus` ; for dir in $list ; do tmpvar=`echo ${dir} |  cut -d "_" -f3` ; echo ${tmpvar} ; cp ./${dir}/scf.out  ./minus.out${tmpvar} ; done 
+
+
+# Molecule Charge
+Charge="m0.2"
+/home/pdarancet/SRC/ScriptsSiesta/Raman/extract.sh 36 108
+cp forces_plus cut_plus
+cp forces_minus cut_minus
+../../PhononsInputFiles/vwhole_junct_NMD.exe  4  36 36  108  108  0.015 0.015 0.015
+tail -n 102 out.dat | awk '{print $2, "1.0"}' > phononsDos.dat
+~/SRC/ScriptsSiesta/Raman/linei.exe phononsDos.dat 102 phononstmp 3200
+~/SRC/ScriptsSiesta/Raman/smear.exe phononstmp 3199 phononsDos.Smeared.dat 10.0
+cp ./phononsDos.Smeared.dat ./Si2Naphthalene.Molecule.Charge_${Charge}.Phonons.DoS.dat
+head -1 out.dat > Si2Naphthalene.Molecule.Charge_${Charge}.Phonons.Frequencies.dat
+tail -n 102 out.dat | awk '{printf "%i %4.8f %4.8f %4.8f %4.8f \n", $6,$2,$3,$4,$5}' >>Si2Naphthalene.Molecule.Charge_${Charge}.Phonons.Frequencies.dat
+
+
+
+
+#JUNCTION
+#      DYNMAT
+# if Config = 3* Natoms 
+/home/pdarancet/SRC/ScriptsSiesta/Raman/extract.sh 72 216
+
+
+list=`ls | grep tmp_Plus` ; for dir in $list ; do tmpvar=`echo ${dir} |  cut -d "_" -f3` ; echo ${tmpvar} ; cp ./${dir}/scf.out  ./plus.out${tmpvar} ; done 
+
+cp plus.out0 minus.out0
+
+list=`ls | grep tmp_Minus` ; for dir in $list ; do tmpvar=`echo ${dir} |  cut -d "_" -f3` ; echo ${tmpvar} ; cp ./${dir}/scf.out  ./minus.out${tmpvar} ; done 
+
+
+cp forces_plus cut_plus
+cp forces_minus cut_minus
+# 
+
+
+../../PhononsInputFiles/vwhole_junct_NMD.exe  5  72 72  216 216  0.015 0.015 0.015
+
+
+tail -n 213 out.dat | awk '{print $3, "1.0"}' > phononsDos.dat
+
+
+
+
+####################################
+#Si2Naphtalene
+ATOMNUMBER=36
+S_NUMBER=2
+C_NUMBER=14
+Si_NUMBER=2
+H_NUMBER=18
+sourcefdf="Si2NaphtalenesinglepointEfield.fdf"
+EFieldINSERT=-0.14
+
+rootdir=`pwd`
+#dir=Si2Naphtalene
+
+cd ${rootdir}/
+#rm -fr Phonons
+#mkdir Phonons; cd Phonons; pwd
+# siesta.cor
+grep -A $ATOMNUMBER 'Relaxed' ./Relax.out | tail -n $ATOMNUMBER | awk '{print $1,$2,$3,$4,$6,$5}'  > tmp 
+echo "H " $H_NUMBER > siesta.cor
+grep 'H' ./tmp  >> siesta.cor
+echo "S " $S_NUMBER >> siesta.cor
+grep 'S ' ./tmp  >> siesta.cor
+echo "C" $C_NUMBER >> siesta.cor
+grep 'C' ./tmp  >> siesta.cor
+echo "Si " $Si_NUMBER >> siesta.cor
+grep 'Si ' ./tmp  >> siesta.cor
+# static.atoms
+touch static.atoms
+sed "s#EFieldINSERT#$EFieldINSERT#g" ../../PhononsInputFiles/$sourcefdf > singlepoint.fdf
+# psf
+#cp ../../PhononsInputFiles/*.psf ./
+# fdf
+cp ../../PhononsInputFiles/pbsscript ./
+# vwhole
+~/SRC/ScriptsSiesta/Raman/genconstr.exe 4 $ATOMNUMBER
+# setup directories
+Name=`pwd | cut -d '/' -f 6 | tr -d '_' `
+sourcedir=`pwd` ; for dir in $(ls Plus_* Minus_* ) ; do mkdir tmp_${dir} ; cd ${sourcedir}/tmp_${dir} ; pwd ; cp   ${sourcedir}/*.psf  ${sourcedir}/tmp_${dir}/ ;  cp   ${sourcedir}/pbsscript   ${sourcedir}/tmp_${dir}/ ; sed -i "s/BASH_SUB/${Name}$dir/g" pbsscript ; cp   ${sourcedir}/singlepoint.fdf  ${sourcedir}/tmp_${dir}/ ; cat  ${sourcedir}/${dir} >>  ${sourcedir}/tmp_${dir}/singlepoint.fdf ; echo '%endblock' >>  ${sourcedir}/tmp_${dir}/singlepoint.fdf ; cd  ${sourcedir}  ;  done
+sourcedir=`pwd` ; for dir in $(ls Plus_* Minus_* ) ; do cd ${sourcedir}/tmp_${dir} ; qsub pbsscript ; done
+
+################
+
+
+
+
+
+
+
+
+#Si2Naphtalene
+ATOMNUMBER=36
+S_NUMBER=2
+C_NUMBER=14
+Si_NUMBER=2
+H_NUMBER=18
+sourcefdf="Si2NaphtalenesinglepointCharge.fdf"
+CHARGE=-0.1
+rootdir=`pwd`
+#dir=Si2Naphtalene
+
+cd ${rootdir}/
+#rm -fr Phonons
+#mkdir Phonons; cd Phonons; pwd
+# siesta.cor
+grep -A $ATOMNUMBER 'Relaxed' ./Relax.out | tail -n $ATOMNUMBER | awk '{print $1,$2,$3,$4,$6,$5}'  > tmp 
+echo "H " $H_NUMBER > siesta.cor
+grep 'H' ./tmp  >> siesta.cor
+echo "S " $S_NUMBER >> siesta.cor
+grep 'S ' ./tmp  >> siesta.cor
+echo "C" $C_NUMBER >> siesta.cor
+grep 'C' ./tmp  >> siesta.cor
+echo "Si " $Si_NUMBER >> siesta.cor
+grep 'Si ' ./tmp  >> siesta.cor
+# static.atoms
+touch static.atoms
+sed "s#NETCHARGE#$CHARGE#g" ../../PhononsInputFiles/$sourcefdf > singlepoint.fdf
+
+
+# psf
+#cp ../../PhononsInputFiles/*.psf ./
+# fdf
+cp ../../PhononsInputFiles/pbsscript ./
+# vwhole
+~/SRC/ScriptsSiesta/Raman/genconstr.exe 4 $ATOMNUMBER
+# setup directories
+Name=`pwd | cut -d '/' -f 6 | tr -d '_' `
+sourcedir=`pwd` ; for dir in $(ls Plus_* Minus_* ) ; do mkdir tmp_${dir} ; cd ${sourcedir}/tmp_${dir} ; pwd ; cp   ${sourcedir}/*.psf  ${sourcedir}/tmp_${dir}/ ;  cp   ${sourcedir}/pbsscript   ${sourcedir}/tmp_${dir}/ ; sed -i "s/BASH_SUB/${Name}$dir/g" pbsscript ; cp   ${sourcedir}/singlepoint.fdf  ${sourcedir}/tmp_${dir}/ ; cat  ${sourcedir}/${dir} >>  ${sourcedir}/tmp_${dir}/singlepoint.fdf ; echo '%endblock' >>  ${sourcedir}/tmp_${dir}/singlepoint.fdf ; cd  ${sourcedir}  ;  done
+sourcedir=`pwd` ; for dir in $(ls Plus_* Minus_* ) ; do cd ${sourcedir}/tmp_${dir} ; qsub pbsscript ; done
+
+################
+
+
+
+
+
+
+
+
+#Si4 
+ATOMNUMBER=46
+S_NUMBER=2
+C_NUMBER=10
+Si_NUMBER=4
+H_NUMBER=30
+sourcefdf="Si4singlepointCharge.fdf"
+
+
+
+#SiCSi
+ATOMNUMBER=31
+S_NUMBER=2
+C_NUMBER=7
+Si_NUMBER=2
+H_NUMBER=20
+sourcefdf="SiCSisinglepointCharge.fdf"
+
+################
+## DIFFERENT SCRIPT ONE MORE SPECIES
+#Ge2
+ATOMNUMBER=28
+S_NUMBER=2
+C_NUMBER=6
+Ge_NUMBER=2
+H_NUMBER=18
+
+sourcefdf="Ge2singlepointCharge.fdf"
+rootdir=`pwd`
+# For charge only
+#for dir in  SiOSi ; do
+dir=Ge2
+cd ${rootdir}/${dir}
+rm -fr Phonons
+mkdir Phonons; cd Phonons; pwd
+# siesta.cor
+grep -A $ATOMNUMBER 'Relaxed' ../Relax.out | tail -n $ATOMNUMBER | awk '{print $1,$2,$3,$4,$6,$5}'  > tmp 
+echo "H " $H_NUMBER > siesta.cor
+grep 'H' ./tmp  >> siesta.cor
+echo "S " $S_NUMBER >> siesta.cor
+grep 'S ' ./tmp  >> siesta.cor
+echo "C" $C_NUMBER >> siesta.cor
+grep 'C' ./tmp  >> siesta.cor
+echo "Ge " $Ge_NUMBER >> siesta.cor
+grep 'Ge ' ./tmp  >> siesta.cor
+# static.atoms
+touch static.atoms
+# psf
+cp ../../*.psf ./
+# fdf
+#Chargetmp=`echo $(pwd | cut -d '/' -f 5 | cut -d '_' -f 3 | tr  'm' '-')".0"`
+#echo $Chargetmp
+#CHARGE=`echo "scale=2;  $Chargetmp / 10000.0 " | bc `
+#echo $CHARGE
+CHARGE=0
+sed "s#NETCHARGE#$CHARGE#g" ../../$sourcefdf > singlepoint.fdf
+#pbsscript
+cp ../../pbsscript ./
+# generate
+# NSPECIES
+~/SRC/ScriptsSiesta/Raman/genconstr.exe 4 $ATOMNUMBER
+# setup directories
+#Name=`pwd | cut -d '/' -f 5 | tr -d '_' | tr -d 'harged' | tr -d 'Fil'`
+Name=`pwd | cut -d '/' -f 5 | tr -d '_' `
+sourcedir=`pwd` ; for dir in $(ls Plus_* Minus_* ) ; do mkdir tmp_${dir} ; cd ${sourcedir}/tmp_${dir} ; pwd ; cp   ${sourcedir}/*.psf  ${sourcedir}/tmp_${dir}/ ;  cp   ${sourcedir}/pbsscript   ${sourcedir}/tmp_${dir}/ ; sed -i "s/BASH_SUB/${Name}$dir/g" pbsscript ; cp   ${sourcedir}/singlepoint.fdf  ${sourcedir}/tmp_${dir}/ ; cat  ${sourcedir}/${dir} >>  ${sourcedir}/tmp_${dir}/singlepoint.fdf ; echo '%endblock' >>  ${sourcedir}/tmp_${dir}/singlepoint.fdf ; cd  ${sourcedir}  ;  done
+sourcedir=`pwd` ; for dir in $(ls Plus_* Minus_* ) ; do cd ${sourcedir}/tmp_${dir} ; qsub pbsscript ; done
+#done
+################
+
+
+
+
+
+
+
+## 
+#SiOSi
+## DIFFERENT SCRIPT ONE MORE SPECIES
+ATOMNUMBER=29
+S_NUMBER=2
+C_NUMBER=6
+Si_NUMBER=2
+O_NUMBER=1
+H_NUMBER=18
+sourcefdf="SiOSisinglepointCharge.fdf"
+rootdir=`pwd`
+# For charge only
+#for dir in  SiOSi ; do
+dir=SiOSi
+cd ${rootdir}/${dir}
+rm -fr Phonons
+mkdir Phonons; cd Phonons; pwd
+# siesta.cor
+grep -A $ATOMNUMBER 'Relaxed' ../Relax.out | tail -n $ATOMNUMBER | awk '{print $1,$2,$3,$4,$6,$5}'  > tmp 
+echo "H " $H_NUMBER > siesta.cor
+grep 'H' ./tmp  >> siesta.cor
+echo "S " $S_NUMBER >> siesta.cor
+grep 'S ' ./tmp  >> siesta.cor
+echo "C" $C_NUMBER >> siesta.cor
+grep 'C' ./tmp  >> siesta.cor
+echo "Si " $Si_NUMBER >> siesta.cor
+grep 'Si ' ./tmp  >> siesta.cor
+echo "O" $O_NUMBER >> siesta.cor
+grep 'O' ./tmp  >> siesta.cor
+# static.atoms
+touch static.atoms
+# psf
+cp ../../*.psf ./
+# fdf
+#Chargetmp=`echo $(pwd | cut -d '/' -f 5 | cut -d '_' -f 3 | tr  'm' '-')".0"`
+#echo $Chargetmp
+#CHARGE=`echo "scale=2;  $Chargetmp / 10000.0 " | bc `
+#echo $CHARGE
+CHARGE=0
+sed "s#NETCHARGE#$CHARGE#g" ../../$sourcefdf > singlepoint.fdf
+#pbsscript
+cp ../../pbsscript ./
+# generate
+# NSPECIES
+~/SRC/ScriptsSiesta/Raman/genconstr.exe 5 $ATOMNUMBER
+# setup directories
+#Name=`pwd | cut -d '/' -f 5 | tr -d '_' | tr -d 'harged' | tr -d 'Fil'`
+Name=`pwd | cut -d '/' -f 5 | tr -d '_' `
+sourcedir=`pwd` ; for dir in $(ls Plus_* Minus_* ) ; do mkdir tmp_${dir} ; cd ${sourcedir}/tmp_${dir} ; pwd ; cp   ${sourcedir}/*.psf  ${sourcedir}/tmp_${dir}/ ;  cp   ${sourcedir}/pbsscript   ${sourcedir}/tmp_${dir}/ ; sed -i "s/BASH_SUB/${Name}$dir/g" pbsscript ; cp   ${sourcedir}/singlepoint.fdf  ${sourcedir}/tmp_${dir}/ ; cat  ${sourcedir}/${dir} >>  ${sourcedir}/tmp_${dir}/singlepoint.fdf ; echo '%endblock' >>  ${sourcedir}/tmp_${dir}/singlepoint.fdf ; cd  ${sourcedir}  ;  done
+sourcedir=`pwd` ; for dir in $(ls Plus_* Minus_* ) ; do cd ${sourcedir}/tmp_${dir} ; qsub pbsscript ; done
+done
+################
+
+## 
+#SiOSiNaph
+## DIFFERENT SCRIPT ONE MORE SPECIES
+ATOMNUMBER=37
+S_NUMBER=2
+C_NUMBER=14
+Si_NUMBER=2
+O_NUMBER=1
+H_NUMBER=18
+sourcefdf="SiOSiNaphsinglepointCharge.fdf"
+rootdir=`pwd`
+# For charge only
+#for dir in  SiOSi ; do
+dir=SiOSiNaphtalene
+cd ${rootdir}/${dir}
+rm -fr Phonons
+mkdir Phonons; cd Phonons; pwd
+# siesta.cor
+grep -A $ATOMNUMBER 'Relaxed' ../Relax.out | tail -n $ATOMNUMBER | awk '{print $1,$2,$3,$4,$6,$5}'  > tmp 
+echo "H " $H_NUMBER > siesta.cor
+grep 'H' ./tmp  >> siesta.cor
+echo "S " $S_NUMBER >> siesta.cor
+grep 'S ' ./tmp  >> siesta.cor
+echo "C" $C_NUMBER >> siesta.cor
+grep 'C' ./tmp  >> siesta.cor
+echo "Si " $Si_NUMBER >> siesta.cor
+grep 'Si ' ./tmp  >> siesta.cor
+echo "O" $O_NUMBER >> siesta.cor
+grep 'O' ./tmp  >> siesta.cor
+# static.atoms
+touch static.atoms
+# psf
+cp ../../PhononsInputFiles/*.psf ./
+# fdf
+#Chargetmp=`echo $(pwd | cut -d '/' -f 5 | cut -d '_' -f 3 | tr  'm' '-')".0"`
+#echo $Chargetmp
+#CHARGE=`echo "scale=2;  $Chargetmp / 10000.0 " | bc `
+#echo $CHARGE
+CHARGE=0
+sed "s#NETCHARGE#$CHARGE#g" ../../PhononsInputFiles/$sourcefdf > singlepoint.fdf
+#pbsscript
+cp ../../PhononsInputFiles/pbsscript ./
+# generate
+# NSPECIES
+~/SRC/ScriptsSiesta/Raman/genconstr.exe 5 $ATOMNUMBER
+# setup directories
+#Name=`pwd | cut -d '/' -f 5 | tr -d '_' | tr -d 'harged' | tr -d 'Fil'`
+Name=`pwd | cut -d '/' -f 5 | tr -d '_' `
+sourcedir=`pwd` ; for dir in $(ls Plus_* Minus_* ) ; do mkdir tmp_${dir} ; cd ${sourcedir}/tmp_${dir} ; pwd ; cp   ${sourcedir}/*.psf  ${sourcedir}/tmp_${dir}/ ;  cp   ${sourcedir}/pbsscript   ${sourcedir}/tmp_${dir}/ ; sed -i "s/BASH_SUB/${Name}$dir/g" pbsscript ; cp   ${sourcedir}/singlepoint.fdf  ${sourcedir}/tmp_${dir}/ ; cat  ${sourcedir}/${dir} >>  ${sourcedir}/tmp_${dir}/singlepoint.fdf ; echo '%endblock' >>  ${sourcedir}/tmp_${dir}/singlepoint.fdf ; cd  ${sourcedir}  ;  done
+sourcedir=`pwd` ; for dir in $(ls Plus_* Minus_* ) ; do cd ${sourcedir}/tmp_${dir} ; qsub pbsscript ; done
+done
+################
+
+
+
+
+#Si3
+ATOMNUMBER=37
+S_NUMBER=2
+C_NUMBER=8
+Si_NUMBER=3
+H_NUMBER=24
+sourcefdf="Si3singlepointCharge.fdf"
+################
+
+
+
+rootdir=`pwd`
+################
+# For charge only
+for dir in  $(ls | grep -v m | grep  Si2_Charged_ | grep -v fixe | grep -v Si2_Charged_200  | grep -v Si2_Charged_100 |grep -v Si2_Charged_500 | grep -v Si2_Charged_400| grep -v Si2_Charged_300  ) ; do
+cd ${rootdir}/${dir}
+rm -fr Phonons
+mkdir Phonons; cd Phonons; pwd
+# siesta.cor
+grep -A $ATOMNUMBER 'Relaxed' ../Relax.out | tail -n $ATOMNUMBER | awk '{print $1,$2,$3,$4,$6,$5}'  > tmp 
+echo "H " $H_NUMBER > siesta.cor
+grep 'H' ./tmp  >> siesta.cor
+echo "S " $S_NUMBER >> siesta.cor
+grep 'S ' ./tmp  >> siesta.cor
+echo "C" $C_NUMBER >> siesta.cor
+grep 'C' ./tmp  >> siesta.cor
+echo "Si " $Si_NUMBER >> siesta.cor
+grep 'Si ' ./tmp  >> siesta.cor
+# static.atoms
+touch static.atoms
+# psf
+cp ../../*.psf ./
+# fdf
+Chargetmp=`echo $(pwd | cut -d '/' -f 5 | cut -d '_' -f 3 | tr  'm' '-')".0"`
+echo $Chargetmp
+CHARGE=`echo "scale=2;  $Chargetmp / 10000.0 " | bc `
+echo $CHARGE
+sed "s#NETCHARGE#$CHARGE#g" ../../$sourcefdf > singlepoint.fdf
+#pbsscript
+cp ../../pbsscript ./
+# vwhole
+cp ../../Si2vwhole_junct_NMD.f ./vwhole_junct_NMD.f
+ifort vwhole_junct_NMD.f -o vwhole_junct_NMD.exe -lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lpthread 
+# generate
+# NSPECIES
+~/SRC/ScriptsSiesta/Raman/genconstr.exe 4 $ATOMNUMBER
+# setup directories
+Name=`pwd | cut -d '/' -f 5 | tr -d '_' | tr -d 'harged' | tr -d 'Fil'`
+sourcedir=`pwd` ; for dir in $(ls Plus_* Minus_* ) ; do mkdir tmp_${dir} ; cd ${sourcedir}/tmp_${dir} ; pwd ; cp   ${sourcedir}/*.psf  ${sourcedir}/tmp_${dir}/ ;  cp   ${sourcedir}/pbsscript   ${sourcedir}/tmp_${dir}/ ; sed -i "s/BASH_SUB/${Name}$dir/g" pbsscript ; cp   ${sourcedir}/singlepoint.fdf  ${sourcedir}/tmp_${dir}/ ; cat  ${sourcedir}/${dir} >>  ${sourcedir}/tmp_${dir}/singlepoint.fdf ; echo '%endblock' >>  ${sourcedir}/tmp_${dir}/singlepoint.fdf ; cd  ${sourcedir}  ;  done
+sourcedir=`pwd` ; for dir in $(ls Plus_* Minus_* ) ; do cd ${sourcedir}/tmp_${dir} ; qsub pbsscript ; done
+done
+################
+
+
+
+
+#Si2
+ATOMNUMBER=28
+S_NUMBER=2
+C_NUMBER=6
+Si_NUMBER=2
+H_NUMBER=18
+
+################
+#for dir in  $(ls | grep m |grep Si2_EField | 
+################
+# For EField only
+for dir in  $(ls | grep  m | grep  Si2_EField_ | grep -v fixe | grep EField_m900   ) ; do
+cd ${rootdir}/${dir}
+rm -fr Phonons
+mkdir Phonons; cd Phonons; pwd
+# siesta.cor
+grep -A $ATOMNUMBER 'Relaxed' ../Relax.out | tail -n $ATOMNUMBER | awk '{print $1,$2,$3,$4,$6,$5}'  > tmp 
+echo "H " $H_NUMBER > siesta.cor
+grep 'H' ./tmp  >> siesta.cor
+echo "S " $S_NUMBER >> siesta.cor
+grep 'S ' ./tmp  >> siesta.cor
+echo "C" $C_NUMBER >> siesta.cor
+grep 'C' ./tmp  >> siesta.cor
+echo "Si " $Si_NUMBER >> siesta.cor
+grep 'Si ' ./tmp  >> siesta.cor
+# static.atoms
+touch static.atoms
+# psf
+cp ../../*.psf ./
+# fdf
+ElectricFieldtmp=`echo $(pwd | cut -d '/' -f 5 | cut -d '_' -f 3 | tr  'm' '-')".0"`
+echo $ElectricFieldtmp
+EFIELD=`echo "scale=4; 0.069 * $ElectricFieldtmp / 1000.0 " | bc `
+echo $EFIELD
+sed "s#EFieldINSERT#$EFIELD#g" ../../Si2singlepointEField.fdf > singlepoint.fdf
+#pbsscript
+cp ../../pbsscript ./
+# vwhole
+cp ../../Si2vwhole_junct_NMD.f ./vwhole_junct_NMD.f
+ifort vwhole_junct_NMD.f -o vwhole_junct_NMD.exe -lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lpthread 
+# generate
+#Si2
+~/SRC/ScriptsSiesta/Raman/genconstr.exe 4 $ATOMNUMBER
+# setup directories
+Name=`pwd | cut -d '/' -f 5 | tr -d '_' | tr -d 'harged' | tr -d 'Fil'`
+sourcedir=`pwd` ; for dir in $(ls Plus_* Minus_* ) ; do mkdir tmp_${dir} ; cd ${sourcedir}/tmp_${dir} ; pwd ; cp   ${sourcedir}/*.psf  ${sourcedir}/tmp_${dir}/ ;  cp   ${sourcedir}/pbsscript   ${sourcedir}/tmp_${dir}/ ; sed -i "s/BASH_SUB/${Name}$dir/g" pbsscript ; cp   ${sourcedir}/singlepoint.fdf  ${sourcedir}/tmp_${dir}/ ; cat  ${sourcedir}/${dir} >>  ${sourcedir}/tmp_${dir}/singlepoint.fdf ; echo '%endblock' >>  ${sourcedir}/tmp_${dir}/singlepoint.fdf ; cd  ${sourcedir}  ;  done
+sourcedir=`pwd` ; for dir in $(ls Plus_* Minus_* ) ; do cd ${sourcedir}/tmp_${dir} ; qsub pbsscript ; done
+done
+################
+
+
+
+
+
+#Si4 
+ATOMNUMBER=46
+S_NUMBER=2
+C_NUMBER=10
+Si_NUMBER=4
+H_NUMBER=30
+
+
+################
+rootdir=`pwd`
+# For + charge only
+for dir in  $(ls | grep -v m | grep  Si4_Charged_ | grep -v fixe  |grep -v Si4_Charged_500 | grep -v Si4_Charged_1000  )
+do
+cd ${rootdir}/${dir}
+rm -fr Phonons
+mkdir Phonons; cd Phonons; pwd
+# siesta.cor
+grep -A $ATOMNUMBER 'Relaxed' ../Relax.out | tail -n $ATOMNUMBER | awk '{print $1,$2,$3,$4,$6,$5}'  > tmp 
+echo "H " $H_NUMBER > siesta.cor
+grep 'H' ./tmp  >> siesta.cor
+echo "S " $S_NUMBER >> siesta.cor
+grep 'S ' ./tmp  >> siesta.cor
+echo "C" $C_NUMBER >> siesta.cor
+grep 'C' ./tmp  >> siesta.cor
+echo "Si " $Si_NUMBER >> siesta.cor
+grep 'Si ' ./tmp  >> siesta.cor
+# static.atoms
+touch static.atoms
+# psf
+cp ../../*.psf ./
+# fdf
+Chargetmp=`echo $(pwd | cut -d '/' -f 5 | cut -d '_' -f 3 | tr  'm' '-')".0"`
+echo $Chargetmp
+CHARGE=`echo "scale=2;  $Chargetmp / 10000.0 " | bc `
+echo $CHARGE
+sed "s#NETCHARGE#$CHARGE#g" ../../Si4singlepointCharge.fdf > singlepoint.fdf
+#pbsscript
+cp ../../pbsscript ./
+# vwhole
+cp ../../Si4vwhole_junct_NMD.f ./vwhole_junct_NMD.f
+ifort vwhole_junct_NMD.f -o vwhole_junct_NMD.exe -lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lpthread 
+# generate
+#Si4
+~/SRC/ScriptsSiesta/Raman/genconstr.exe 4 $ATOMNUMBER
+# setup directories
+Name=`pwd | cut -d '/' -f 5 | tr -d '_' | tr -d 'harged' | tr -d 'Fil'`
+sourcedir=`pwd` ; for dir in $(ls Plus_* Minus_* ) ; do mkdir tmp_${dir} ; cd ${sourcedir}/tmp_${dir} ; pwd ; cp   ${sourcedir}/*.psf  ${sourcedir}/tmp_${dir}/ ;  cp   ${sourcedir}/pbsscript   ${sourcedir}/tmp_${dir}/ ; sed -i "s/BASH_SUB/${Name}$dir/g" pbsscript ; cp   ${sourcedir}/singlepoint.fdf  ${sourcedir}/tmp_${dir}/ ; cat  ${sourcedir}/${dir} >>  ${sourcedir}/tmp_${dir}/singlepoint.fdf ; echo '%endblock' >>  ${sourcedir}/tmp_${dir}/singlepoint.fdf ; cd  ${sourcedir}  ;  done
+sourcedir=`pwd` ; for dir in $(ls Plus_* Minus_* ) ; do cd ${sourcedir}/tmp_${dir} ; qsub pbsscript ; done
+done
+################
+
+
+
+
+#Si4 
+ATOMNUMBER=46
+S_NUMBER=2
+C_NUMBER=10
+Si_NUMBER=4
+H_NUMBER=30
+
+
+
+################
+# For EField only
+for dir in  $(ls | grep  Si4_EField_1000) ; do
+cd ${rootdir}/${dir}
+rm -fr Phonons
+mkdir Phonons; cd Phonons; pwd
+# siesta.cor
+grep -A $ATOMNUMBER 'Relaxed' ../Relax.out | tail -n $ATOMNUMBER | awk '{print $1,$2,$3,$4,$6,$5}'  > tmp 
+echo "H " $H_NUMBER > siesta.cor
+grep 'H' ./tmp  >> siesta.cor
+echo "S " $S_NUMBER >> siesta.cor
+grep 'S ' ./tmp  >> siesta.cor
+echo "C" $C_NUMBER >> siesta.cor
+grep 'C' ./tmp  >> siesta.cor
+echo "Si " $Si_NUMBER >> siesta.cor
+grep 'Si ' ./tmp  >> siesta.cor
+# static.atoms
+touch static.atoms
+# psf
+cp ../../*.psf ./
+# fdf
+ElectricFieldtmp=`echo $(pwd | cut -d '/' -f 5 | cut -d '_' -f 3 | tr  'm' '-')".0"`
+echo $ElectricFieldtmp
+EFIELD=`echo "scale=5; 0.0536 * $ElectricFieldtmp / 1000.0 " | bc `
+echo $EFIELD
+sed "s#EFieldINSERT#$EFIELD#g" ../../Si4singlepointEField.fdf > singlepoint.fdf
+#pbsscript
+cp ../../pbsscript ./
+# vwhole
+cp ../../Si4vwhole_junct_NMD.f ./vwhole_junct_NMD.f
+ifort vwhole_junct_NMD.f -o vwhole_junct_NMD.exe -lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lpthread 
+# generate
+#Si2
+~/SRC/ScriptsSiesta/Raman/genconstr.exe 4 $ATOMNUMBER
+# setup directories
+Name=`pwd | cut -d '/' -f 5 | tr -d '_' | tr -d 'harged' | tr -d 'Fil'`
+sourcedir=`pwd` ; for dir in $(ls Plus_* Minus_* ) ; do mkdir tmp_${dir} ; cd ${sourcedir}/tmp_${dir} ; pwd ; cp   ${sourcedir}/*.psf  ${sourcedir}/tmp_${dir}/ ;  cp   ${sourcedir}/pbsscript   ${sourcedir}/tmp_${dir}/ ; sed -i "s/BASH_SUB/${Name}$dir/g" pbsscript ; cp   ${sourcedir}/singlepoint.fdf  ${sourcedir}/tmp_${dir}/ ; cat  ${sourcedir}/${dir} >>  ${sourcedir}/tmp_${dir}/singlepoint.fdf ; echo '%endblock' >>  ${sourcedir}/tmp_${dir}/singlepoint.fdf ; cd  ${sourcedir}  ;  done
+sourcedir=`pwd` ; for dir in $(ls Plus_* Minus_* ) ; do cd ${sourcedir}/tmp_${dir} ; qsub pbsscript ; done
+done
+################
+
+
+

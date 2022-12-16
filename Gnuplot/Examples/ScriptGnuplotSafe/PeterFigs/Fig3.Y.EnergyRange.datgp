@@ -1,0 +1,6 @@
+#in eV
+YMIN=1.2
+YMAX=8.5
+YTICS=1.0
+YLABEL = 'Peak Energy (Theory) [eV]'
+

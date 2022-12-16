@@ -1,0 +1,84 @@
+print(it);
+set multiplot
+
+LMARGIN = LMARGIN_1
+RMARGIN = RMARGIN_1 
+TMARGIN = TMARGIN_1 
+BMARGIN = BMARGIN_1
+SETXLABEL = SETXLABEL_1
+SETYLABEL = SETYLABEL_1
+SETCBLABEL = SETCBLABEL_1
+SETTITLE = SETTITLE_1
+XOFFSET = XOFFSET_1
+YOFFSET = YOFFSET_1
+CBOFFSET = CBOFFSET_1
+
+INPUT_FILE=sprintf("%d.%s.gp", it,Filename_TransmissionSmall);
+Scaling_factor_X = Scaling_factor_X_TransmissionSmall
+XMAX   = XMAX_TransmissionSmall
+XMIN   =  XMIN_TransmissionSmall
+XTICS  = XTICS_TransmissionSmall 
+XLABEL = XLABEL_TransmissionSmall 
+Scaling_factor_Y = Scaling_factor_Y_TransmissionSmall
+YMAX    = YMAX_TransmissionSmall
+YMIN    = YMIN_TransmissionSmall
+YTICS   = YTICS_TransmissionSmall
+YLABEL  = YLABEL_TransmissionSmall
+Scaling_factor_Z = Scaling_factor_Z_TransmissionSmall
+CBMIN   =  CBMIN_TransmissionSmall
+CBMAX   =  CBMAX_TransmissionSmall
+CBTICS  =  CBTICS_TransmissionSmall 
+CBLABEL =  CBLABEL_TransmissionSmall
+CONTOURINCREMENT = CONTOURINCREMENT_TransmissionSmall
+
+load "plottransmission.plt"
+
+load "fitlorentzian.plt"
+
+load "seebeckfromlorentzian.plt"
+
+load "plotfittedcurve.plt"
+
+
+LMARGIN = LMARGIN_2
+RMARGIN = RMARGIN_2 
+TMARGIN = TMARGIN_2 
+BMARGIN = BMARGIN_2
+SETXLABEL = SETXLABEL_2
+SETYLABEL = SETYLABEL_2
+SETCBLABEL = SETCBLABEL_2
+SETTITLE = SETTITLE_2
+XOFFSET = XOFFSET_2
+YOFFSET = YOFFSET_2
+CBOFFSET = CBOFFSET_2
+
+
+INPUT_FILE=sprintf("%d.%s.gp", it, Filename_Seebeck);
+Scaling_factor_X = Scaling_factor_X_Seebeck
+XMAX   = XMAX_Seebeck
+XMIN   =  XMIN_Seebeck
+XTICS  = XTICS_Seebeck
+XLABEL = XLABEL_Seebeck
+Scaling_factor_Y = Scaling_factor_Y_Seebeck
+YMAX    = YMAX_Seebeck
+YMIN    = YMIN_Seebeck
+YTICS   = YTICS_Seebeck
+YLABEL  = YLABEL_Seebeck
+Scaling_factor_Z = Scaling_factor_Z_Seebeck
+CBMIN   =  CBMIN_Seebeck
+CBMAX   =  CBMAX_Seebeck
+CBTICS  =  CBTICS_Seebeck
+CBLABEL =  CBLABEL_Seebeck
+CONTOURINCREMENT = CONTOURINCREMENT_Seebeck
+
+load "plotseebeck.plt"
+
+
+
+
+unset multiplot
+
+
+
+
+

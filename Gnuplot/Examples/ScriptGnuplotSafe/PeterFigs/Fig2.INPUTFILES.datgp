@@ -1,0 +1,9 @@
+
+############## 
+
+INPUT_FILE_A='./InputFig/NormMonomerEV'
+INPUT_FILE_B='./InputFig/NormBenzeneEV'
+INPUT_FILE_C='./InputFig/D2B1A2eV'
+INPUT_FILE_D='./InputFig/PNB_b_dmb_exp_eV'
+
+

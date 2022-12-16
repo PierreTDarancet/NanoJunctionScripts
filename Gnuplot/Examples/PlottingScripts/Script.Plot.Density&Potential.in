@@ -1,0 +1,65 @@
+#!/bin/bash
+#############################################
+##### Calculation VARIABLES		#####
+#############################################
+SCRATCHDIRECTORY=`pwd`
+OUTDIRECTORY="PlotsDensity"
+JUNCTIONLIST="DASADAD DASTRIMAD DASTRIMTRIM BAPAADAD BAPATRIMAD BAPATRIMTRIM BPADAD BPADAD_re BPTRIMAD BPTRIMTRIM BPVHGTRIMAD HDAADAD HDATRIMAD HDATRIMTRIM"
+
+#############################################
+##### GNUPLOT VARIABLES			#####
+#############################################
+GNUPLOTFILE="Makeplot.DensityPotential.1page.Gif.rungp"
+GNUPLOTEXE="gnuplot"
+GNUPLOTDIRECTORYCOMMON=$SCRATCHDIRECTORY/GPFILES
+SPECSCOMMON=$SCRATCHDIRECTORY/SPECSFILES
+#############################################
+#############################################
+#############################################
+
+mkdir $SCRATCHDIRECTORY/temp
+mkdir $SCRATCHDIRECTORY/PlotsDensityPotential/
+
+echo SCRATCHDIRECTORY
+echo $SCRATCHDIRECTORY
+
+#############################################
+#############################################
+#############################################
+#LOOP for LOCAL_M in 1 2 3 4 5
+for LOCALDIR in $JUNCTIONLIST
+do
+cd $SCRATCHDIRECTORY/temp
+echo "Launching Junction: " $LOCALDIR
+cd $SCRATCHDIRECTORY/$LOCALDIR
+echo "Target Directory: "  $SCRATCHDIRECTORY/$LOCALDIR
+echo "Actual Directory: " `pwd`
+#############################################
+mkdir $SCRATCHDIRECTORY/$LOCALDIR/$OUTDIRECTORY
+cd $SCRATCHDIRECTORY/temp/
+rm ./*
+
+cp $SCRATCHDIRECTORY/$LOCALDIR/*.gp $SCRATCHDIRECTORY/temp/
+cp $SCRATCHDIRECTORY/$LOCALDIR/*.dat   $SCRATCHDIRECTORY/temp/
+
+ln -s $SCRATCHDIRECTORY/GPFILES/*.setgp $SCRATCHDIRECTORY/temp/
+ln -s $SCRATCHDIRECTORY/GPFILES/*.rungp $SCRATCHDIRECTORY/temp/
+ln -s $SCRATCHDIRECTORY/GPFILES/*.plt $SCRATCHDIRECTORY/temp/
+cp $SCRATCHDIRECTORY/SPECSFILES/common.ingp  $SCRATCHDIRECTORY/temp/common.ingp 
+cp $SCRATCHDIRECTORY/SPECSFILES/$LOCALDIR\.ingp $SCRATCHDIRECTORY/temp/specs.ingp
+
+$GNUPLOTEXE $GNUPLOTFILE > $SCRATCHDIRECTORY/temp/$LOCALDIR\.$GNUPLOTFILE\.out 
+echo  "Copying Output Files"
+cp $SCRATCHDIRECTORY/temp/$LOCALDIR\.$GNUPLOTFILE\.out $SCRATCHDIRECTORY/$LOCALDIR/$OUTDIRECTORY/
+cp $SCRATCHDIRECTORY/temp/*.gif $SCRATCHDIRECTORY/$LOCALDIR/$OUTDIRECTORY/
+cp $SCRATCHDIRECTORY/temp/*.png $SCRATCHDIRECTORY/$LOCALDIR/$OUTDIRECTORY/
+cp $SCRATCHDIRECTORY/temp/*.ps $SCRATCHDIRECTORY/$LOCALDIR/$OUTDIRECTORY/
+echo "Completed for Junction: "  $LOCALDIR
+cp $SCRATCHDIRECTORY/temp/*.gif  $SCRATCHDIRECTORY/PlotsDensityPotential/
+
+done
+
+echo "Done"
+
+
+

@@ -1,0 +1,13 @@
+PLOT_TYPE="Density&Potential"
+it=400
+load "specs.ingp"
+
+load "PS.setgp"
+
+load "6plots.4x2D_2xCt.setgp"
+
+load "oneshot.6plots.2D4P.rungp"
+
+load "close.rungp"
+
+

@@ -1,0 +1,285 @@
+!
+! Copyright (C) 2006 LEPES-CNRS Grenoble
+!
+! This file is distributed under the terms of the
+! GNU General Public License. See the file `License'
+! in the root directory of the present distribution,
+! or http://www.gnu.org/copyleft/gpl.txt .
+!
+! Contributors  : Pierre DARANCET
+!*******************************************************************
+   SUBROUTINE scalar_recursion(rec_chain, nb_first, id_first, ene_first, ene_onsite, dim_recursion, max_iter, dim_subspace, var_summary, cut_chain, cut_iter)
+   !*******************************************************************
+
+   USE parameters,      ONLY : nstrx
+   USE kinds
+   USE constants,            ONLY : ZERO, CZERO, CONE, EPS_m4, CI, ONE
+   USE timing_module
+   USE T_control_module,   ONLY : debug_mode, numerical_cut_off, conv_criterion
+   USE recursion_function_module, ONLY :  calculate_A_matrix, calculate_recursion_state, &
+                                          normalize_recursion_state, calculate_variation
+
+
+
+   IMPLICIT NONE
+   !
+   ! Input variables
+   !
+   LOGICAL, INTENT(in)      :: cut_chain
+   INTEGER, INTENT(in)      :: max_iter
+   INTEGER, INTENT(in)      :: dim_subspace
+   INTEGER, INTENT(in)      :: dim_recursion
+   !COMPLEX(dbl), INTENT(in) :: rec_hamiltonian(dim_rec,dim_rec)
+   INTEGER, INTENT(in) :: nb_first(dim_recursion)
+   INTEGER, INTENT(in) :: id_first(((dim_subspace*3)-1),dim_recursion)
+   COMPLEX(dbl), INTENT(in) :: ene_onsite(dim_recursion)
+   COMPLEX(dbl), INTENT(in) :: ene_first(((dim_subspace*3)-1),dim_recursion)
+   !
+   ! Output variables
+   !
+   REAL(dbl), INTENT(out)    :: var_summary(max_iter,dim_subspace,dim_subspace)
+   COMPLEX(dbl), INTENT(out) :: rec_chain(2,max_iter,dim_subspace,dim_subspace)
+   INTEGER, INTENT(out)      :: cut_iter(dim_subspace,dim_subspace)
+
+   !
+   ! local variables
+   !
+   CHARACTER(16) :: subname="scalar_recursion"
+   INTEGER       :: ierr, i_sub, j_sub, k_sub, i_rec
+   COMPLEX(dbl)  :: trial_state(dim_recursion)
+   INTEGER       :: nb_max_first 
+       ! Local  variables : recursion loop
+   INTEGER                   :: iteration,jteration, ishift, jshift, iter_aux, iteration_shift
+       ! Local  variables : recursion test
+   REAL(dbl)                 :: last_var_aux(max_iter-2*dim_subspace+1)
+   REAL(dbl)                 :: variation
+   REAL(dbl)                 :: var_aux
+   REAL(dbl)                 :: norm(max_iter+1)
+       ! Local  variables : recursion auxiliary
+   COMPLEX(dbl)              :: aux1
+   COMPLEX(dbl)              :: aux2(dim_recursion)
+       ! Local  variables : Recursion
+   COMPLEX(dbl)              :: A_matrix(max_iter), B_matrix(max_iter)
+   COMPLEX(dbl)              :: recursion_state(max_iter+1, dim_recursion)
+   !
+   !  End of declarations
+   !
+
+
+   !
+   ! end of declarations
+   !
+
+!
+!----------------------------------------
+! main Body
+!----------------------------------------
+!
+   CALL timing( 'scalar_recursion', OPR='start' )
+
+   nb_max_first = (dim_subspace*3)-1
+   PRINT*, 'Entering scalar recursion part'
+   !
+   ! allocations
+   !
+!    ALLOCATE ( trial_state(dim_recursion), STAT=ierr )
+!         IF( ierr /=0 ) CALL errore(subname, 'allocating recursion_state', ABS(ierr) )
+
+    DO i_sub=1, dim_subspace
+       !
+       DO j_sub=1, dim_subspace
+           PRINT*, 'Recursion for i_sub=', i_sub
+           PRINT*, 'Recursion for j_sub=', j_sub
+           !
+           trial_state(:)=CZERO
+           !
+           IF  ( i_sub == j_sub ) THEN
+               !
+               trial_state(i_sub) = CONE
+               !
+           ELSE IF ( i_sub < j_sub ) THEN
+               !
+               trial_state(i_sub) = CONE
+               trial_state(j_sub) = CONE
+               trial_state(:)=trial_state(:) / SQRT(2.000*ONE)
+               !
+           ELSE IF ( i_sub > j_sub ) THEN
+               !  ATTENTION
+               trial_state(i_sub) = CI
+               trial_state(j_sub) = CONE
+               trial_state(:)=trial_state(:) / SQRT(2.000*ONE)
+               !
+           ELSE
+               !
+               CALL errore(subname, 'problem with i_sub and j_sub', 1 )
+               !
+           ENDIF
+           !
+           DO k_sub=1,dim_subspace
+               !
+               PRINT*, 'Trial state for i_rec =', k_sub, trial_state(k_sub)
+               !
+           ENDDO
+           !
+           !CALL recursion_loop(trial_state(:), nb_first(:), id_first(:,:), ene_first(:,:), ene_onsite(:), dim_rec, nb_max_first, max_iter, rec_chain(:,:,i_sub,j_sub), var_sum(:,i_sub,j_sub) )
+           !
+           !--------------------------------------------
+           ! ... Recursion loop
+           !--------------------------------------------
+           !
+           PRINT*, 'Entering recursion part'
+           ! Init Recursion local variables
+           recursion_state(:,:)= CZERO
+           recursion_state(1,:)= trial_state(:)
+           A_matrix(:)         = CZERO
+           B_matrix(:)         = CZERO
+           var_summary(:,i_sub,j_sub)      = CZERO
+           !
+           !
+           ! Init Auxiliary local variables
+           !
+           aux1=CZERO
+           aux2(:)=CZERO
+           !
+           !
+           ! Recursion part
+           !
+           PRINT*, 'First iteration'
+           !
+           ! Recursion part : First iteration
+           CALL calculate_A_matrix(nb_max_first, nb_first(:), id_first(:,:), ene_onsite(:), ene_first(:,:), recursion_state(1,:), A_matrix(1), dim_recursion , debug_mode) 
+           !
+           CALL calculate_recursion_state(nb_max_first, nb_first(:), id_first(:,:), ene_onsite(:), ene_first(:,:), recursion_state(1,:), A_matrix(1), &
+                                         aux1, aux2(:), recursion_state(2,:), dim_recursion , debug_mode)
+           !
+           CALL normalize_recursion_state( recursion_state(2,:), B_matrix(1), norm(2), numerical_cut_off, dim_recursion, debug_mode )
+           !
+           PRINT*, 'Enter recursion loop'
+           ! Recursion part : General loop
+           iteration_loop : &
+           DO iteration = 2, max_iter
+               ! real iteration indice
+               PRINT*, 'iter = ', iteration
+               !
+               CALL calculate_A_matrix(nb_max_first, nb_first(:), id_first(:,:), ene_onsite(:), ene_first(:,:), recursion_state(iteration,:) , A_matrix(iteration), dim_recursion, debug_mode ) 
+               !
+               CALL calculate_recursion_state(nb_max_first, nb_first(:), id_first(:,:), ene_onsite(:), ene_first(:,:), recursion_state(iteration,:), A_matrix(iteration), &
+                                    B_matrix(iteration-1), recursion_state(iteration-1,:), recursion_state(iteration+1,:), dim_recursion, debug_mode )
+               !
+               CALL normalize_recursion_state(recursion_state(iteration+1,:), B_matrix(iteration), norm(iteration+1), numerical_cut_off, dim_recursion, debug_mode )
+               !
+               CALL calculate_variation( A_matrix(iteration), A_matrix(iteration-1), variation, debug_mode) 
+               !
+               var_summary(iteration,i_sub,j_sub) = variation
+               !
+           ENDDO iteration_loop
+           !
+           ! Tests
+           IF ( (ABS( variation ) >  conv_criterion) ) CALL errore(subname, 'recursion not converged', 1 )
+           IF ( (ABS(SUM( norm(:) ))  <   max_iter - EPS_m4) ) CALL errore(subname, 'problem with norm', INT(SUM(norm(:))) )
+           !
+           !
+           !
+           ! Final Process
+           rec_chain(:,:, i_sub, j_sub)=CZERO
+           DO iteration=1, max_iter
+               !
+               rec_chain(1,iteration, i_sub, j_sub)=A_matrix(iteration)
+               rec_chain(2,iteration, i_sub, j_sub)=B_matrix(iteration)
+               !
+           ENDDO
+           !
+           !PRINT*, 'recursion_state(max_iter,:)'
+           !PRINT*, recursion_state(max_iter,:)
+           !
+           !PRINT*, 'recursion_state(max_iter,:)'
+           !PRINT*, recursion_state(3,:)
+           !
+
+       ENDDO
+       !
+    ENDDO
+    !
+!     PRINT*, 'nb_first(1-10)'
+!     PRINT*, (nb_first(i_rec), i_rec=1,10)
+!     !
+!     i_rec=1
+!     PRINT*, 'id_first(irec=)', i_rec
+!     PRINT*, id_first(:,i_rec)
+!     PRINT*, 'ene_onsite(irec)'
+!     PRINT*, ene_onsite(i_rec)
+!     PRINT*, 'ene_first (irec=)', i_rec
+!     PRINT*, ene_first(:,i_rec)
+! 
+!     i_rec=5
+!     PRINT*, 'id_first(irec=)', i_rec
+!     PRINT*, id_first(:,i_rec)
+!     PRINT*, 'ene_onsite(irec)'
+!     PRINT*, ene_onsite(i_rec)
+!     PRINT*, 'ene_first (irec=)', i_rec
+!     PRINT*, ene_first(:,i_rec)
+! 
+! 
+! 
+!     i_rec=200
+!     PRINT*, 'id_first(irec=)', i_rec
+!     PRINT*, id_first(:,i_rec)
+!     PRINT*, 'ene_onsite(irec)'
+!     PRINT*, ene_onsite(i_rec)
+!     PRINT*, 'ene_first (irec=)', i_rec
+!     PRINT*, ene_first(:,i_rec)
+! 
+
+    IF ( cut_chain ) THEN
+       !
+       DO i_sub=1,dim_subspace
+         !
+         DO j_sub=1,dim_subspace
+            !
+            iter_aux=0
+            var_aux = ZERO
+            ! First value
+            DO jteration = 1, 2*dim_subspace
+               !
+               var_aux = var_summary(jteration,i_sub,j_sub) + var_aux
+               !
+            ENDDO
+            !
+            DO iteration = 2*dim_subspace, max_iter
+               !
+               iteration_shift = iteration - 2*dim_subspace + 1
+               !
+               DO jteration = 1, 2*dim_subspace
+                  !
+                  last_var_aux(iteration_shift)= var_summary((iteration-jteration+1),i_sub,j_sub) + last_var_aux(iteration_shift)
+                  !
+               ENDDO
+               !
+               IF (last_var_aux(iteration_shift) < var_aux ) THEN
+                  !
+                  var_aux = last_var_aux(iteration_shift)
+                  iter_aux = iteration
+                  !
+               ENDIF
+               !
+            ENDDO
+            !
+            cut_iter(i_sub,j_sub) = iter_aux
+            !
+         ENDDO
+         !
+       ENDDO
+       !
+    ENDIF
+   !
+   ! local cleaning
+   !
+!      IF ( ALLOCATED( trial_state  ) ) THEN
+!            DEALLOCATE ( trial_state, STAT=ierr )
+!            IF( ierr /=0 ) CALL errore(subname, 'deallocating trial_state', ABS(ierr) )
+!       ENDIF
+
+   CALL timing( 'scalar_recursion', OPR='stop' )
+
+
+END SUBROUTINE scalar_recursion

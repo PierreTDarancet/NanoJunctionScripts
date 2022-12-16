@@ -1,0 +1,6 @@
+
+############## 
+
+INPUT_FILE_A='./InputFig/correlationMaximaAll'
+INPUT_FILE_B='./InputFig/correlationMaximaSolvCEV'
+

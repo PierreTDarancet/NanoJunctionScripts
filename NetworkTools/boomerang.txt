@@ -1,0 +1,199 @@
+boomerang.py
+====================
+**SOURCE:** :download:`boomerang.py <//home/cam1/projects/utils/boomerang.py>`
+
+Boomerang is a simple program to submit runs to a cluster of machines using SSH. 
+The code is object oriented and therefore should be easily incorporated into other programs.
+Also, it is easy to call from the command line. The program stores information in a series
+of data files (described below). The basic essence of the program invloves a few simple steps: 
+
+#. First, queue jobs on your local machine for a given cluster.
+#. Second, determine the status of the cluster by finding out how many jobs are running on each. 
+#. Submit the jobs to machines that contain N or fewer running jobs. 
+#. While the jobs are running boomerang has convenient functions to let you view
+   the results. 
+#. Finally you can retreive any runs that have been finished.
+
+Files
+---------------
+
+All data files pertaining to this program are stored in a hidden directory in your home directory .boomerang. "Global" files are stored at ~/.boomerang/file. "Local" files are stored at ~/.boomerang/default/file. Some files can be global or local; this means that if there exists a file at ~/.boomerang/default/file then it will be used; else the file at ~/.boomerang/file will be used. We will discuss applications of this in a bit.
+
+Here are the files that boomerang uses:
+
+  * *environment* (global) - This file contains the environment variable LD_LIBRARY_PATH (and any others) that need to be set on the
+    remote machines. The format of this file is one line per machine, with the first word being the machine name and the
+    following words being a bash command. The default value will be applied to all machines unless the machine is explicitly
+    named. This file is actually not required; the default value is hard coded into the program.
+
+  * *queue* (local) - Shows which directories on your local machine are queued to be submitted.
+
+  * *running* (local) - Shows which files are currently running on the remote machines.
+
+  * *finished* (local) - This contains a list of all the jobs that have finished.
+
+  * *required* (global or local) - A list of files which must be present in order to queue a job.
+
+  * *exclude* (global or local) - Do not transfer these files back from the remote machine.
+
+  * *machlist* (global or local) - contains a list of machines to submit to. These may be shortcuts defined in your ssh config file or complete IP names. Only one machine per line should be listed. Lines beginning with # will not be read. 
+
+  * *status* (global) - The query method will look up how many jobs there are on each machine and write the result here.
+
+  * *script* (global or local) - This is the default script that will be submitted unless 
+    a file name boomerang_submit.sh exists in the
+    directory. An example script is shown here. The first step is to copy the
+    vasp executable to the local directory with a distinct name so you know
+    which executable corresponds to which job. boomerang will replace any
+    instance of XXXX in your script with a four-digit random integer. A time
+    command is included for convenience, though it may not be necessary.  There
+    is a an if statement which executes a postprocessing script if it is
+    present in the running directory. Finally, the vasp executable is removed.
+    Please note that this is
+    only an example and the script can be whatever you want. This is not tied
+    to vasp in any particular way.
+
+.. code-block:: bash 
+
+  cp `which vasp` vaspexe.XXXX
+  /usr/bin/time -a -o out -f "\n%PCPU \n%U user-sec \n%S system-sec \n%E elapsed-hr:min:sec \n%e elapsed-sec" ./vaspexe.XXXX
+  if [ -f postp.sh ]; then ./postp.sh ; fi
+  rm ./vaspexe.XXXX
+
+Multiple clusters: If you want a different cluster (e.g. high memory), we can make a new directory ~/.boomerang/highmem, which contains all the local files and an adjusted "machlist" file. If you want a different script (e.g. abinit instead of vasp), we can make a directory ~/.boomerang/abinit with all the local files and an adjusted "script" file. We do this as follows:
+
+.. code-block:: bash
+
+  $ mkdir ~/.boomerang/highmem
+  $ touch ~/.boomerang/highmem/{queue,finished,running}
+  $ vi ~/.boomerang/highmem/machlist
+
+Setup
+---------------
+
+To setup boomerang for the first time for VASP, run the following:
+
+.. code-block:: bash
+
+  $ mkdir ~/.boomerang
+  $ touch ~/.boomerang/{machlist,required,exclude,status}
+  $ mkdir ~/.boomerang/default
+  $ touch ~/.boomerang/default/{queue,finished,running}
+  $ echo -e "POSCAR\nPOTCAR\nKPOINTS\nINCAR\n" > ~/.boomerang/required
+  $ echo -e "WAVECAR\nPROCAR\n" > ~/.boomerang/exclude
+
+Then copy the aforementioned VASP script into ~/.boomerang/script, and put newline-delimited machine names into machlist. (We have ssh_generate.py, which automatically generates a machlist.)
+
+Make sure you have boomerang.py in your PATH and inputs.py in your PYTHONPATH. You can adjust these in ~/.bashrc.
+
+Command-line usage
+-------------------------
+
+We will now discuss how to do things from the command line. For the most part, each task is associated with a given
+method. The methods themselves are documented in the code and these comments are pulled out into the docstring section
+below. The most important methods are: query, queue, scatter, get.
+
+* **Identifying the cluster** - The name keyword may be combined with all of the below commands. If name is not given, it
+  will be assumed that the name is default. One may want to have different clusters for different purposes; see above.
+
+  .. code-block:: bash 
+
+    $ boomerang.py name=highmem
+
+* **Preparing remote machines** - Create the remote run directories on the of the remote hosts (i.e. currently called ~/tmp_runs). Each run will be placed at ~/tmp_runs/directorynameXXXX, where XXXX is a random 4-digit number.
+
+  .. code-block:: bash 
+
+    $ boomerang.py -prep
+
+* **Querying availability** - Check all of the machines to see how many jobs are running on each. This updates the status file.
+
+  .. code-block:: bash 
+
+    $ boomerang.py -query
+    2 jobs on tribeca
+        --> hyowon
+        --> hyowon
+    2 jobs on soho
+        --> ai
+        --> ai
+    2 jobs on gramercy
+        --> hyowon
+        --> hyowon
+    2 jobs on les
+        --> hyowon
+        --> hyowon
+    4 jobs on noho
+        --> ai
+        --> ai
+    etc
+
+
+
+* **Queueing** - Go to the directory which contains the files you want to submit and execute:
+
+  .. code-block:: bash 
+
+    $ boomerang.py -queue
+
+* **Summary** - Show what jobs are in the queue, running, and how many jobs are on each machine:
+
+  .. code-block:: bash 
+
+    $ boomerang.py -sum
+
+* **Scatter queued jobs** - Send queued jobs to available slots on remote machines. Make sure you've queried to get current usage.
+  Other command-line flags exist for scatter: maxjob=3 allows up to 3 jobs per machine; default is 2. (This is not recommended for vasp, because it reduces overall efficiency of the cluster.) hogmax=XX tells boomerang to take no more than XX% (default 75) of the cluster, to leave space for other users; hogmin=XX tells boomerang to take XX% (default 30) even if nothing is left for others; the script will take some amount in between these, depending on how much is empty. leave=XX takes all but XX processes, which it leaves for other users.
+  To use all default values, just run:
+
+  .. code-block:: bash
+  
+    $ boomerang.py -query
+    $ boomerang.py -scatter
+
+
+* **Cat running jobs** - Cat a given file for each running directory on the remote machine. If no file is given, the default is OSZICAR:
+
+  .. code-block:: bash 
+
+    $ boomerang.py -cat INCAR
+
+* **Go to remote machine** - Change to a running directory and execute boomerang with the go option and it will take you to the running directory on the remote machine:
+
+  .. code-block:: bash 
+
+    $ boomerang.py -go
+
+* **Get finished job** - Retreive the results from all finished calculations:
+
+  .. code-block:: bash 
+
+    $ boomerang.py -get
+
+* **Force** - Force a job to start on a given remote machine regardless of its status. There is no need to queue the job in this case, and you should be in the directory of interest upon executing the command:
+
+  .. code-block:: bash 
+
+    $ boomerang.py force=gramercy
+
+* **Kill** - This will kill a job. You can provide the call with a filename, and this file should contain a list of all directories that should be killed. If no filename is given, it will try to kill the current directory:
+
+  .. code-block:: bash 
+
+    $ boomerang.py -kill [filename]
+
+* **Force Get** - This will force boomerang to try and get files from a remote host for the current directory. It is not relevant if they have already been retrieved. Of course, it will fail if they have already been deleted.
+
+  .. code-block:: bash 
+
+    $ boomerang.py -forceget
+
+* **Check** - This will check each directory that is currently running to ensure the executable is still running. It returns the directories for which no executable is found. (It assumes that the executable has the four-number XXXX in the name; see the above example script.)
+
+
+Docstrings from boomerang.py 
+-----------------------------
+
+.. automodule:: boomerang
+   :members:
+

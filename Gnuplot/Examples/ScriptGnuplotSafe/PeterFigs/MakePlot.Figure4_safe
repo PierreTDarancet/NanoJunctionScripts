@@ -1,0 +1,243 @@
+reset
+PLOT_TYPE="Fig4_ZLine_Abs"
+PLOTNAME="Fig4_ZLine_Abs"
+set terminal  postscript enhanced font 'Helvetica,10'
+unset pm3d
+OUTPUT_NAME=sprintf("%s.ps",PLOTNAME);
+RydtoeV=13.605
+eVtoRyd=1.0/13.605
+
+set output OUTPUT_NAME
+
+load "PS.setgp"
+set size ratio 1
+
+#######################21 Panels####################################
+#1 # Legend #2  
+#####################################################################
+set multiplot
+
+load  "Fig4.2plots.setgp"
+set size ratio SIZE_RATIO
+LMARGIN = LMARGIN_1
+RMARGIN = RMARGIN_1
+TMARGIN = TMARGIN_1
+BMARGIN = BMARGIN_1
+SETXLABEL = SETXLABEL_1
+SETYLABEL = SETYLABEL_1
+set border
+unset colorbox
+unset key
+unset title
+unset contour
+unset xlabel
+unset ylabel
+unset cblabel
+unset xtics
+unset ytics
+unset cbtics
+set lmargin at screen LMARGIN
+set rmargin at screen RMARGIN
+set tmargin at screen TMARGIN
+set bmargin at screen BMARGIN
+load "Fig4.X.ZRange.datgp"
+load "Fig4.Y.EnergyRange.datgp"
+set xrange [XMIN:XMAX]
+set yrange [YMIN:YMAX]
+if (SETXLABEL) set xlabel XLABEL font 'Helvetica,10'
+set xtics  XTICS   font 'Helvetica,0.1'
+if (SETXLABEL) set xtics  XTICS   font 'Helvetica,10'
+if (SETYLABEL) set ylabel YLABEL font 'Helvetica,10' 
+set ytics  YTICS   font 'Helvetica,0.1'
+if (SETYLABEL) set ytics  YTICS font 'Helvetica,10'
+load  "Fig4.INPUTFILES.datgp"
+INPUT_FILE=INPUT_FILE_1
+load "Fig4.Styles.ColorBar.setgp"
+load "Fig4.CB.LDOSRange.datgp"
+set cbrange [CBMIN:CBMAX]
+unset border
+unset colorbox
+unset key
+unset title
+unset contour
+unset xlabel
+unset ylabel
+unset cblabel
+unset xtics
+unset ytics
+unset cbtics
+
+iloop=istart
+load "Fig4.Plot.loop.rungp"
+
+
+load  "Fig4.2plots.setgp"
+set size ratio SIZE_RATIO
+LMARGIN = LMARGIN_1
+RMARGIN = RMARGIN_1
+TMARGIN = TMARGIN_1
+BMARGIN = BMARGIN_1
+SETXLABEL = SETXLABEL_1
+SETYLABEL = SETYLABEL_1
+set border
+unset colorbox
+unset key
+unset title
+unset contour
+unset xlabel
+unset ylabel
+unset cblabel
+unset xtics
+unset ytics
+unset cbtics
+set lmargin at screen LMARGIN
+set rmargin at screen RMARGIN
+set tmargin at screen TMARGIN
+set bmargin at screen BMARGIN
+load "Fig4.X.ZRange.datgp"
+load "Fig4.Y.EnergyRange.datgp"
+set xrange [XMIN:XMAX]
+set yrange [YMIN:YMAX]
+if (SETXLABEL) set xlabel XLABEL font 'Helvetica,10'
+set xtics  XTICS   font 'Helvetica,0.1'
+if (SETXLABEL) set xtics  XTICS   font 'Helvetica,10'
+if (SETYLABEL) set ylabel YLABEL font 'Helvetica,10' 
+set ytics  YTICS   font 'Helvetica,0.1'
+if (SETYLABEL) set ytics  YTICS font 'Helvetica,10'
+load  "Fig4.INPUTFILES.datgp"
+INPUT_FILE=INPUT_FILE_1
+load "Fig4.Styles.ColorBar.setgp"
+load "Fig4.CB.LDOSRange.datgp"
+set cbrange [CBMIN:CBMAX]
+
+
+
+set label font 'Helvetica,10' "HOMO-4" front at -8,-8.394
+set label font 'Helvetica,10' "HOMO-3" front at 5,-8.176
+set label font 'Helvetica,10' "HOMO-2" front at -8,-7.479
+set label font 'Helvetica,10' "HOMO-1" front at 5,-7.336
+set label font 'Helvetica,10' "HOMO" front at -8,-6.939
+set label font 'Helvetica,10' "LUMO" front at 5,0.197
+set label font 'Helvetica,10' "LUMO+1" front at -8,0.678
+set label font 'Helvetica,10' "LUMO+2" front at 5,0.897
+set label font 'Helvetica,10' "LUMO+3" front at -8,1.266
+set label font 'Helvetica,10' "LUMO+4" front at 5,1.448
+
+
+#Plot Axis once
+unset colorbox
+f(x)=1/0
+plot f(x)
+
+
+
+#######################LEGEND PART1###############################
+reset
+load  "Fig4.2plots.setgp"
+set size ratio HeightColorbox/WidthColorbox
+LMARGIN = LMARGIN_CB
+RMARGIN = RMARGIN_CB 
+TMARGIN = TMARGIN_CB
+BMARGIN = BMARGIN_CB
+SETXLABEL = SETXLABEL_CB
+SETYLABEL = SETYLABEL_CB
+SETCBLABEL = SETCBLABEL_CB
+set lmargin at screen LMARGIN
+set rmargin at screen RMARGIN
+set tmargin at screen TMARGIN
+set bmargin at screen BMARGIN
+
+#########################################
+########       Color Box         ########
+#########################################
+
+set border
+set pm3d map
+unset colorbox
+unset key
+unset title
+unset contour
+unset xlabel
+unset ylabel
+unset cblabel
+unset xtics
+unset ytics
+unset cbtics
+load "Fig4.CB.LDOSRange.datgp"
+set xrange [*:*]
+
+set yrange [CBMIN:CBMAX]
+
+f(y)=y
+
+if (SETYLABEL) set ylabel CBLABEL font 'Helvetica,10' offset 1,0
+set ytics  CBTICS   font 'Helvetica,0.1'
+set ytics mirror
+
+
+load "Fig4.Styles.ColorBar.setgp"
+
+set isosamples 101, 101
+splot f(y) 
+
+##############################################
+reset 
+load  "Fig4.2plots.setgp"
+set size ratio SIZE_RATIO
+LMARGIN = LMARGIN_2
+RMARGIN = RMARGIN_2
+TMARGIN = TMARGIN_2
+BMARGIN = BMARGIN_2
+SETXLABEL = SETXLABEL_2
+SETYLABEL = SETYLABEL_2
+set border 3 
+unset colorbox
+unset key
+unset title
+unset contour
+unset xlabel
+unset ylabel
+unset cblabel
+unset xtics
+unset ytics
+unset cbtics
+set lmargin at screen LMARGIN
+set rmargin at screen RMARGIN
+set tmargin at screen TMARGIN
+set bmargin at screen BMARGIN
+load "Fig4.X.EnergyRange.datgp"
+load "Fig4.Y.AbsorptionRange.datgp"
+set xrange [XMIN:XMAX]
+set yrange [YMIN:YMAX]
+
+
+load  "Fig4.INPUTFILES.datgp"
+INPUT_FILE_A=INPUT_FILE_2_A
+INPUT_FILE_B=INPUT_FILE_2_B
+
+#load "Fig4.Styles.ColorBar.setgp"
+load "Fig4.Styles.Lines.setgp"
+
+OFFSET_1=YMAX
+#plot INPUT_FILE_A using 1:2 with impulses ls 13 notitle, \
+#     INPUT_FILE_B using 1:2 w filledcurves  y1=OFFSET_1 lc rgb 'white' notitle ,  \
+#     INPUT_FILE_B using 1:2 w l ls 13  notitle
+plot INPUT_FILE_A using 1:2 with impulses ls 13 notitle, \
+     INPUT_FILE_B using 1:2 w filledcurves  y1=OFFSET_1 lc rgb 'white' notitle ,  \
+     INPUT_FILE_B using 1:2 w l ls 4  notitle
+
+set border 3 
+if (SETXLABEL) set xlabel XLABEL font 'Helvetica,10'
+set xtics  XTICS  nomirror font 'Helvetica,0.1'
+if (SETXLABEL) set xtics  XTICS nomirror  font 'Helvetica,10'
+if (SETYLABEL) set ylabel YLABEL font 'Helvetica,10' 
+set ytics  YTICS nomirror  font 'Helvetica,0.1'
+if (SETYLABEL) set ytics  YTICS nomirror font 'Helvetica,10'
+
+f(x)=1/0
+plot f(x)
+
+unset multiplot
+load "close.rungp"
+
+

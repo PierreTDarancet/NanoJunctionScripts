@@ -1,0 +1,16 @@
+reset
+Size_square=0.40
+VSeparation=0.0
+HSeparation=-0.03
+HSeparation2=0.05
+HeightColorbox=Size_square
+WidthColorbox=HeightColorbox/6
+VOffset=0.08
+
+
+
+
+TMARGIN_CB=((TMARGIN_1-BMARGIN_5)/2) + (HeightColorbox/2)+VOffset
+BMARGIN_CB=((TMARGIN_1-BMARGIN_5)/2) - (HeightColorbox/2)+VOffset
+LMARGIN_CB=RMARGIN_3+HSeparation2
+RMARGIN_CB=LMARGIN_CB+WidthColorbox

@@ -1,0 +1,9 @@
+main_-1.0.VH
+VH_-1.0.dat
+3                               ! orientation of the plane, 1-x,2-y,3-z
+0                               ! scale the data by 1/vol, 1-yes,other-no
+1                               ! average in xy plane: 1-yes,other-no
+1                               ! multiply data by ryd: 1-yes,other-no
+0                               ! average over z, 0-no,n-# of average
+7.211808                  ! lave in angtrom
+
