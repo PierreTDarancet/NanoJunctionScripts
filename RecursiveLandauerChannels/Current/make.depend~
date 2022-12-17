@@ -1,3 +1,0 @@
-current.o : ../libs/kind.o
-current.o : ../libs/parameters.o
-current.o : ../wannier/io_module.o
